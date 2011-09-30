@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.6.4//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.6.4/distro-source/core/src/gwt-module.dtd">
+<module>
+    <!-- Name of the GWT Robusta Module is : com.robustaweb.library.Robusta -->
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.google.gwt.xml.XML" />
+     <inherits name="com.google.gwt.http.HTTP" />
+    <!--
+    <extend-property name="locale" values="en"/>
+    <extend-property name="locale" values="fr"/>
+    -->
+
+        <!-- <inherits name="com.google.gwt.user.User"/> -->
+
+	<!-- Do not define servlets here, use web.xml -->
+        <source path="commons"/>
+        <source path="gwt"/>
+        <source path="i18n"/>
+        <source path="rest"/>
+        <source path="security"/>
+        <source path="xml"/>
+        <source path="logger"/>
+        <source path="mvc"/>
+        
+        
+
+</module>
