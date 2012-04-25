@@ -35,7 +35,7 @@ public class MD5 {
 
         byte[] hash = null;
         try {
-// on récupère un objet qui permettra de crypter la chaine
+
             hash = MessageDigest.getInstance("MD5").digest(uniqueKey);
         } catch (NoSuchAlgorithmException e) {
             throw new Error("no MD5 support in this VM");
@@ -55,11 +55,7 @@ public class MD5 {
         return hashString.toString();
 
     }
-// mÃ©thode principale
-    public static void main(String[] args) {
-        System.out.println("La chaine : P@ssWord, cryptée via MD5 donne : " + MD5.encodeMD5("P@ssWord"));
-    }
-    
+
     
     
 }
