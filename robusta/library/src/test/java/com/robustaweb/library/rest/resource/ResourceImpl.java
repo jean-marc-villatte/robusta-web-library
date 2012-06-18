@@ -68,6 +68,6 @@ public class ResourceImpl implements Resource<Long> {
 
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
-        return CoupleList.build("id", this.id);
+        return CoupleList.<String, Object>build("id", this.id);
     }
 }

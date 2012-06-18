@@ -117,7 +117,7 @@ class House implements Resource<String>{
 
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
-        return CoupleList.build("id", id);
+        return CoupleList.<String, Object>build("id", id);
     }
 
 
