@@ -34,8 +34,7 @@ public interface Resource<IdType> {
     /**
      * Returns the id of the Resource.
      * <p>
-     * In REST, a Resource might have an id as a Number, String or even a url. As 95% of the time, it will be a Number, getting here
-     * a long is much more simpler than most other solutions.
+     * In REST, a Resource might have an id as a Number, UUID String, CompositeKey or even an url
      * </p>
      * @return the Resource id
      */

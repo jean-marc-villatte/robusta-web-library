@@ -15,6 +15,7 @@
  */
 package com.robustaweb.library.rest.controller;
 
+import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
 
 /**
@@ -28,7 +29,6 @@ import com.robustaweb.library.commons.util.CoupleList;
  * The &lt;robusta:response/> Tag has less responsabilities, but will nevertheless help you to give back a response to the user
  * </p>
  * @author Nicolas Zozol - Edupassion.com - Robusta Web - nzozol@edupassion.com
- * @param Request : the emmebded Request object - often HttpServletRequest
  */
 public interface ResourceController <HttpRequest>{
 
@@ -37,9 +37,7 @@ public interface ResourceController <HttpRequest>{
      * This is the URI aimed by the request : for exemple, if the complete URL is
      * http://www.myapp.com:8080/webapp/user/12?email=robusta@gmail.com
      * then the URI is : /webapp/user/12
-     * @param uri
      */
-   // public void setUri(String uri);
     public String getUri();
 
     /**
@@ -53,13 +51,20 @@ public interface ResourceController <HttpRequest>{
 
     
     /**
-     * Set the the Authorization key of the incoming Http request
-     * It should be in the Authorization header or a cookie, but there are various strategies
-     * It's automoatic with JAX-RS ; With JSP, you can use the &lt;robusta:request/> Tag along ARMY/LAZY authentication systems (see documentation on <a href="http://www.robustaweb.com/">RobustaWeb.com</a>)
-     * @param authorizationValue authorization key sent by the user
+     * Returns the Authorization key of the incoming Http request
+     * It's often in the Authorization header, but may be in a cookie.
      */
     public String getAuthorizationValue();
-      
+
+    /**
+     * Returns the credentials of the request. Default value gives the username/SHA(salt(password)) of a user
+     * Here is a good way to use salt and hash : http://crackstation.net/hashing-security.htm
+     * @return
+     */
+    public Couple<String, String> getCredentials();
+
+
+
     /**
      * return the IP Adress of the User
      * @return
@@ -87,6 +92,13 @@ public interface ResourceController <HttpRequest>{
      * @return query params
      */
     public CoupleList<String, String> getParams();
+
+    /**
+     * It's a good idea to have a different HttpHeader named request-id for each request, to avoid bad returns with 200 Http code by Proxies.
+     * This happens mainly with shared wifi in Airports, coffees or conferences.
+     * @return value of the HttpRequest
+     */
+    public String getRequestUuid();
    
 }
 

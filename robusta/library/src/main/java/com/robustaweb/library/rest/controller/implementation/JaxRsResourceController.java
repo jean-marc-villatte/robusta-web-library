@@ -16,6 +16,7 @@
 package com.robustaweb.library.rest.controller.implementation;
 
 import java.util.Enumeration;
+import java.util.logging.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,11 +26,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import com.robustaweb.library.commons.exception.CodecException;
 import com.robustaweb.library.commons.exception.RepresentationException;
+import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.controller.ResourceController;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.resource.Resource;
+import com.robustaweb.library.security.implementation.CodecImpl;
 
 /**
  * This is a ResourceController designed for JAX-RS specifications
@@ -115,10 +119,32 @@ public class JaxRsResourceController implements
 	 */
 	@Override
 	public String getAuthorizationValue() {
+
 		return this.getHeaders().getValue("authorization", true);
 	}
 
-	/**
+    @Override
+    public Couple<String, String> getCredentials() {
+        String authorizationValue =  getAuthorizationValue();
+        if (authorizationValue!=null){
+            int substract = new String("BASIC ").length();
+            String credentials = authorizationValue.substring(substract);
+            try{
+                String login = new CodecImpl().getUsername(credentials);
+                String password= new CodecImpl().getPassword(credentials);
+
+            }catch(CodecException ex){
+                Logger.getLogger(JaxRsResourceController.class.getName()).warning("Can't decode login/password ; Client side may be not correctly implemented");
+                return null;
+            }
+
+
+        }  else{
+            return null;
+        }
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override
@@ -165,7 +191,12 @@ public class JaxRsResourceController implements
 		return result;
 	}
 
-	/**
+    @Override
+    public String getRequestUuid() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override
