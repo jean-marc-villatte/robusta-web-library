@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.controller.ResourceController;
 
@@ -32,7 +33,16 @@ import com.robustaweb.library.rest.controller.ResourceController;
  */
 public class JspResourceController implements ResourceController<HttpServletRequest> {
 
-    
+    @Override
+    public Couple<String, String> getCredentials() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String getRequestUuid() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     String requestBody;
     HttpServletResponse httpResponse;
     HttpServletRequest httpRequest;
