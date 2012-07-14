@@ -7,7 +7,12 @@
   <version>1.0-SNAPSHOT</version>
   <name>robusta-jee-maven Maven Webapp</name>
   <url>http://maven.apache.org</url>
+    <properties>
+        <jettyVersion>7.2.0.v20101020</jettyVersion>
+    </properties>
   <dependencies>
+
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -19,40 +24,53 @@
           <artifactId>library</artifactId>
           <version>1.0-SNAPSHOT</version>
       </dependency>
+
+      <dependency>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>jsr311-api</artifactId>
+          <version>1.1.1</version>
+      </dependency>
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+          <version>2.5</version>
+          <scope>provided</scope>
+      </dependency>
+      <!-- jersey -->
+
   </dependencies>
+
+
+
   <build>
     <finalName>robusta-jee-maven</finalName>
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <groupId>org.glassfish</groupId>
+                  <artifactId>maven-embedded-glassfish-plugin</artifactId>
+                  <version>3.1</version>
+              </plugin>
+
+          </plugins>
+      </pluginManagement>
+      <!-- To use the plugin goals in your POM or parent POM -->
       <plugins>
           <plugin>
-              <groupId>org.mortbay.jetty</groupId>
-              <artifactId>maven-jetty-plugin</artifactId>
-              <version>6.1.10</version>
+
+              <groupId>org.glassfish</groupId>
+              <artifactId>maven-embedded-glassfish-plugin</artifactId>
+              <version>3.1</version>
               <configuration>
-                  <scanIntervalSeconds>10</scanIntervalSeconds>
-                  <stopKey>foo</stopKey>
-                  <stopPort>9999</stopPort>
+                  <app>${basedir}/target/web-app.war</app>
+                  <autoDelete>true</autoDelete>
+                  <port>8080</port>
+                  <name>web-app</name>
+                  <contextRoot>web-app</contextRoot>
+
               </configuration>
-              <executions>
-                  <execution>
-                      <id>start-jetty</id>
-                      <phase>pre-integration-test</phase>
-                      <goals>
-                          <goal>run</goal>
-                      </goals>
-                      <configuration>
-                          <scanIntervalSeconds>0</scanIntervalSeconds>
-                          <daemon>true</daemon>
-                      </configuration>
-                  </execution>
-                  <execution>
-                      <id>stop-jetty</id>
-                      <phase>post-integration-test</phase>
-                      <goals>
-                          <goal>stop</goal>
-                      </goals>
-                  </execution>
-              </executions>
           </plugin>
       </plugins>
+
   </build>
 </project>

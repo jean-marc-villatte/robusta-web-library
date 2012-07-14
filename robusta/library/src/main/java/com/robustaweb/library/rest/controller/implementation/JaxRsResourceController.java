@@ -122,9 +122,12 @@ public class JaxRsResourceController implements
 	 */
 	@Override
 	public String getAuthorizationValue() {
-
-		return this.getHeaders().getValue("authorization", true);
+		return this.getHeader("Authorization");
 	}
+
+    public String getHeader(String header){
+        return this.getHeaders().getValue(header, true);
+    }
 
     @Override
     public Couple<String, String> getCredentials() {
@@ -197,8 +200,13 @@ public class JaxRsResourceController implements
 
     @Override
     public String getRequestUuid() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+         return this.getHeader("request-id");
     }
+
+    public boolean cancelResponseId(){
+        return true;
+    }
+
 
     /**
 	 * {@inheritDoc }
