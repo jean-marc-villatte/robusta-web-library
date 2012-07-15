@@ -547,7 +547,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         }else{
             prefix = "root";
         }
-        CoupleList<String, String> obj = ReflectionUtils.getFieldValueCouples(o).stringify();
+        CoupleList<String, String> obj = ReflectionUtils.basicSerialization(o).stringify();
         JdomRepresentation representation = new JdomRepresentation(prefix, (String[]) obj.stringify().flat());
         return representation;
     }

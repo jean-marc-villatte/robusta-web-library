@@ -2,7 +2,28 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>RESTFullApp</display-name>
+    <servlet>
+        <servlet-name>Jersey</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 
-<display-name>Archetype Created Web Application</display-name>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.robustaweb.demojee</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Jersey</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Test1</servlet-name>
+        <servlet-class>com.robustaweb.demojee.Servlet1</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Test1</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
 
 </web-app>

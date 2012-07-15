@@ -13,7 +13,7 @@ import javax.xml.ws.Response;
  * Date: 14/07/12
  * Time: 14:54
  */
-@Path("test")
+@Path("/test")
 public class TestController extends JaxRsResourceController{
 
 

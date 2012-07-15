@@ -15,6 +15,8 @@
  */
 package com.robustaweb.library.commons.util;
 
+import com.robustaweb.library.rest.resource.Resource;
+
 import java.lang.reflect.Field;
 
 /**
@@ -31,7 +33,7 @@ public class ReflectionUtils {
      * @param object
      * @return
      */
-    public static CoupleList<String, Object> getFieldValueCouples(Object object){
+    public static CoupleList<String, Object> basicSerialization(Object object){
         CoupleList<String, Object> cp = new CoupleList<String, Object>();
 
 
@@ -58,7 +60,14 @@ public class ReflectionUtils {
         for (Field f : fields){
             f.setAccessible(true);
             try {
-                couple = new Couple<String, Object>(f.getName(), f.get(object));
+                Object value = f.get(object);
+                if (value instanceof Resource){
+                     //adding another couple with the key
+                    Resource r = (Resource) value;
+                    Couple keyCouple = new Couple<String, Object>(f.getName()+"Id", r.getId());
+                    cp.add(keyCouple);
+                }
+                couple = new Couple<String, Object>(f.getName(),value);
             } catch (IllegalArgumentException ex) {
                 couple = new Couple<String, Object>(f.getName(), ex.getMessage());
             } catch (IllegalAccessException ex) {
@@ -77,7 +86,7 @@ public class ReflectionUtils {
      * @return
      */
     public String toVerySimpleXml(String prefix, Object obj){        
-        return XmlUtils.build (null, prefix, (String[]) getFieldValueCouples(obj).stringify().flat());
+        return XmlUtils.build (null, prefix, (String[]) basicSerialization(obj).stringify().flat());
     }
 
     /**

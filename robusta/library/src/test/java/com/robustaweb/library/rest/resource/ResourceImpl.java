@@ -1,8 +1,6 @@
 package com.robustaweb.library.rest.resource;
 
-import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.rest.representation.Representation;
-import com.robustaweb.library.rest.representation.RepresentationManager;
 import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
@@ -41,8 +39,8 @@ public class ResourceImpl implements Resource<Long> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ResourceImpl) {
-            return ((ResourceImpl) obj).getId() == this.getId();
+        if (obj instanceof com.robustaweb.library.rest.resource.implementation.ResourceImpl) {
+            return ((com.robustaweb.library.rest.resource.implementation.ResourceImpl) obj).getId() == this.getId();
         }
         return false;
     }
