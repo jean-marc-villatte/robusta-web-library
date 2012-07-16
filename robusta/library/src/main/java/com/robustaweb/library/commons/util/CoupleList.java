@@ -308,19 +308,7 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
         return cpList;
     }
 
-    /**
-     * Returns all elements, couple by couple,; left then right.<br/>
-     * For exemple ( (1,A), (2,B), (3,B) ) will return [1, A, 2, B, 3, B]
-     * @return
-     */
-    public Object [] flat(){
-        ArrayList<Object> array = new ArrayList<Object>();
-        for (Couple c : this){
-            array.add(c.getLeft());
-            array.add(c.getRight());
-        }
-        return  array.toArray();
-    }
+
 
 
     /**

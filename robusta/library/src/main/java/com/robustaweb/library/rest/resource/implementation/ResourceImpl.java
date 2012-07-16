@@ -2,7 +2,7 @@ package com.robustaweb.library.rest.resource.implementation;
 
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.commons.util.ReflectionUtils;
+import com.robustaweb.library.commons.util.SerializationUtils;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.implementation.JdomRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
@@ -38,7 +38,7 @@ public class ResourceImpl<IdType> implements Resource<IdType> {
 
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
-        return ReflectionUtils.basicSerialization(this);
+        return SerializationUtils.serialize(this);
     }
 
     @Override

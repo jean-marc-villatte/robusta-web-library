@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  */
 public class ReflectionUtilsJavaTest {
 
-    ReflectionUtilsJava rft = new ReflectionUtilsJava();
+    SerializationUtils serializationUtils = new SerializationUtils();
     public ReflectionUtilsJavaTest() {
 
     }
@@ -33,13 +33,13 @@ public class ReflectionUtilsJavaTest {
     @Test
     public void testGetItems() {
         UserImpl user = UserImpl.johnDoe;
-        System.out.println("couples : "+rft.getFieldValueCouples(user));
-        assertTrue (rft.getFieldValueCouples(user).size() == 5);
+        System.out.println("couples : " + serializationUtils.serialize(user));
+        assertTrue (serializationUtils.serialize(user).size() == 5);
 
         SuperUser user2 = new SuperUser(2L, "jj@gmail.com", "Jane", "Doe");
-        System.out.println("couples : "+rft.getFieldValueCouples(user2));
+        System.out.println("couples : "+ serializationUtils.serialize(user2));
         int expected = 6;
-        assertEquals(expected, rft.getFieldValueCouples(user2).size());
+        assertEquals(expected, serializationUtils.serialize(user2).size());
     }
 
 }

@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
  * Workaround support for simple Releflection unsing Java Reflection API
  * @author n.zozol
  */
-public class ReflectionUtils {
+public class SerializationUtils {
 
    
 
@@ -33,7 +33,7 @@ public class ReflectionUtils {
      * @param object
      * @return
      */
-    public static CoupleList<String, Object> basicSerialization(Object object){
+    public static CoupleList<String, Object> serialize(Object object){
         CoupleList<String, Object> cp = new CoupleList<String, Object>();
 
 
@@ -85,8 +85,8 @@ public class ReflectionUtils {
      * @param obj
      * @return
      */
-    public String toVerySimpleXml(String prefix, Object obj){        
-        return XmlUtils.build (null, prefix, (String[]) basicSerialization(obj).stringify().flat());
+    public String toXml(String prefix, Object obj){
+        return XmlUtils.build (null, prefix, serialize(obj));
     }
 
     /**

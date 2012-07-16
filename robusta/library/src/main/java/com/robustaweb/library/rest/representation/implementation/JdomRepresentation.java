@@ -25,6 +25,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.robustaweb.library.commons.util.*;
+import com.robustaweb.library.commons.util.CoupleList;
+import com.robustaweb.library.commons.util.MathUtils;
+import com.robustaweb.library.commons.util.SerializationUtils;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -36,10 +40,6 @@ import org.jdom.output.XMLOutputter;
 
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.exception.XmlException;
-import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.commons.util.MathUtils;
-import com.robustaweb.library.commons.util.ReflectionUtils;
-import com.robustaweb.library.commons.util.XmlUtils;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
@@ -69,15 +69,9 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         assert this.document != null;
     }
 
-    /**
-     * 
-     * @param path
-     * @throws ResourceNotFoundException
-     */
+
     public JdomRepresentation(String xml) {
-
         this.document = createDocument(xml);
-        assert this.document != null;
     }
 
     
@@ -86,22 +80,18 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     /**
      * 
      * @param rootName
-     * @param nodesAndValues
+     * @param serialization
      */
-    public JdomRepresentation(String rootName, CoupleList<String, Object> nodesAndValues) {
-        this(rootName, (String[]) nodesAndValues.stringify().flat());
-        assert this.document != null;
+    public JdomRepresentation(String rootName, CoupleList<String, Object> serialization) {
+        Element root = new Element(rootName);
+        for (Couple<String, Object> couple : serialization){
+            Element elt = new Element(couple.getLeft());
+            elt.setText(couple.getRight().toString());
+            root.addContent(elt);
+        }
+        this.document = new Document(root);
     }
 
-    /**
-     * 
-     * @param rootName
-     * @param nodesAndValues
-     */
-    public JdomRepresentation(String rootName, String... nodesAndValues) {
-        this(XmlUtils.build(null, rootName, nodesAndValues));
-        assert this.document != null;
-    }
 
     public JdomRepresentation(Resource resource){
 
@@ -540,15 +530,15 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * @return
      * @deprecated 
      */
-    public JdomRepresentation serialize(Object o) {
+    public static JdomRepresentation getRepresentation(Object o) {
         String prefix;
         if (o instanceof Resource){
             prefix = ((Resource) o).getPrefix();
         }else{
             prefix = "root";
         }
-        CoupleList<String, String> obj = ReflectionUtils.basicSerialization(o).stringify();
-        JdomRepresentation representation = new JdomRepresentation(prefix, (String[]) obj.stringify().flat());
+
+        JdomRepresentation representation = new JdomRepresentation(prefix, SerializationUtils.serialize(o));
         return representation;
     }
 

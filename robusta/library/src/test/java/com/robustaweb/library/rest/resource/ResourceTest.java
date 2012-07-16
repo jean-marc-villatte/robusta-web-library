@@ -8,7 +8,9 @@ package com.robustaweb.library.rest.resource;
 import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
+import com.robustaweb.library.commons.util.SerializationUtils;
 import com.robustaweb.library.rest.representation.Representation;
+import com.robustaweb.library.rest.representation.implementation.JdomRepresentation;
 import com.robustaweb.library.rest.resource.implementation.UserImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,6 +31,7 @@ public class ResourceTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        MyRobusta.setDefaultRepresentation(new JdomRepresentation());
     }
 
     @AfterClass
@@ -95,6 +98,7 @@ class House implements Resource<String>{
 
     @Override
     public Representation getRepresentation() throws RepresentationException {
+        System.out.println(SerializationUtils.serialize(this));
         return MyRobusta.getDefaultRepresentation(this);
     }
 

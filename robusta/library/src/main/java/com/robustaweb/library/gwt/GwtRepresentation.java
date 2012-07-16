@@ -67,29 +67,18 @@ public class GwtRepresentation implements
 		assert this.document != null;
 	}
 
-	/**
-	 * Creates an Xml Representation from nodes and values
-	 * 
-	 * @param rootName
-	 * @param nodesAndValues
-	 *            Alternate nodeNames and their values of Xml document
-	 */
-	public GwtRepresentation(String rootName, String... nodesAndValues) {
-		this(XmlUtils.build(null, rootName, nodesAndValues));
-		assert this.document != null;
-	}
+
 
 	/**
 	 * Creates an Xml Representation from nodes and values
 	 * 
 	 * @param rootName
-	 * @param nodesAndValues
+	 * @param serialization
 	 *            Alternate nodeNames and their values of Xml document
 	 */
 	public GwtRepresentation(String rootName,
-			CoupleList<String, Object> nodesAndValues) {
-		this(XmlUtils.build(null, rootName, (String[]) nodesAndValues
-				.stringify().flat()));
+			CoupleList<String, Object> serialization) {
+		this(XmlUtils.build(null, rootName,serialization));
 		assert this.document != null;
 	}
 
@@ -423,9 +412,7 @@ public class GwtRepresentation implements
 	 */
 	@Override
 	public Representation construct(Resource resource) {
-		CoupleList<String, Object> serialization = resource.serialize();
-		return new GwtRepresentation(resource.getPrefix(),
-				(String[]) serialization.stringify().flat());
+		return new GwtRepresentation(resource.getPrefix(),resource.serialize());
 	}
 
 	/**

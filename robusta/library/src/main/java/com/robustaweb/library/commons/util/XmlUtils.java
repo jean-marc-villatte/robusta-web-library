@@ -32,9 +32,7 @@ public class XmlUtils {
      * @throws IllegalArgumentException if number of params is not pair.
      * @return an Xml String
      */
-    public static String build(String headers, String rootName, String... elements) {
-        CoupleList<String, String> clist = CoupleList.<String, String>build((Object[])elements);
-
+    public static String build(String headers, String rootName, CoupleList<String, Object> clist) {
 
         StringBuilder xml = new StringBuilder();
         if (headers != null){
@@ -71,7 +69,7 @@ public class XmlUtils {
      * @return an Xml String
      */
     public static String build(String headers, Resource resource){
-        return build(headers, resource.getPrefix(), (String[]) resource.serialize().stringify().flat());
+        return build(headers, resource.getPrefix(), resource.serialize());
     }
 
 }
