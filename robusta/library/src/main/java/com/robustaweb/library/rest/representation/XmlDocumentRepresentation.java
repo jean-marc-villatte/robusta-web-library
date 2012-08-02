@@ -21,6 +21,7 @@ import com.robustaweb.library.commons.exception.XmlException;
 
 /**
  * TODO : document methods
+ * TODO : remove XmlException, so old school !
  * Add some capabilities
  * @author n.zozol
  */
@@ -30,6 +31,7 @@ public interface XmlDocumentRepresentation<D, E> extends XmlRepresentation{
     public D getDocument() throws XmlException;
     public E getRootElement() throws XmlException;
     public E getElement(String nodeName) throws XmlException;
+    //TODO : probably to remove ; no need for that
     public E getOptionalElement(String nodeName);
     public List<E> getElements(String nodeName) throws XmlException;
     public String getElementRepresentation(E element) throws XmlException;

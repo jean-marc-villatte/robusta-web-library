@@ -22,6 +22,8 @@ import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.security.Codec;
 
+import java.util.logging.Logger;
+
 /**
  * Hot configuration class. This class is more important for GWT developpers.
  * This class replace the Injection mechanism that is not possible with GWT (or
@@ -158,7 +160,7 @@ public class MyRobusta {
 	public static Representation getDefaultRepresentation(Resource resource) {
 		if (defaultRepresentation == null) {
 			throw new IllegalStateException(
-					"No defaultRepresentation engine set for MyRobusta ; use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation()' for exemple)");
+					"No defaultRepresentation engine set for MyRobusta ; When starting your application, use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation());' for exemple)");
 		}
 		return defaultRepresentation.construct(resource);
 	}
@@ -171,7 +173,7 @@ public class MyRobusta {
 	public static Representation getDefaultRepresentation() {
 		if (defaultRepresentation == null) {
 			throw new IllegalStateException(
-					"No defaultRepresentation engine set for MyRobusta ; use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation()' for exemple)");
+                    "No defaultRepresentation engine set for MyRobusta ; When starting your application, use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation());' for exemple)");
 		}
 		return defaultRepresentation.reset();
 	}
@@ -183,5 +185,16 @@ public class MyRobusta {
 	public static EtagStore getEtagStore() {
 		return etagStore;
 	}
+
+
+    public static Logger logger = Logger.getLogger("com.robustaweb");
+
+    public static void error(String message){
+        logger.severe(message);
+    }
+
+    public static void warning(String message){
+        logger.warning(message);
+    }
 	
 }

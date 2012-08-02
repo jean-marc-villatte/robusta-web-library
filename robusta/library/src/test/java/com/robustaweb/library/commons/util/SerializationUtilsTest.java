@@ -15,10 +15,10 @@ import static org.junit.Assert.*;
  *
  * @author n.zozol
  */
-public class ReflectionUtilsJavaTest {
+public class SerializationUtilsTest {
 
     SerializationUtils serializationUtils = new SerializationUtils();
-    public ReflectionUtilsJavaTest() {
+    public SerializationUtilsTest() {
 
     }
 

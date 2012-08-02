@@ -29,6 +29,7 @@ import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.MathUtils;
 import com.robustaweb.library.commons.util.SerializationUtils;
+import com.sun.xml.internal.bind.v2.runtime.output.XmlOutput;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -54,20 +55,20 @@ import com.robustaweb.library.security.implementation.MD5;
 public class JdomRepresentation implements XmlDocumentRepresentation<Document, Element>{
 
     Document document;
-    /**
-     * Optional file path where the document may be read/saved
-     */
-    String path;
-    
+
     Date lastModified;
 
+
+    public JdomRepresentation(Document document) {
+        this.document = document;
+    }
     /**
      * Create an empty document with a <root> element
      */
     public JdomRepresentation() {
-        this.document = new Document(new Element("root"));
-        assert this.document != null;
+        this(new Document(new Element("root")));
     }
+
 
 
     public JdomRepresentation(String xml) {
@@ -78,7 +79,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     
     
     /**
-     * 
+     * This is the preferred way for creating a Representation via a customized Resource serialization
      * @param rootName
      * @param serialization
      */
@@ -86,37 +87,54 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         Element root = new Element(rootName);
         for (Couple<String, Object> couple : serialization){
             Element elt = new Element(couple.getLeft());
-            elt.setText(couple.getRight().toString());
+            if (couple.getRight()==null){
+                elt.setText(this.getEmptyValue());
+            }else{
+                elt.setText(couple.getRight().toString());
+            }
             root.addContent(elt);
         }
         this.document = new Document(root);
     }
 
 
+    /**
+     * This is the simplest way to create a Representation
+     * @param resource
+     */
     public JdomRepresentation(Resource resource){
-
+        this(resource.getPrefix(), resource.serialize());
     }
 
     private Document createDocument(String xml){
            SAXBuilder sax = new SAXBuilder();
            try {
-               this.document = sax.build(new StringReader(xml));
+               return  sax.build(new StringReader(xml));
            } catch (JDOMException ex) {
                throw new XmlException(ex);
            } catch (IOException ex) {
                throw new XmlException(ex);
            }
-           return document;
        }
 
+
+    XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+
+    /**
+     * Set a customized JDOM outputter. By default, it's a  new XMLOutputter(Format.getPrettyFormat());
+     * @param outputter JDOM outputter
+     */
+    public void setOutputter(XMLOutputter outputter) {
+        this.outputter = outputter;
+    }
 
     /**
      * {@inheritDoc }
      */
     @Override
     public String toString() {
-        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        String s = out.outputString(this.document);
+
+        String s = outputter.outputString(this.document);
         return s;
     }
 
@@ -154,8 +172,6 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         }else{
             return null;
         }
-
-        
     }
     
     /**
@@ -211,8 +227,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         Element detached = (Element) element.detach();
         Document doc = new Document(detached);
         //output
-        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        String s = out.outputString(doc);
+        String s = outputter.outputString(doc);
         return s;
     }
 
@@ -233,11 +248,20 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     @Override
     public JdomRepresentation remove(String nodeName) throws XmlException {
 
-        Iterator it = this.document.getDescendants();
         Element candidate = getElement(nodeName);
         assert candidate != null : "getElement should have throw an execption";
         candidate.getParent().removeContent(candidate);
         return this;
+    }
+
+    @Override
+    public Representation fetch(String nodeName) {
+        Element elt = this.getElement(nodeName);
+        elt = (Element)((Element)elt.clone()).detach();
+        Document doc = new Document();
+        doc.setRootElement(elt);
+        return  new JdomRepresentation(doc);
+
     }
 
     /**
@@ -448,7 +472,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     }
 
     /**
-     * Saves the JDOM Document
+     * Saves the JDOM Document using a Format.getPrettyFormat
      * @param doc
      * @param path
      * @return
@@ -477,52 +501,24 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public boolean save(String path) throws FileNotFoundException, IOException {
+    public void save(String path) throws FileNotFoundException, IOException {
+
         File f = new File(path);
 
         if (!f.exists()) {
             f.createNewFile();
         }
-        XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
-        FileOutputStream fos = new FileOutputStream(f);
-        sortie.output(this.document, fos);
-        fos.close();
-        f = null;
-        return true;
-    }
+        XMLOutputter out= new XMLOutputter(Format.getPrettyFormat());
+        FileOutputStream fileOutputStream = new FileOutputStream(f);
 
-    /**
-     * Saves the Xml Document
-     * @param doc
-     * @param filePath
-     * @return
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public boolean save() throws IOException {
-        if (this.path == null) {
-            throw new IllegalStateException("No path has been set for this document");
-        }
-        File f = new File(path);
-
-        if (!f.exists()) {
-            f.createNewFile();
-        }
-        XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
-        try {
-            FileOutputStream fos = new FileOutputStream(f);
-            sortie.output(this.document, fos);
-            fos.close();
-        } catch (FileNotFoundException ex) {
-            throw new IOException("File not found :" + ex.getMessage());
+        try{
+            out.output(this.document, fileOutputStream);
+        }finally {
+            fileOutputStream.close();
         }
 
         f = null;
-        return true;
     }
-
-   
-    
 
     /**
      *
@@ -568,9 +564,9 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 	 * {@inheritDoc }
 	 */
 	@Override
-	public Representation construct(String prefix, CoupleList<String, Object> nodesAndValues) {
+	public Representation construct(String prefix, CoupleList<String, Object> serialization) {
 		// TODO Auto-generated method stub
-		return new JdomRepresentation(prefix, nodesAndValues);
+		return new JdomRepresentation(prefix, serialization);
 	}
 
 	//TODO : to be tested !
@@ -625,6 +621,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 		return MD5.encodeMD5(this.toString());
 	}
 
+
+
 	/**
 	 * {@inheritDoc }
 	 */
@@ -639,6 +637,18 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 		this.lastModified = lastModified;
 	}
 
-	
 
+    String emptyValue = "";
+
+    @Override
+    public void setEmptyValue(String value) {
+        this.emptyValue = emptyValue;
+
+    }
+
+    @Override
+    public String getEmptyValue() {
+
+        return this.emptyValue;
+    }
 }

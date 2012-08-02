@@ -181,6 +181,7 @@ public class MathUtils {
      */
     public static <T extends Number> T convert(String str, T exemple) throws NumberFormatException, IllegalArgumentException{
 
+        str = str.trim();
         T result = null;
         if (exemple instanceof Double) {
             result = (T) new Double(str);

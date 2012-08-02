@@ -205,7 +205,13 @@ public class GwtRepresentation implements
 		return this;
 	}
 
-	/**
+    @Override
+    public Representation fetch(String nodeName) {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override
@@ -481,8 +487,8 @@ public class GwtRepresentation implements
 	 */
 	@Override
 	public Representation construct(String prefix,
-			CoupleList<String, Object> nodesAndValues) {
-		return new GwtRepresentation(prefix, nodesAndValues);
+			CoupleList<String, Object> serialization) {
+		return new GwtRepresentation(prefix, serialization);
 	}
 	
 	
@@ -501,11 +507,23 @@ public class GwtRepresentation implements
 		return lastModified;
 	}
 
+
 	/**
 	 * {@inheritDoc }
 	 */
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
 	}
+
+    String emptyValue ="";
+    @Override
+    public void setEmptyValue(String value) {
+        this.emptyValue =emptyValue;
+    }
+
+    @Override
+    public String getEmptyValue() {
+        return this.emptyValue;
+    }
 
 }

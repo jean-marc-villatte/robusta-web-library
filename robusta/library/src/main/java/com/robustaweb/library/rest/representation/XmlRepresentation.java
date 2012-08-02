@@ -24,6 +24,8 @@ import com.robustaweb.library.commons.util.CoupleList;
  */
 public interface XmlRepresentation extends Representation {
 
+
+
     public static final String headers = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     
     String getAttribute(String nodeName, String attribute) throws XmlException;

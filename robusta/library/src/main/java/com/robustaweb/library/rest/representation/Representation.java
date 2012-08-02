@@ -38,6 +38,7 @@ public interface Representation {
     public String toString();
 
     /**
+     * TODO : not JsonCompliant, because it's not always a String
      * Returns a node value, or throw a RepresentationException if it's not found
      * @param nodeName name of the searched node
      * @return the node value
@@ -54,6 +55,7 @@ public interface Representation {
     public Representation set(String nodeName, String value);
 
     /**
+     * TODO : Not Json complient. Document has no need here. Not good for SAX neither
      * Returns the underlying structure, or a String representation
      * @return
      */
@@ -129,12 +131,14 @@ public interface Representation {
     public Representation addList(String listName, String nodeName, List<Object>values);
 
     /**
+     * TODO : what the fuck is that ?
      * Add a list of resources to the Representation. A Teacher Representation can embbed a List&lt;Student> even if
      * the Java Teacher object does NOT contain a List &lt;Student>students attribute.
      * The Representation will add id <strong>AND</strong> a toString representation of the Resource.
      * If list is empty, an empty node <strong>is</strong> created.
      * @param resources
      * @return the updated Representation
+     * @deprecated
      */
     public Representation addList(ResourceList resources, String prefixIfListIsEmpty);
     
@@ -146,6 +150,8 @@ public interface Representation {
      * @throws RepresentationException if the struncture is irrelevant for the removal
      */
     public Representation remove(String nodeName) throws RepresentationException;
+
+    public Representation fetch(String nodeName);
 
     /**
      * Overrides the copy() method. Each descending elements of the new structure must have differents memory adresses.
@@ -170,10 +176,10 @@ public interface Representation {
     /**
      * Construct a Representation from a alternate property/value array. This method should directly call a constructor.
      * @param prefix prefix of the representation
-     * @param nodesAndValues alternate property/value array, such as "id", 12, "name", "John Doe"
+     * @param serialization alternate property/value array, such as "id", 12, "name", "John Doe"
      * @return
      */
-    public Representation construct(String prefix, CoupleList<String, Object> nodesAndValues);
+    public Representation construct(String prefix, CoupleList<String, Object> serialization);
     
     /**
      * Etags are Representation Specific ; 
@@ -186,4 +192,10 @@ public interface Representation {
     public Date getLastModified();
     
     public void setLastModified(Date date);
+
+    public void setEmptyValue(String value);
+    public String getEmptyValue();
+
+
+
 }

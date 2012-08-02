@@ -1,8 +1,12 @@
 package com.robustaweb.resource;
 
+
+import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.Couple;
+
 import com.robustaweb.library.commons.util.CoupleList;
+import com.robustaweb.library.commons.util.SerializationUtils;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.resource.Resource;
 
@@ -41,12 +45,11 @@ public class User implements Resource<Couple<String, Long>>
 
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
-
+        return SerializationUtils.serialize(this);
     }
 
     @Override
     public Representation getRepresentation() {
-        //TODO Defualt implementation
-        return null;
+        return MyRobusta.getDefaultRepresentation(this);
     }
 }
