@@ -10,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.gwt.junit.client.GWTTestCase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,7 +22,12 @@ import com.robustaweb.library.security.Codec;
  *
  * @author n.zozol
  */
-public class MyRobustaTest {
+public class MyRobustaTest  extends GWTTestCase {
+
+    @Override
+    public String getModuleName() {
+        return "com.robustaweb.library.Robusta";
+    }
 
     public MyRobustaTest() {
     }
@@ -36,7 +42,7 @@ public class MyRobustaTest {
 
     @Test
     public void testGetGwtModuleName() {
-        String expected = "";
+        String expected = "com.robustaweb.library.Robusta";
         assertEquals("Bad Module name", expected, MyRobusta.getGwtModuleName());
     }
 

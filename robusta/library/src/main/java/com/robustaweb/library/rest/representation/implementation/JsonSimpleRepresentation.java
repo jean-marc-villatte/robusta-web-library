@@ -35,7 +35,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
         this.json = json;
     }
 
-    private JsonSimpleRepresentation(String string) throws ParseException {
+    public JsonSimpleRepresentation(String string) throws RepresentationException {
 
         if (string == null){
             throw new IllegalArgumentException("Can't create a JsonObject from null");
@@ -44,7 +44,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
             this.json = parser.parse(string);
         } catch (ParseException e) {
             MyRobusta.error("Paring error with SimpleJsonRepresentation. Most server side Json Parser are more strict than Browsers and left keys MUST be wrapped with double quotes");
-            throw e;
+            throw new RepresentationException(e);
         }
     }
 
@@ -132,23 +132,47 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
     @Override
     public List<String> getValues(String nodeName) throws RepresentationException {
 
-        JSONArray array = toArray(nodeName);
-        List<String> list = new ArrayList<String>(array.size());
-        for (Object o : array){
-            list.add(o.toString());
+        //the current object MUST be an array
+        if (! (json instanceof JSONArray)){
+            throw new RepresentationException("The current object must be a JSONArray. The method will pick '"+nodeName+"' values on each object in the array");
         }
-        return list;
+
+        List<String> objects = new ArrayList<String>();
+
+        JSONArray array = ((JSONArray)json);
+        for (Object o : array){
+            if (! (o instanceof JSONObject)){
+                throw new RepresentationException("Every object in the array MUST be a JsonObject");
+            }else{
+                JSONObject obj = (JSONObject)o;
+                String value =(String)obj.get(nodeName);
+                objects.add(String.valueOf(value));
+            }
+        }
+
+        return objects;
     }
 
 
     @Override
     public List<Long> getNumbers(String nodeName) throws RepresentationException, NumberFormatException {
-        JSONArray array = toArray(nodeName);
-        List<Long> list = new ArrayList<Long>(array.size());
-        for (Object o : array){
-            list.add( MathUtils.convert(o.toString().trim(), 1L));
+        //the current object MUST be an array
+        if (! (json instanceof JSONArray)){
+            throw new RepresentationException("The current object must be a JSONArray. The method will pick '"+nodeName+"' values on each object in the array");
         }
-        return list;
+
+        List<Long> numbers = new ArrayList<Long>();
+
+        JSONArray array = ((JSONArray)json);
+        for (Object o : array){
+            if (! (o instanceof JSONObject)){
+                throw new RepresentationException("Every object in the array MUST be a JsonObject");
+            }else{
+                JSONObject obj = (JSONObject)o;
+                numbers.add((Long)obj.get(nodeName));
+            }
+        }
+        return numbers;
     }
 
     @Override
@@ -188,7 +212,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
     }
 
     @Override
-    public Representation fetch(String nodeName) {
+    public JsonSimpleRepresentation fetch(String nodeName) {
         Object newJson = toObject().get(nodeName);
         return new JsonSimpleRepresentation(newJson);
     }

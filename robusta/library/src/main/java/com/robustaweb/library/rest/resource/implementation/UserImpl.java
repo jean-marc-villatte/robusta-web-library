@@ -12,7 +12,7 @@ import com.robustaweb.library.rest.resource.Resource;
  */
 public class UserImpl implements Resource<Long> {
 
-    public static UserImpl johnDoe = new UserImpl(1L, "john.doe@gmail.com", "John", "Doe");
+    //public static UserImpl johnDoe = new UserImpl(1L, "john.doe@gmail.com", "John", "Doe");
 
     long id;
     String email;

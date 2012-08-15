@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.robustaweb.library.rest.resource;
 
@@ -24,7 +20,7 @@ import static org.junit.Assert.*;
 public class ResourceTest {
 
     House house = new House( "Chateau de Versailles");
-    UserImpl johnDoe = UserImpl.johnDoe;
+    UserImpl johnDoe = new UserImpl(1L, "john.doe@gmail.com", "John", "Doe");
 
     public ResourceTest() {
     }
@@ -61,15 +57,11 @@ public class ResourceTest {
         representation = johnDoe.getRepresentation();
         assertTrue(representation != null);
         assertTrue(representation.get("id").equals(johnDoe.getId().toString()));
-        assertTrue(representation.getNumber("id") == johnDoe.getId());
 
-    }
+        long expected =representation.getNumber("id");
+        long found = johnDoe.getId();
+        assertEquals(expected, found);
 
-    @Test
-    public void testGetRelativeURI() {
-        String expected = "house/"+this.house.getId();
-
-        //assertTrue("",);
     }
 
   
@@ -98,7 +90,6 @@ class House implements Resource<String>{
 
     @Override
     public Representation getRepresentation() throws RepresentationException {
-        System.out.println(SerializationUtils.serialize(this));
         return MyRobusta.getDefaultRepresentation(this);
     }
 

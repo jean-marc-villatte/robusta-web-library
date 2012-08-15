@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
  */
 public class SerializationUtilsTest {
 
+    UserImpl johnDoe = new UserImpl(1L, "john.doe@gmail.com", "John", "Doe");
+
     SerializationUtils serializationUtils = new SerializationUtils();
     public SerializationUtilsTest() {
 
@@ -32,14 +34,16 @@ public class SerializationUtilsTest {
 
     @Test
     public void testGetItems() {
-        UserImpl user = UserImpl.johnDoe;
-        System.out.println("couples : " + serializationUtils.serialize(user));
-        assertTrue (serializationUtils.serialize(user).size() == 5);
+        UserImpl user = johnDoe;
+        int expected = new String[]{"id", "email", "firstName", "lastName"}.length;
+        CoupleList serialization = serializationUtils.serialize(user);
+        int serializedSize = serialization.size();
+        assertEquals(expected, serializedSize);
 
         SuperUser user2 = new SuperUser(2L, "jj@gmail.com", "Jane", "Doe");
-        System.out.println("couples : "+ serializationUtils.serialize(user2));
-        int expected = 6;
-        assertEquals(expected, serializationUtils.serialize(user2).size());
+        expected ++;
+        serializedSize = serializationUtils.serialize(user2).size();
+        assertEquals(expected, serializedSize);
     }
 
 }

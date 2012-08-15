@@ -61,12 +61,12 @@ public class SerializationUtils {
             f.setAccessible(true);
             try {
                 Object value = f.get(object);
-                if (value instanceof Resource){
+               /* if (value instanceof Resource){
                      //adding another couple with the key
                     Resource r = (Resource) value;
                     Couple keyCouple = new Couple<String, Object>(f.getName()+"Id", r.getId());
                     cp.add(keyCouple);
-                }
+                }*/
                 couple = new Couple<String, Object>(f.getName(),value);
             } catch (IllegalArgumentException ex) {
                 couple = new Couple<String, Object>(f.getName(), ex.getMessage());
