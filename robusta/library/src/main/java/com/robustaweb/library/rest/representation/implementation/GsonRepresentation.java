@@ -1,7 +1,11 @@
 package com.robustaweb.library.rest.representation.implementation;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.robustaweb.library.commons.exception.RepresentationException;
+import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.representation.JsonRepresentation;
 import com.robustaweb.library.rest.representation.Representation;
@@ -15,9 +19,26 @@ import java.util.List;
  * Created by Nicolas Zozol
  * Date: 12/08/12
  */
-public class GsonRepresentation extends AbstractJsonRepresentation<Gson> {
+public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> {
+
+
+    Gson gson = new Gson();
+    JsonElement document;
+
+    /**
+     * In that case, is serialization if not null, it's always a JsonObject
+     * @param serialization
+     */
+    public GsonRepresentation(CoupleList<String, Object>  serialization) {
+
+
+        String str = gson.toJson(serialization);
+        this.document = gson.toJsonTree(serialization.getHashMap());
+
+    }
+
     @Override
-    public JsonRepresentation getObject(String nodeName) {
+    public GsonRepresentation getObject(String nodeName) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -58,7 +79,8 @@ public class GsonRepresentation extends AbstractJsonRepresentation<Gson> {
 
     @Override
     public String get(String nodeName) throws RepresentationException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+     return null;
     }
 
     @Override
@@ -67,8 +89,8 @@ public class GsonRepresentation extends AbstractJsonRepresentation<Gson> {
     }
 
     @Override
-    public Object getDocument() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public JsonElement getDocument() {
+        return this.document;
     }
 
     @Override
@@ -138,6 +160,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<Gson> {
 
     @Override
     public Representation construct(Resource resource) {
+        CoupleList<String, Object> serialization;
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

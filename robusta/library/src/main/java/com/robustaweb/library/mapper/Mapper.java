@@ -13,5 +13,7 @@ public interface Mapper <Lib, Rep extends Representation> {
 
     Rep getRepresentation (Resource resource);
 
+    <T> T getObject (Object o, Class <T> resourceClass);
+
     Lib getUnderlyingLibrary ();
 }

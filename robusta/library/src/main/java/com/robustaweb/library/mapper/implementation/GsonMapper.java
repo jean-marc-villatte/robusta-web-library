@@ -19,6 +19,11 @@ public class GsonMapper implements Mapper<Gson,GsonRepresentation>{
     }
 
     @Override
+    public <T> T getObject(Object o, Class<T> resourceClass) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public GsonRepresentation getRepresentation(Resource resource) {
         return null;
     }
