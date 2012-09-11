@@ -5,6 +5,7 @@ import com.robustaweb.library.commons.util.SerializationUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,38 @@ public class GsonRepresentationTest {
         Student jim = new Student(3L, "Jim", "Y");
         johnDoe.addFriend(jack);
         johnDoe.addFriend(jim);
-   
+
         jack.addFriend(jim);
 
         GsonRepresentation representation = new GsonRepresentation(SerializationUtils.serialize(johnDoe));
         System.out.println(representation.getDocument().toString());
 
+    }
+
+    @Test
+    public void testIsXxx(){
+        String _0 = "0", _11 = "11", _00="00";
+        String _null="null";
+        String _false = "false", _true = "true";
+        String str0 = "'0'", str0bis = "\"0\"", strFalse = "'false'",  strTrue = "\"false\"";
+
+        GsonRepresentation rep = new GsonRepresentation(_0);
+        assertTrue(rep.isNumber());
+        assertFalse(rep.isBoolean());
+        assertFalse(rep.isString());
+        assertFalse(rep.isNull());
+
+        rep = new GsonRepresentation(_11);
+        assertTrue(rep.isNumber());
+        assertFalse(rep.isBoolean());
+        assertFalse(rep.isString());
+        assertFalse(rep.isNull());
+
+        rep = new GsonRepresentation(_00);
+        assertTrue(rep.isNumber());
+        assertFalse(rep.isBoolean());
+        assertFalse(rep.isString());
+        assertFalse(rep.isNull());
     }
 
 }

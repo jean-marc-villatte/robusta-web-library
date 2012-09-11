@@ -37,39 +37,61 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
 
     }
 
+    public GsonRepresentation(String json) {
+
+
+        this.document = new JsonParser().parse(json);
+
+    }
+
+
     @Override
+    /**
+     * @deprecated can't see the need of that.
+     */
     public GsonRepresentation getObject(String nodeName) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (!this.isObject()){
+            throw new RepresentationException("The current JsonElement :"+this.document.toString() + " is not an object, but a primitive :");
+        }
+        this.document = this.document.getAsJsonObject().get(nodeName);
+        return this;
     }
 
     @Override
     public boolean isObject() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return this.document.isJsonObject();
     }
 
     @Override
     public boolean isBoolean() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        //checking that it' a primitive
+        if (this.document.isJsonPrimitive()){
+            String json = this.document.toString();
+            return json.equalsIgnoreCase("true") || json.equalsIgnoreCase("false");
+        }else{
+            return false;
+        }
     }
 
     @Override
     public boolean isString() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return this.document.isJsonPrimitive() &&(
+                this.document.toString().trim().startsWith("\"") || this.document.toString().trim().startsWith("'"));
     }
 
     @Override
     public boolean isNumber() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+       return this.document.isJsonPrimitive() && ! this.isBoolean() && ! this.isString();
     }
 
     @Override
     public boolean isArray() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return this.document.isJsonArray();
     }
 
     @Override
     public boolean isNull() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+         return this.document.isJsonNull();
     }
 
     @Override
