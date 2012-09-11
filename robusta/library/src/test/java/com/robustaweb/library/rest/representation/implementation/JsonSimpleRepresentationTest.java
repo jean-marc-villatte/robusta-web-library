@@ -70,6 +70,7 @@ public class JsonSimpleRepresentationTest {
         assertTrue(numbers.contains(24L));
     }
 
+    @Test
     public void testValues(){
         representation = new JsonSimpleRepresentation(fetch);
         representation = representation.fetch("main").fetch("under").fetch("houses");

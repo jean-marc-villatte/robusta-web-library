@@ -27,10 +27,7 @@ import com.google.gwt.xml.client.Text;
 import com.google.gwt.xml.client.XMLParser;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.exception.XmlException;
-import com.robustaweb.library.commons.util.Couple;
-import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.commons.util.MathUtils;
-import com.robustaweb.library.commons.util.XmlUtils;
+import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
@@ -396,8 +393,16 @@ public class GwtRepresentation implements
 	 * {@inheritDoc }
 	 */
 	@Override
-	public Representation reset() {
-		return new GwtRepresentation();
+	public GwtRepresentation getRepresentation(Object newObject) {
+        String prefix;
+        if (newObject instanceof Resource){
+            prefix = ((Resource) newObject).getPrefix();
+        }else{
+            prefix = "root";
+        }
+
+        GwtRepresentation representation = new GwtRepresentation(prefix, SerializationUtils.serialize(newObject));
+        return representation;
 	}
 
 	/**
@@ -413,19 +418,13 @@ public class GwtRepresentation implements
 		}
 	}
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public Representation construct(Resource resource) {
-		return new GwtRepresentation(resource.getPrefix(),resource.serialize());
-	}
+
 
 	/**
 	 * {@inheritDoc }
 	 */
 	@Override
-	public Representation addList(String listName, String nodeName,
+	public Representation addList( String nodeName,String listName,
 			List<Object> values) {
 		Element root = this.document.getDocumentElement();
 		if (root == null) {
@@ -482,14 +481,6 @@ public class GwtRepresentation implements
 		return this;		
 	}
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public Representation construct(String prefix,
-			CoupleList<String, Object> serialization) {
-		return new GwtRepresentation(prefix, serialization);
-	}
 	
 	
 	/**

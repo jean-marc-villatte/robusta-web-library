@@ -162,7 +162,7 @@ public class MyRobusta {
 			throw new IllegalStateException(
 					"No defaultRepresentation engine set for MyRobusta ; When starting your application, use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation());' for exemple)");
 		}
-		return defaultRepresentation.construct(resource);
+		return getDefaultRepresentation().construct(resource);
 	}
 
 	/**

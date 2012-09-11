@@ -91,6 +91,7 @@ public interface Representation {
      * Returns a node value, or null if it's not found
      * @param nodeName name of the searched node
      * @return the node value or null
+     * @deprecated
      */
     public String getOptionalValue(String nodeName);
 
@@ -128,10 +129,10 @@ public interface Representation {
      * @param values
      * @return the updated representation
      */
-    public Representation addList(String listName, String nodeName, List<Object>values);
+    public Representation addList(String nodeName, String listName, List<Object>values);
 
     /**
-     * TODO : what the fuck is that ?
+     * TODO : what the fuck is that ? We should be independant from Resource object here
      * Add a list of resources to the Representation. A Teacher Representation can embbed a List&lt;Student> even if
      * the Java Teacher object does NOT contain a List &lt;Student>students attribute.
      * The Representation will add id <strong>AND</strong> a toString representation of the Resource.
@@ -161,25 +162,12 @@ public interface Representation {
 
 
     /**
-     * Returns a new empty representation . This current object is NOT affected.
-     * @return  a new empty representation
+     * Returns a new Representation object of newObject. This current Representation object is NOT affected.
+     * @return  a Representation of newObject
      */
-    public Representation reset();
+    public Representation getRepresentation(Object newObject);
 
-    /**
-     * Construct a Representation from a resource. This method should directly call a constructor.
-     * @param resource
-     * @return  a Representation of the resource
-     */
-    public Representation construct(Resource resource);
 
-    /**
-     * Construct a Representation from a alternate property/value array. This method should directly call a constructor.
-     * @param prefix prefix of the representation
-     * @param serialization alternate property/value array, such as "id", 12, "name", "John Doe"
-     * @return
-     */
-    public Representation construct(String prefix, CoupleList<String, Object> serialization);
     
     /**
      * Etags are Representation Specific ; 

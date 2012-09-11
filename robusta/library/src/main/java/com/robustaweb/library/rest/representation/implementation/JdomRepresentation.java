@@ -524,9 +524,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      *
      * @param o
      * @return
-     * @deprecated 
      */
-    public static JdomRepresentation getRepresentation(Object o) {
+    public  JdomRepresentation getRepresentation(Object o) {
         String prefix;
         if (o instanceof Resource){
             prefix = ((Resource) o).getPrefix();
@@ -538,40 +537,30 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         return representation;
     }
 
-    /**
-     * TODO : for every right object, we should check if there is an iterator, or an array
-     * @param serialization
-     * @return
-     * TODO : test
-     */
-    @Override
-    public Representation reset() {        
-        return  new JdomRepresentation();
-    }
+
 
     /**
      * Create a basic representation
      * @param resource Resource
      * @return
      */
-    @Override
-    public Representation construct(Resource resource) {
+
+    public static Representation construct(Resource resource) {
         CoupleList<String, Object> serialization = resource.serialize();
-        return this.construct(resource.getPrefix(),  serialization);
+        return JdomRepresentation.construct(resource.getPrefix(),  serialization);
     }
 
     /**
 	 * {@inheritDoc }
 	 */
-	@Override
-	public Representation construct(String prefix, CoupleList<String, Object> serialization) {
-		// TODO Auto-generated method stub
+
+	public static Representation construct(String prefix, CoupleList<String, Object> serialization) {
 		return new JdomRepresentation(prefix, serialization);
 	}
 
 	//TODO : to be tested !
 	@Override
-	public Representation addList(String listName, String nodeName,
+	public Representation addList( String nodeName, String listName,
 			List<Object> values) {
 		Element list = new Element(listName);
 		for (Object o : values){

@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ import java.util.List;
  * Date: 24/07/12
  * Time: 22:03
  */
-public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> {
+public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
 
     JsonType type;
     Object json;
@@ -80,8 +81,8 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
     }
 
     @Override
-    public JSONObject getDocument() {
-       return toObject();
+    public Object getDocument() {
+       return this.json;
     }
 
     @Override
@@ -154,6 +155,11 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
     }
 
 
+
+
+
+
+
     @Override
     public List<Long> getNumbers(String nodeName) throws RepresentationException, NumberFormatException {
         //the current object MUST be an array
@@ -192,7 +198,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
     }
 
     @Override
-    public Representation addList(String listName, String nodeName, List<Object> values) {
+    public Representation addList( String nodeName,String listName, List<Object> values) {
         JSONArray array = new JSONArray();
         array.addAll(values);
         toObject().put(nodeName, array);
@@ -222,23 +228,26 @@ public class JsonSimpleRepresentation implements JsonRepresentation<JSONObject> 
         return new JsonSimpleRepresentation(((JSONObject) json).clone());
     }
 
-    @Override
-    public Representation reset() {
+
+
+    public static JsonSimpleRepresentation construct(Resource resource) {
         //TODO Defualt implementation
         return null;
     }
 
-    @Override
-    public Representation construct(Resource resource) {
-        //TODO Defualt implementation
-        return null;
+    public JsonSimpleRepresentation construct(String prefix, HashMap<String, Object> serialization) {
+        this.json = new JSONObject(serialization);
+        return this;
     }
 
-    @Override
-    public Representation construct(String prefix, CoupleList<String, Object> serialization) {
-        //TODO Defualt implementation
-        return null;
+    public JsonSimpleRepresentation construct(String prefix,  Object object) {
+
+        this.json = object;//TODO : looks suspicious !
+        return this;
     }
+
+
+
 
     @Override
     public String getEtagValue() {
