@@ -247,7 +247,47 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
 
+    @Override
+    public List<String> getValuesFromArray() throws RepresentationException {
+        //TODO Defualt implementation
+        return null;
+    }
 
+    @Override
+    public List<Long> getNumbersFromArray() throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public List<String> pluck(String key) throws RepresentationException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public List<Long> pluckNumbers(String key) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public Representation getRepresentation(Object newObject) {
+        //TODO Defualt implementation
+        return null;
+    }
 
     @Override
     public String getEtagValue() {

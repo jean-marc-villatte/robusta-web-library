@@ -176,19 +176,45 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public Representation reset() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public List<String> getValuesFromArray() throws RepresentationException {
+        //TODO Defualt implementation
+        return null;
     }
 
     @Override
-    public Representation construct(Resource resource) {
-        CoupleList<String, Object> serialization;
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public List<Long> getNumbersFromArray() throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
     }
 
     @Override
-    public Representation construct(String prefix, CoupleList<String, Object> serialization) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public List<String> pluck(String key) throws RepresentationException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public List<Long> pluckNumbers(String key) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public Representation getRepresentation(Object newObject) {
+        //TODO Defualt implementation
+        return null;
     }
 
     @Override

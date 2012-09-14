@@ -149,33 +149,19 @@ public class MyRobusta {
 		MyRobusta.defaultRepresentation = representation;
 	}
 
-	/**
-	 * Create a default representation of the Resource Before using this method,
-	 * be sure you have set a defaultRepresentation.
-	 * 
-	 * @param resource
-	 * @return
-	 * @see #setDefaultRepresentation(Representation)
-	 */
-	public static Representation getDefaultRepresentation(Resource resource) {
-		if (defaultRepresentation == null) {
-			throw new IllegalStateException(
-					"No defaultRepresentation engine set for MyRobusta ; When starting your application, use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation());' for exemple)");
-		}
-		return getDefaultRepresentation().construct(resource);
-	}
+
 
 	/**
 	 * Returns an <strong>empty</strong> Representation using the default Engine
 	 * 
 	 * @return
 	 */
-	public static Representation getDefaultRepresentation() {
+	public static Representation getDefaultRepresentation(Object object) {
 		if (defaultRepresentation == null) {
 			throw new IllegalStateException(
                     "No defaultRepresentation engine set for MyRobusta ; When starting your application, use : 'MyRobusta.setDefaultRepresentation(new JdomRepresentation());' for exemple)");
 		}
-		return defaultRepresentation.reset();
+		return defaultRepresentation.getRepresentation(object);
 	}
 
 	public static void setEtagStore(EtagStore etagStore) {
