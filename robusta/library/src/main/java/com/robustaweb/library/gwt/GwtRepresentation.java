@@ -191,7 +191,20 @@ public class GwtRepresentation implements
 		return this;
 	}
 
-	/**
+
+    @Override
+    public Representation add(Resource resource, boolean eager) {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public Representation addAll(ResourceList resources, boolean eager) {
+        //TODO Defualt implementation
+        return null;
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override
@@ -424,8 +437,8 @@ public class GwtRepresentation implements
 	 * {@inheritDoc }
 	 */
 	@Override
-	public Representation addList( String nodeName,String listName,
-			List<Object> values) {
+	public GwtRepresentation addAll(String nodeName, String listName,
+                                 List<Object> values) {
 		Element root = this.document.getDocumentElement();
 		if (root == null) {
 			throw new XmlException("The document has no Root Element");
@@ -445,10 +458,11 @@ public class GwtRepresentation implements
 	}
 
 	/**
+     * TODO : incorrect implementation
 	 * {@inheritDoc }
 	 */
-	@Override
-	public Representation addList(ResourceList resources, String prefixIfListIsEmpty) {
+	//@Override
+	public GwtRepresentation addAll(ResourceList resources, String prefixIfListIsEmpty) {
 		if (resources == null){
 			throw new IllegalArgumentException("Resources is null");
 		}

@@ -18,6 +18,8 @@ package com.robustaweb.library.rest.representation;
 import com.robustaweb.library.commons.exception.XmlException;
 import com.robustaweb.library.commons.util.CoupleList;
 
+import java.util.List;
+
 /**
  * 
  * @author n.zozol
@@ -41,6 +43,19 @@ public interface XmlRepresentation extends Representation {
      */
     public CoupleList<String, String> getCouples(String leftNodeName, String rightNodeName);
 
+
+    /**
+     * Add a list of objects to the Representation. A Teacher Representation can embbed a list of objects even if the
+     * Teacher Java object does not contains explicitely some attribute slots.
+     * Note that nodeName is not necessary in, for exemple, a Json Representation. The method contract is essentialy based on
+     * retrieving the values.
+     * If list is empty, an empty node <strong>is</strong> created.
+     * @param listName
+     * @param nodeName
+     * @param values
+     * @return the updated representation
+     */
+    public XmlRepresentation addAll(String nodeName, String listName, List<Object> values);
     
 
 }

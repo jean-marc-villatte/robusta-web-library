@@ -117,33 +117,21 @@ public interface Representation {
      * @return the updated representation
      */
     public Representation add(String nodeName, String nodeValue);
-    
-    /**
-     * Add a list of objects to the Representation. A Teacher Representation can embbed a list of objects even if the 
-     * Teacher Java object does not contains explicitely some attribute slots.
-     * Note that nodeName is not necessary in, for exemple, a Json Representation. The method contract is essentialy based on 
-     * retrieving the values.
-     * If list is empty, an empty node <strong>is</strong> created.
-     * @param listName
-     * @param nodeName
-     * @param values
-     * @return the updated representation
-     */
-    public Representation addList(String nodeName, String listName, List<Object>values);
 
     /**
-     * TODO : what the fuck is that ? We should be independant from Resource object here
-     * Add a list of resources to the Representation. A Teacher Representation can embbed a List&lt;Student> even if
-     * the Java Teacher object does NOT contain a List &lt;Student>students attribute.
-     * The Representation will add id <strong>AND</strong> a toString representation of the Resource.
-     * If list is empty, an empty node <strong>is</strong> created.
-     * @param resources
-     * @return the updated Representation
-     * @deprecated
+     * Add a new element, even if one of the same nodeName exists or a value to a Json array.
+     * @param nodeName
+     * @param nodeValue
+     * @return the updated representation
      */
-    public Representation addList(ResourceList resources, String prefixIfListIsEmpty);
-    
-    
+    public Representation add(Resource resource, boolean eager);
+
+
+    public Representation addAll(ResourceList resources, boolean eager);
+
+
+
+
     /**
      * Removes the <strong>first</strong>  element found with this nodeName, or the <strong>last</strong> element of a JSON array
      * @param nodeName

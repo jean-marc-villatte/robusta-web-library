@@ -150,15 +150,25 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
     @Override
-    public Representation addList(String listName, String nodeName, List<Object> values) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Representation add(Resource resource, boolean eager) {
+        //TODO Defualt implementation
+        return null;
     }
 
     @Override
-    public Representation addList(ResourceList resources, String prefixIfListIsEmpty) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public JsonRepresentation<JsonElement> addAll(String listName, List values) {
+        //TODO Defualt implementation
+        return null;
     }
+
+    @Override
+    public JsonRepresentation<JsonElement> addAll(ResourceList resources, boolean eager) {
+        //TODO Defualt implementation
+        return null;
+    }
+
 
     @Override
     public Representation remove(String nodeName) throws RepresentationException {

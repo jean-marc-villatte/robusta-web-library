@@ -23,7 +23,7 @@ import com.robustaweb.library.commons.exception.RepresentationException;
  * Utility class to work on list of Resources. It also help the Xml writing of this list.
  * @author Nicolas Zozol - Edupassion.com - Robusta Web - nzozol@edupassion.com
  */
-public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<T> {
+public class ResourceList<T extends Resource> extends ArrayList<Resource> {
 
     String xml;
 
@@ -60,7 +60,7 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
 
     @Override
     public T get(int index) {
-        return super.get(index);
+        return (T)super.get(index);
     }
 
     /**
@@ -84,7 +84,7 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
      * @param id
      * @return
      */
-    public T removeById(IdType id) {
+    public T removeById(Object id) {
         T resource;
         for (int i = 0; i < this.size(); i++) {
             resource = this.get(i);
@@ -117,14 +117,19 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
     }
 
     /**
-     * This function replace the resource with id by the new Resource
+     * This function replace the resource with id by the new Resource. The method does nothing if id == null but could replace an existing resource by null
      * @return true if it has replaced
      */
-    public boolean replace(IdType id, T resource) {
+    public boolean replace(Object id, T resource) {
+
+        if (id == null){
+            return false;
+        }
 
         int index;
-        for (T t : this) {
-            if (t.getId().equals(id)) {
+        for (Object t : this) {
+            Object tId =((Resource)t).getId();
+            if ( tId != null && tId.equals(id) ) {
                 index = this.indexOf(t);
                 this.remove(t);
                 this.add(index, resource);
@@ -135,6 +140,7 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
     }
 
     /**
+     *
      * return something like :
      * <resourceList>
      * <resource>
@@ -153,6 +159,7 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
      * 
      * </resourceList>
      * @return the xml representation
+     * @deprecated change by getRepresentation
      */
     public String getXmlRepresentation() throws RepresentationException {
 
@@ -194,17 +201,13 @@ public class ResourceList<T extends Resource<IdType>, IdType> extends ArrayList<
      *
      * @return a arraylist of all ids
      */
-    public ArrayList<IdType> getIds() {
+    public <IdType> ArrayList<IdType> getIds() {
         ArrayList<IdType> ids = new ArrayList<IdType>();
         for (Resource<IdType> r : this) {
             ids.add(r.getId());
         }
         return ids;
     }
-
-   
-
-
 
 }//End of class
 

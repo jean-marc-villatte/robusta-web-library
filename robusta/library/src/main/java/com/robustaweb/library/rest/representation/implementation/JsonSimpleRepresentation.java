@@ -198,17 +198,42 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
-    public Representation addList( String nodeName,String listName, List<Object> values) {
-        JSONArray array = new JSONArray();
-        array.addAll(values);
-        toObject().put(nodeName, array);
+    public JsonSimpleRepresentation add(Resource resource, boolean eager) {
+        if (resource == null){
+            return this;
+        }
+        Object value = eager ? resource.getRepresentation() : resource.getId();
+        toObject().put(resource.getPrefix(), value);
         return this;
     }
 
+
+
     @Override
-    public Representation addList(ResourceList resources, String prefixIfListIsEmpty) {
-        //TODO Defualt implementation
-        return null;
+    public JsonSimpleRepresentation addAll(String listName, List values) {
+        JSONArray array = new JSONArray();
+        array.addAll(values);
+        toObject().put(listName, array);
+        return this;
+    }
+
+
+    @Override
+    public JsonSimpleRepresentation addAll(ResourceList resources, boolean eager) {
+        if (resources == null || resources.isEmpty()){
+            return this;
+        }
+
+        String listName = resources.get(0).getListPrefix();
+
+        JSONArray array = new JSONArray();
+        for (int i = 0 ; i < resources.size() ; i++){
+            Resource resource = resources.get(i);
+            Object value = eager ? resource.getRepresentation() : resource.getId();
+            array.add(value);
+        }
+        toObject().put(listName, array);
+        return this;
     }
 
     @Override

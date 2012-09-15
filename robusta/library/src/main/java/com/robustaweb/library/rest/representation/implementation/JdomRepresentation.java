@@ -242,6 +242,15 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         return this;
     }
 
+    @Override
+    public JdomRepresentation add(Resource resource, boolean eager) {
+        if (resource == null){
+            return this;
+        }
+        Object value = eager ? resource.getRepresentation() : resource.getId();
+        return this.add(resource.getPrefix(), value.toString());
+    }
+
     /**
      * {@inheritDoc }
      */
@@ -560,8 +569,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
 	//TODO : to be tested !
 	@Override
-	public Representation addList( String nodeName, String listName,
-			List<Object> values) {
+	public JdomRepresentation addAll(String nodeName, String listName,
+                                 List<Object> values) {
 		Element list = new Element(listName);
 		for (Object o : values){
 			Element e = new Element(nodeName);
@@ -574,27 +583,19 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
 	//TODO : to be tested !
 	@Override
-	public Representation addList(ResourceList resources, String prefixIfListIsEmpty) {
-		if (resources == null){
-			throw new IllegalArgumentException("Resources is null");
-		}
-		if (resources.isEmpty()){
-			this.document.getRootElement().addContent(new Element(prefixIfListIsEmpty));
+	public JdomRepresentation addAll(ResourceList resources, boolean eager) {
+
+		if (resources == null || resources.isEmpty()){
+			return this;
 		}else{
 			Resource r0 = resources.get(0);
 			Element list = new Element(r0.getListPrefix());
-			for (Object r :  resources){
-				
+			for (int i = 0 ; i < resources.size() ; i++){
+				Resource r = resources.get(i);
 				Element e = new Element(r0.getPrefix());
-				
-				Element id=new Element("id");
-				id.setText(((Resource)r).getId().toString());
-				e.addContent(id);
-				
-				Element toString = new Element("show");
-				toString.setText(r.toString());
-				e.addContent(toString());
-								
+                String idText = r.getId() == null ? "" : r.getId().toString();
+				e.setText(idText);
+
 				list.addContent(e);
 			}
 			this.document.getRootElement().addContent(list);			
