@@ -1,6 +1,7 @@
 package com.robustaweb.library.rest.representation.implementation;
 
 import com.google.gson.Gson;
+import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.SerializationUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,6 +36,7 @@ public class GsonRepresentationTest {
         johnDoe.addFriend(jim);
 
         jack.addFriend(jim);
+
 
         GsonRepresentation representation = new GsonRepresentation(SerializationUtils.serialize(johnDoe));
         System.out.println(representation.getDocument().toString());

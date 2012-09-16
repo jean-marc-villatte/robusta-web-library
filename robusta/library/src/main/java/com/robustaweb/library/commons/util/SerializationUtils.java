@@ -18,6 +18,7 @@ package com.robustaweb.library.commons.util;
 import com.robustaweb.library.rest.resource.Resource;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 /**
  * Workaround support for simple Releflection unsing Java Reflection API
@@ -33,17 +34,20 @@ public class SerializationUtils {
      * @param object
      * @return
      */
-    public static CoupleList<String, Object> serialize(Object object){
-        CoupleList<String, Object> cp = new CoupleList<String, Object>();
+    public static HashMap<String, Object> serialize(Object object){
+        HashMap<String, Object> map = new HashMap<String, Object>();
 
-
-        //Checking first all superclass of the Resource
+        //Checking first all superclass of the object
         Class current = object.getClass();
         while (current != null){
-            cp.addAll(getClassItems(current, object));
+            try {
+                map.putAll(getClassItems(current, object));
+            } catch (IllegalAccessException e) {
+              throw new RuntimeException("Illegal Access to object fileds using Java Reflection.");
+            }
             current = current.getSuperclass();
         }
-        return cp;
+        return map;
     }
 
     /**
@@ -52,31 +56,18 @@ public class SerializationUtils {
      * @param object
      * @return
      */
-    private  static CoupleList<String, Object> getClassItems(Class c, Object object){
-        CoupleList<String, Object> cp = new CoupleList<String, Object>();
+    private  static HashMap<String, Object> getClassItems(Class c, Object object) throws IllegalAccessException {
+        HashMap<String, Object> map = new HashMap<String, Object>();
 
         Field[] fields = c.getDeclaredFields();
-        Couple <String, Object> couple;
         for (Field f : fields){
             f.setAccessible(true);
-            try {
                 Object value = f.get(object);
-               /* if (value instanceof Resource){
-                     //adding another couple with the key
-                    Resource r = (Resource) value;
-                    Couple keyCouple = new Couple<String, Object>(f.getName()+"Id", r.getId());
-                    cp.add(keyCouple);
-                }*/
-                couple = new Couple<String, Object>(f.getName(),value);
-            } catch (IllegalArgumentException ex) {
-                couple = new Couple<String, Object>(f.getName(), ex.getMessage());
-            } catch (IllegalAccessException ex) {
-                couple = new Couple<String, Object>(f.getName(), ex.getMessage());
-            }
-            cp.add(couple);
+                map.put(f.getName(), value);
+
         }
 
-        return cp;
+        return map;
     }
 
     /**
@@ -86,7 +77,9 @@ public class SerializationUtils {
      * @return
      */
     public String toXml(String prefix, Object obj){
-        return XmlUtils.build (null, prefix, serialize(obj));
+        HashMap<String, Object> map = serialize(obj);
+        CoupleList<String, Object> cpList = new CoupleList<String, Object>(map);
+        return XmlUtils.build (null, prefix, cpList);
     }
 
     /**

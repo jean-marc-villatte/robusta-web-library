@@ -9,6 +9,9 @@ import com.robustaweb.library.rest.resource.implementation.UserImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 /**
@@ -36,7 +39,7 @@ public class SerializationUtilsTest {
     public void testGetItems() {
         UserImpl user = johnDoe;
         int expected = new String[]{"id", "email", "firstName", "lastName"}.length;
-        CoupleList serialization = serializationUtils.serialize(user);
+        HashMap serialization = serializationUtils.serialize(user);
         int serializedSize = serialization.size();
         assertEquals(expected, serializedSize);
 

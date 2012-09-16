@@ -401,7 +401,7 @@ public class GwtRepresentation implements
             prefix = "root";
         }
 
-        GwtRepresentation representation = new GwtRepresentation(prefix, SerializationUtils.serialize(newObject));
+        GwtRepresentation representation = new GwtRepresentation(prefix,  new CoupleList(SerializationUtils.serialize(newObject)));
         return representation;
 	}
 
