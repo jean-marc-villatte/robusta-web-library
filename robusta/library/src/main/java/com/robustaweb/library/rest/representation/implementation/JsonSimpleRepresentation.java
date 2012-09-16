@@ -192,7 +192,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
-    public Representation add(String nodeName, String nodeValue) {
+    public JsonSimpleRepresentation add(String nodeName, String nodeValue) {
         toObject().put(nodeName, nodeValue);
         return this;
     }
@@ -254,44 +254,63 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
 
-
-    public static JsonSimpleRepresentation construct(Resource resource) {
-        //TODO Defualt implementation
-        return null;
-    }
-
-    public JsonSimpleRepresentation construct(String prefix, HashMap<String, Object> serialization) {
-        this.json = new JSONObject(serialization);
-        return this;
-    }
-
-    public JsonSimpleRepresentation construct(String prefix,  Object object) {
-
-        this.json = object;//TODO : looks suspicious !
-        return this;
-    }
-
-
     @Override
     public List<String> getValuesFromArray() throws RepresentationException {
-        //TODO Defualt implementation
-        return null;
+        JSONArray array  = toArray();
+        List<String> result = new ArrayList<String>();
+        for (Object o : array){
+            String val = o == null ? getEmptyValue() : o.toString();
+            result.add(val);
+        }
+        return result;
     }
 
     @Override
     public List<Long> getNumbersFromArray() throws RepresentationException, NumberFormatException {
-        //TODO Defualt implementation
-        return null;
+        JSONArray array  = toArray();
+        List<Long> result = new ArrayList<Long>();
+        for (Object o : array){
+            if (o == null || ! (o instanceof Number) ){
+                throw new NumberFormatException(o+" is not a Number");
+            }
+            result.add((Long) o);
+        }
+        return result;
     }
 
     @Override
     public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
-        //TODO Defualt implementation
-        return null;
+        JSONArray array  = toArray();
+        List<T> result = new ArrayList<T>();
+        for (Object o : array){
+            if (o == null || ! (o instanceof Number) ){
+                throw new NumberFormatException(o+" is not a Number");
+            }
+            result.add((T) o);
+        }
+        return result;
     }
 
     @Override
     public List<String> pluck(String key) throws RepresentationException {
+        JSONArray array = this.toArray();
+        for (Object o : array){
+            JSONObject object;
+            try{
+                object = (JSONObject)o;
+            }catch (Exception e){
+                throw new RepresentationException("The pluck() method require that all members of the JsonArray are a JSONObject");
+            }
+
+            if (object.containsKey(key)){
+
+            }else {
+                throw new RepresentationException("The current object "+ object+ " does not contains the '"+key+"' key needed for pluck() method");
+            }
+
+
+
+        }
         //TODO Defualt implementation
         return null;
     }
