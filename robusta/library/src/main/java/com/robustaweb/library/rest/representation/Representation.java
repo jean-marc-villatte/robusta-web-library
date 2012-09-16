@@ -19,8 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.robustaweb.library.commons.exception.RepresentationException;
-import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.rest.resource.ResourceList;
 
 /**

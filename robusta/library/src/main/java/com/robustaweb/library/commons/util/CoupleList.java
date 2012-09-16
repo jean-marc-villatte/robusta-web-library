@@ -17,6 +17,7 @@ package com.robustaweb.library.commons.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * <p>
@@ -35,6 +36,17 @@ import java.util.HashMap;
  * @see Couple
  */
 public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
+
+    public CoupleList(){
+
+    }
+
+    public CoupleList(HashMap<LEFT, RIGHT> map){
+        Set<LEFT> entries = map.keySet();
+        for (LEFT entry : entries){
+            this.addCouple(entry, map.get(entry));
+        }
+    }
 
     @Override
     public Couple<LEFT, RIGHT> get(int index) {

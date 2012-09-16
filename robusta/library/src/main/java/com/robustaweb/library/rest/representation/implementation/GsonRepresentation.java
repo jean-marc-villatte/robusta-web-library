@@ -13,6 +13,7 @@ import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.rest.resource.ResourceList;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,11 +30,10 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
      * In that case, is serialization if not null, it's always a JsonObject
      * @param serialization
      */
-    public GsonRepresentation(CoupleList<String, Object>  serialization) {
+    public GsonRepresentation(HashMap<String, Object> serialization) {
 
 
-        String str = gson.toJson(serialization);
-        this.document = gson.toJsonTree(serialization.getHashMap());
+        this.document = gson.toJsonTree(serialization);
 
     }
 

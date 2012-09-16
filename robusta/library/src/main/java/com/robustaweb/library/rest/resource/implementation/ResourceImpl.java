@@ -38,7 +38,7 @@ public class ResourceImpl<IdType> implements Resource<IdType> {
 
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
-        return SerializationUtils.serialize(this);
+        return  new CoupleList(SerializationUtils.serialize(this));
     }
 
     @Override
