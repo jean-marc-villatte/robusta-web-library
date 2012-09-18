@@ -37,14 +37,19 @@ public interface Representation {
     public String toString();
 
     /**
-     * TODO : not JsonCompliant, because it's not always a String
-     * Returns a node value, or throw a RepresentationException if it's not found
+     * Returns a node value, or throw a RepresentationException if it's not found, or if it's not a String
      * @param nodeName name of the searched node
      * @return the node value
      * @throws RepresentationException if the nodeName is not found
-     * @see Representation#getOptionalValue(java.lang.String) 
      */
     public String get(String nodeName) throws RepresentationException;
+
+    /**
+     * Returns true if the Representation has the nodeName
+     * @param nodeName
+     * @return
+     */
+    public boolean has(String nodeName);
 
     /**
      * Update a node with its value, or create a new node
@@ -86,13 +91,6 @@ public interface Representation {
      */
     public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException;
 
-    /**
-     * Returns a node value, or null if it's not found
-     * @param nodeName name of the searched node
-     * @return the node value or null
-     * @deprecated
-     */
-    public String getOptionalValue(String nodeName);
 
     /**
      * 

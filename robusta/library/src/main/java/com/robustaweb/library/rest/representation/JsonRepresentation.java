@@ -101,6 +101,7 @@ public interface JsonRepresentation<JsonObject> extends Representation {
 
 
 
+    public boolean isPrimitive();
     public boolean isObject();
     public boolean isBoolean();
     public boolean isString();

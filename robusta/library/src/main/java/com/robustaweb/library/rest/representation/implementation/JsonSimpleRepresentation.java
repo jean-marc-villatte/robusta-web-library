@@ -14,10 +14,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Nicolas
@@ -26,14 +23,43 @@ import java.util.List;
  */
 public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
 
-    JsonType type;
+    
     Object json;
     JSONParser parser = new JSONParser();
 
 
 
     private JsonSimpleRepresentation(Object json) {
-        this.json = json;
+        if (json instanceof Boolean || json instanceof Number || json instanceof String || json == null){
+            this.json = json;
+        }else{
+            if (json instanceof Iterable){
+                Iterable iterable = (Iterable)json;
+                JSONArray array = new JSONArray();
+                int index = 0;
+                for ( Object item : iterable){
+                    if (item instanceof Boolean || item instanceof Number || item instanceof String || item == null){
+                        array.add(item);
+                    }else if (item instanceof JsonSimpleRepresentation){
+                        JsonSimpleRepresentation rep = (JsonSimpleRepresentation) item;
+                        array.add(rep.json);
+                    }else if (item instanceof Resource){
+                        Resource resource = (Resource) item;
+                        Representation rep = resource.getRepresentation();
+                        if (rep instanceof JsonSimpleRepresentation){
+                            JsonSimpleRepresentation jsonRepresentation = (JsonSimpleRepresentation) item;
+                            array.add(jsonRepresentation.json);
+                        }else{
+                            throw new RepresentationException("Trying to add a Representation that is NOT a JsonSimpleRepresentation. (index "+index+" ; representation : \n"+rep+")");
+                        }
+                    }else{
+                        throw new RepresentationException("Trying to add an object that is not a Primitive, not a Resource, and not a JsonSimpleRepresentation (index "+index+" ; object : "+item+"). \nYou should therefore use a Mapper.");
+                    }
+                    index++;
+                }
+            }
+        }
+
     }
 
     public JsonSimpleRepresentation(String string) throws RepresentationException {
@@ -81,6 +107,19 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
+    public boolean has(String nodeName) {
+        if (nodeName == null || nodeName.isEmpty()){
+            return false;
+        }
+        try{
+            return toObject().containsKey(nodeName);
+        }catch (RepresentationException rex){
+            return false;
+        }
+
+    }
+
+    @Override
     public Object getDocument() {
        return this.json;
     }
@@ -102,11 +141,8 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         return result;
     }
 
-    @Override
-    public String getOptionalValue(String nodeName) {
-        //TODO Defualt implementation
-        return null;
-    }
+
+
 
     JSONArray toArray(){
         if (! isArray()){
@@ -294,43 +330,93 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     @Override
     public List<String> pluck(String key) throws RepresentationException {
         JSONArray array = this.toArray();
-        for (Object o : array){
+        List<String> result = new ArrayList<String>();
+
+        for (int i = 0 ; i < array.size(); i++){
+            Object o = array.get(i);
             JSONObject object;
             try{
                 object = (JSONObject)o;
             }catch (Exception e){
-                throw new RepresentationException("The pluck() method require that all members of the JsonArray are a JSONObject");
+                throw new RepresentationException("The pluck() method require that all members of the JsonArray are a JSONObject. Object "+o+" is not (index "+i+").");
             }
 
             if (object.containsKey(key)){
-
+                Object pluckItem = object.get(key);
+                if (pluckItem instanceof String){
+                    result.add((String)pluckItem);
+                }else{
+                    throw new RepresentationException("The current object "+ object+ " contains the '"+key+"' key, but result :'"+pluckItem+"' is not a String (index "+i+").");
+                }
             }else {
-                throw new RepresentationException("The current object "+ object+ " does not contains the '"+key+"' key needed for pluck() method");
+                throw new RepresentationException("The current object "+ object+ " does not contains the '"+key+"' key needed for pluck() method (index "+i+").");
             }
-
-
-
         }
-        //TODO Defualt implementation
-        return null;
+
+        return result;
     }
 
     @Override
     public List<Long> pluckNumbers(String key) throws RepresentationException, NumberFormatException {
-        //TODO Defualt implementation
-        return null;
+        JSONArray array = this.toArray();
+        List<Long> result = new ArrayList<Long>();
+
+        for (int i = 0 ; i < array.size(); i++){
+            Object o = array.get(i);
+            JSONObject object;
+            try{
+                object = (JSONObject)o;
+            }catch (Exception e){
+                throw new RepresentationException("The pluck() method require that all members of the JsonArray are a JSONObject. Object "+o+" is not (index "+i+").");
+            }
+
+            if (object.containsKey(key)){
+                Object pluckItem = object.get(key);
+                if (pluckItem instanceof Long){
+                    result.add((Long)pluckItem);
+                }else{
+                    throw new RepresentationException("The current object "+ object+ " contains the '"+key+"' key, but result :'"+pluckItem+"' is not a Long (index "+i+").");
+                }
+            }else {
+                throw new RepresentationException("The current object "+ object+ " does not contains the '"+key+"' key needed for pluck() method (index "+i+").");
+            }
+        }
+
+        return result;
     }
 
     @Override
     public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException {
-        //TODO Defualt implementation
-        return null;
+        JSONArray array = this.toArray();
+        List<T> result = new ArrayList<T>();
+
+        for (int i = 0 ; i < array.size(); i++){
+            Object o = array.get(i);
+            JSONObject object;
+            try{
+                object = (JSONObject)o;
+            }catch (Exception e){
+                throw new RepresentationException("The pluck() method require that all members of the JsonArray are a JSONObject. Object "+o+" is not (index "+i+").");
+            }
+
+            if (object.containsKey(key)){
+                Object pluckItem = object.get(key);
+                if (pluckItem instanceof Number){ //TODO : when we will use the Class variable, this will be more precise
+                    result.add((T)pluckItem);
+                }else{
+                    throw new RepresentationException("The current object "+ object+ " contains the '"+key+"' key, but result :'"+pluckItem+"' is not a Number (index "+i+").");//TODO : when we will use the Class variable, Number will be more precise
+                }
+            }else {
+                throw new RepresentationException("The current object "+ object+ " does not contains the '"+key+"' key needed for pluck() method (index "+i+").");
+            }
+        }
+
+        return result;
     }
 
     @Override
-    public Representation getRepresentation(Object newObject) {
-        //TODO Defualt implementation
-        return null;
+    public JsonSimpleRepresentation getRepresentation(Object newObject) {
+        return new JsonSimpleRepresentation(newObject);
     }
 
 
@@ -395,20 +481,14 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         return ( this.getTypeof() == JsonType.NULL);
     }
 
+    public boolean isPrimitive(){
+        return this.isString() || this.isBoolean() || this.isNull() || this.isNumber();
+    }
+
 
     @Override
     public String toString() {
         return String.valueOf(this.json);
     }
 
-    public static void main (String [] args) throws ParseException {
-
-        String json = "\"bob\"";
-        //json = "null";
-        json = "{\"bob\":[2,3,7]}";
-        JsonSimpleRepresentation rep = new JsonSimpleRepresentation(json);
-        System.out.println(rep.getNumbers("bob"));
-        System.out.println(rep.getValues("bob"));
-
-    }
 }
