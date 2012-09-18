@@ -496,14 +496,7 @@ public class GwtRepresentation implements
 	}
 
 	
-	
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override	
-	public String getEtagValue() {
-		return new CodecGwt().encodeMD5(this.toString());
-	}
+
 
 	/**
 	 * {@inheritDoc }
@@ -520,15 +513,18 @@ public class GwtRepresentation implements
 		this.lastModified = lastModified;
 	}
 
-    String emptyValue ="";
+
+    public String emptyValue="";
+
     @Override
     public void setEmptyValue(String value) {
-        this.emptyValue =emptyValue;
+        this.emptyValue = value;
     }
 
     @Override
     public String getEmptyValue() {
         return this.emptyValue;
     }
+
 
 }

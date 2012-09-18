@@ -333,34 +333,17 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         return null;
     }
 
-    @Override
-    public String getEtagValue() {
-        //TODO Defualt implementation
-        return null;
-    }
 
-    @Override
-    public Date getLastModified() {
-        //TODO Defualt implementation
-        return null;
-    }
-
-    @Override
-    public void setLastModified(Date date) {
-        //TODO Defualt implementation
-
-    }
+    public String emptyValue="";
 
     @Override
     public void setEmptyValue(String value) {
-        //TODO Defualt implementation
-
+        this.emptyValue = value;
     }
 
     @Override
     public String getEmptyValue() {
-        //TODO Defualt implementation
-        return null;
+        return this.emptyValue;
     }
 
     @Override

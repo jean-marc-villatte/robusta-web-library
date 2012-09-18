@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.robustaweb.library.commons.exception.RepresentationException;
+import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.rest.resource.ResourceList;
 
 /**
@@ -154,18 +155,7 @@ public interface Representation {
     public Representation getRepresentation(Object newObject);
 
 
-    
-    /**
-     * Etags are Representation Specific ; 
-     * By default, returns this MD5 of the representation, wich may take some time for heavy representations.
-     * If you use seriously Etags, you should overwrite this method. hashcode() method may also return your Etag value.  
-     * @return EtagValue
-     */
-    public String getEtagValue();
-    
-    public Date getLastModified();
-    
-    public void setLastModified(Date date);
+
 
     public void setEmptyValue(String value);
     public String getEmptyValue();

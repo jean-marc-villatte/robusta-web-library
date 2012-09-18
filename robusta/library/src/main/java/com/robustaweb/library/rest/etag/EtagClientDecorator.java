@@ -5,9 +5,9 @@ public class EtagClientDecorator {
 	EtagStore store = new EtagStore();
 	
 	void addEtag(String etagValue, String response){
-		Etag etag = new Etag(etagValue, response );
-		//store.addEtag(etag);
-		store.addEtag(etag);
+		EtagObject etagObject = new EtagObject(etagValue, response );
+		//store.addEtag(etagObject);
+		store.addEtag(etagObject);
 	}
 	
 	

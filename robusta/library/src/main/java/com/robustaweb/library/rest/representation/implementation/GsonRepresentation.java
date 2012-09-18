@@ -227,28 +227,16 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
         return null;
     }
 
-    @Override
-    public String getEtagValue() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
-    @Override
-    public Date getLastModified() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void setLastModified(Date date) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public String emptyValue="";
 
     @Override
     public void setEmptyValue(String value) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.emptyValue = value;
     }
 
     @Override
     public String getEmptyValue() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return this.emptyValue;
     }
 }

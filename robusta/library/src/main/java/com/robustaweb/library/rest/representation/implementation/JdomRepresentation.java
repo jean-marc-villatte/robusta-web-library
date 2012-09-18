@@ -603,42 +603,19 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override	
-	public String getEtagValue() {
-		return MD5.encodeMD5(this.toString());
-	}
 
-
-
-	/**
-	 * {@inheritDoc }
-	 */
-	public Date getLastModified() {
-		return lastModified;
-	}
-
-	/**
-	 * {@inheritDoc }
-	 */
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
-	}
 
 
     String emptyValue = "";
 
     @Override
     public void setEmptyValue(String value) {
-        this.emptyValue = emptyValue;
+        this.emptyValue = value;
 
     }
 
     @Override
     public String getEmptyValue() {
-
         return this.emptyValue;
     }
 }
