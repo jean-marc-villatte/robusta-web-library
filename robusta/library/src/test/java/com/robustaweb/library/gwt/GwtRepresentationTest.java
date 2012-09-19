@@ -138,28 +138,7 @@ public class GwtRepresentationTest extends GWTTestCase {
 		}
 	}
 
-	@Test
-	public void testGetOptionalValue() {
-		create();
-		try {
-			for (Representation rp : representations) {
-				String expected = "johndoe";
-				String res = rp.getOptionalValue("userName");
-				String errorMessage = "getting " + res + " for representation "
-						+ rp.getClass().getName() + " instead of " + expected;
-				assertEquals(errorMessage, expected, res);
 
-
-				res = rp.getOptionalValue("usernameThatIsNotATag");
-				errorMessage = "getting " + res + " for representation "
-						+ rp.getClass().getName() + " instead of " + null;
-				assertNull(errorMessage, res);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}
 
 	@Test
 	public void testGetValues() {

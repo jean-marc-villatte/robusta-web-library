@@ -37,19 +37,21 @@ public interface Representation {
     public String toString();
 
     /**
-     * Returns a node value, or throw a RepresentationException if it's not found, or if it's not a String
+     * TODO : not JsonCompliant, because it's not always a String
+     * Returns a node value, or throw a RepresentationException if it's not found
      * @param nodeName name of the searched node
      * @return the node value
      * @throws RepresentationException if the nodeName is not found
      */
     public String get(String nodeName) throws RepresentationException;
 
+
     /**
-     * Returns true if the Representation has the nodeName
-     * @param nodeName
+     * Returns true if the Representation has the nodeName as direct child
+     * @param name
      * @return
      */
-    public boolean has(String nodeName);
+    public boolean has(String name);
 
     /**
      * Update a node with its value, or create a new node
@@ -130,13 +132,14 @@ public interface Representation {
 
 
     /**
-     * Removes the <strong>first</strong>  element found with this nodeName, or the <strong>last</strong> element of a JSON array
+     * TODO : find the correct doc !!! Removes the <strong>first</strong>  element found with this nodeName, or the <strong>last</strong> element of a JSON array
      * @param nodeName
      * @return the new representation
      * @throws RepresentationException if the struncture is irrelevant for the removal
      */
     public Representation remove(String nodeName) throws RepresentationException;
 
+    //TODO : determine if it detaches from father (I suppose yes)
     public Representation fetch(String nodeName);
 
     /**

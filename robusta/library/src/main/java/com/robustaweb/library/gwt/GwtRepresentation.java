@@ -288,7 +288,13 @@ public class GwtRepresentation implements
 
 	}
 
-	/**
+    @Override
+    public boolean has(String nodeName) {
+        //TODO Defualt implementation
+        return false;
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override
@@ -325,10 +331,7 @@ public class GwtRepresentation implements
 
 	}
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
+
 	public String getOptionalValue(String nodeName) {
 		Element e = getOptionalElement(nodeName);
 		if (e == null) {

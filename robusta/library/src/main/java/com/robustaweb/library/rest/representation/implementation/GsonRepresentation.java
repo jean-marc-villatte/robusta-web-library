@@ -106,6 +106,18 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
+    public boolean isPrimitive() {
+        //TODO Defualt implementation
+        return false;
+    }
+
+    @Override
+    public boolean has(String nodeName) {
+        //TODO Defualt implementation
+        return false;
+    }
+
+    @Override
     public Representation set(String nodeName, String value) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -125,10 +137,6 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    public String getOptionalValue(String nodeName) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     public List<String> getValues(String nodeName) throws RepresentationException {

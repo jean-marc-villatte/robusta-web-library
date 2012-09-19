@@ -19,6 +19,7 @@ public class UserImpl implements Resource<Long> {
     String firstName;
     String lastName;
 
+
     public UserImpl(long id, String email, String firstName, String lastName) {
         this.id = id;
         this.email = email;

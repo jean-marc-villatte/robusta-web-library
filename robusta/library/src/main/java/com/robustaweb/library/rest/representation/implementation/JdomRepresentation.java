@@ -370,6 +370,12 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     }
 
+    @Override
+    public boolean has(String nodeName) {
+        Element elt = getOptionalElement(nodeName);
+        return elt != null;
+    }
+
     /**
      * {@inheritDoc }
      */
@@ -399,10 +405,6 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     }
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
     public String getOptionalValue(String nodeName) {
         Element elt = getOptionalElement(nodeName);
         if (elt == null) {

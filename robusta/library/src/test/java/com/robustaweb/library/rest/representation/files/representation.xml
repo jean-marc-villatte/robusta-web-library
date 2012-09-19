@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<school>
+    <name>Boston school</name>
+    <size>4</size>
+    <price>12300.5</price>
+    <students>
+        <student>
+            <id>1</id>
+            <firstname>John</firstname>
+            <lastname>Doe</lastname>
+            <age>12</age>
+        </student>
+        <student>
+            <id>2</id>
+            <firstname>Jim</firstname>
+            <lastname>Bo</lastname>
+            <age>12</age>
+        </student>
+        <student>
+            <id>3</id>
+            <firstname>Jane</firstname>
+            <lastname>Doe</lastname>
+            <age>13</age>
+        </student>
+        <student>
+            <id>4</id>
+            <firstname>Jack</firstname>
+            <lastname>Rapper</lastname>
+            <age>13</age>
+        </student>
+    </students>
+    <classes>
+        <class>
+            <name>5th grade</name>
+            <students>
+                <student>1</student>
+                <student>2</student>
+            </students>
+        </class>
+        <class>
+            <name>4th grade</name>
+            <students>
+                <student>3</student>
+                <student>4</student>
+            </students>
+        </class>
+    </classes>
+    <teachers>
+        <teacher>Bill</teacher>
+        <teacher>Brian</teacher>
+        <teacher>Bob</teacher>
+    </teachers>
+    <years>
+        <year>1992</year>
+        <year>1993</year>
+        <year>1994</year>
+        <year>1995</year>
+        <year>1996</year>
+        <year>1997</year>
+        <year>1998</year>
+        <year>1999</year>
+    </years>
+</school>

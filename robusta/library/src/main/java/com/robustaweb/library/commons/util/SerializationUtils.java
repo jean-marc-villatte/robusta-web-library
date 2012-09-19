@@ -19,6 +19,8 @@ import com.robustaweb.library.rest.resource.Resource;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Workaround support for simple Releflection unsing Java Reflection API
@@ -50,6 +52,28 @@ public class SerializationUtils {
         return map;
     }
 
+    public static HashMap<String, Object> simplify(HashMap<String, Object>  map){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        Set<String> keys = map.keySet();
+        Set<Map.Entry<String, Object>> entries = map.entrySet();
+        for (Map.Entry<String, Object> entry : entries){
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+
+    public static Object getSimpleValue(Object item){
+        if (item instanceof Boolean || item instanceof Number || item instanceof String || item == null || item instanceof Character){
+            return item;
+        } else if (item instanceof CharSequence){
+            return item.toString();
+        }else if (item instanceof Resource){
+            return ((Resource)item).getId();
+        }else{
+            return item.toString();
+        }
+    }
+
     /**
      * Any error will be written in the couples
      * @param c
@@ -63,6 +87,7 @@ public class SerializationUtils {
         for (Field f : fields){
             f.setAccessible(true);
                 Object value = f.get(object);
+            //TODO : we may use different strategy : eager for all, eager for Resource, just lazy (objects -> toString)
                 map.put(f.getName(), value);
 
         }
