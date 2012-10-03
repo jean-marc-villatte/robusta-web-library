@@ -1,6 +1,12 @@
 package com.robustaweb.library.rest.representation.implementation;
 
+import com.robustaweb.library.commons.MyRobusta;
+import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.FileUtils;
+import com.robustaweb.library.rest.representation.Representation;
+import com.robustaweb.library.rest.representation.RepresentationTest;
+import com.robustaweb.library.rest.resource.Resource;
+import com.robustaweb.library.rest.resource.implementation.UserImpl;
 import org.json.simple.JSONArray;
 import org.junit.*;
 
@@ -14,31 +20,14 @@ import static org.junit.Assert.*;
  * Date: 05/08/12
  * Time: 20:24
  */
-public class JsonSimpleRepresentationTest {
+public class JsonSimpleRepresentationTest extends RepresentationTest {
 
-    static String jsonHouses, fetch, singers;
-    JsonSimpleRepresentation representation;
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        String userDir = System.getProperty("user.dir");
-        String mavenPath="/src/test/java";
-        String packagePath = JsonSimpleRepresentationTest.class.getPackage().getName().replaceAll("\\.", "/");
-        String here = userDir+mavenPath+"/"+packagePath+"/jsonFiles/";
-
-
-        jsonHouses = FileUtils.readFile(here+"houses.json");
-        fetch = FileUtils.readFile(here+"fetch.json");
-        //jsonHouses = FileUtils.readFile(here+"houses.json");
-
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
 
     @Before
     public void setUp() {
+        this.isJson = true;
+        this.representation = new JsonSimpleRepresentation(this.jsonContent, true);
+        MyRobusta.setDefaultRepresentation(new JsonSimpleRepresentation(null));
     }
 
     @After
@@ -46,37 +35,33 @@ public class JsonSimpleRepresentationTest {
     }
 
 
-    @Test
-    public void testHouses(){
-        representation = new JsonSimpleRepresentation(jsonHouses);
-       // System.out.println(representation.getNumbers("size"));
-    }
 
     @Test
-    public void testFetch(){
-        representation = new JsonSimpleRepresentation(fetch);
-        representation = representation.fetch("main").fetch("under").fetch("houses");
-        assertTrue(representation.json instanceof JSONArray);
+    public void testAddResourceEagerExceptions(){
+        representation = representation.fetch("school");
+        Representation jsonRepresentation = new JsonSimpleRepresentation(null);
+        Representation jdomRepresentation = new JdomRepresentation();
+
+        //Getting a Jdom resource
+        MyRobusta.setDefaultRepresentation(jdomRepresentation);
+        Resource nicolas = new UserImpl(24L, "a@a.com", "nicolas", "zozol");
+        assertTrue(nicolas.getRepresentation() instanceof JdomRepresentation);
 
 
+
+        boolean catched = false;
+        try{
+            jsonRepresentation.add(nicolas, true);
+        }catch (RepresentationException ex){
+            catched = true;
+        }
+        assertTrue(catched);
+
+        //setting back ; probably not needed
+        MyRobusta.setDefaultRepresentation( new JsonSimpleRepresentation(null));
     }
 
-    @Test
-    public void testNumbers(){
-        representation = new JsonSimpleRepresentation(fetch);
-        representation = representation.fetch("main").fetch("under").fetch("houses");
-        List<Long> numbers =representation.getNumbers("size");
-        assertTrue(numbers.size()== 4);
-        assertTrue(numbers.contains(24L));
-    }
 
-    @Test
-    public void testValues(){
-        representation = new JsonSimpleRepresentation(fetch);
-        representation = representation.fetch("main").fetch("under").fetch("houses");
-        List<Long> numbers =representation.getNumbers("size");
-        assertTrue(numbers.size()== 4);
-    }
 
 
 }

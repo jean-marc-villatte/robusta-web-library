@@ -43,8 +43,12 @@ public class GsonRepresentationTest {
 
     }
 
+
     @Test
     public void testIsXxx(){
+
+        //TODO : there is a bug with "00"
+
         String _0 = "0", _11 = "11", _00="00";
         String _null="null";
         String _false = "false", _true = "true";

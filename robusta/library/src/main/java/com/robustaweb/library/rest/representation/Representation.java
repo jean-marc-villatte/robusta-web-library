@@ -118,7 +118,10 @@ public interface Representation {
     public Representation add(String nodeName, String nodeValue);
 
     /**
-     * Add a new element, even if one of the same nodeName exists or a value to a Json array.
+     * Add a new element ( even if one of the same nodeName exists) to the representation. It pushes a value if the current Json Element
+     * is a Json array.
+     * If eager is used, then resource.getRepresentation() must be 'compatible' with this Representation. The best compatibility is of course
+     * the same class, but this may depend on the implementation.
      * @param nodeName
      * @param nodeValue
      * @return the updated representation
@@ -126,6 +129,15 @@ public interface Representation {
     public Representation add(Resource resource, boolean eager);
 
 
+    /**
+     * Add elements to the representation. It pushes a Json array with the resource.getPrefix() name if the Representation is Json.However,
+     * it does nothing if the list is empty : you have to add yourself an empty array if needed.
+     * If eager is used, then resource.getRepresentation() must be 'compatible' with this Representation. The best compatibility is of course
+     * the same class, but this may depend on the implementation.
+     * @param nodeName
+     * @param nodeValue
+     * @return the updated representation
+     */
     public Representation addAll(ResourceList resources, boolean eager);
 
 

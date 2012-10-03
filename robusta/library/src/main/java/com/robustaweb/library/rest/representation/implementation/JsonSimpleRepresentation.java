@@ -31,7 +31,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     JSONParser parser = new JSONParser();
 
 
-    private JsonSimpleRepresentation(Object object) {
+    public JsonSimpleRepresentation(Object object) {
         //Primitives
         if (object instanceof Boolean || object instanceof Number || object instanceof String || object == null) {
             this.json = object;
@@ -52,12 +52,13 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         else if (object instanceof JSONObject){
             this.json = object;
         }
-        else if (object instanceof Resource){
+       /* else if (object instanceof Resource){
             Representation rep = ((Resource) object).getRepresentation();
             if (rep instanceof JsonSimpleRepresentation){
                 this.json =((JsonSimpleRepresentation)rep).json;
             }
-        }
+        }*/
+        //Maybe a map
         else{
             HashMap<String, Object> map = SerializationUtils.serialize(object);
             //TODO : check here for different strategies instead of calling twice
@@ -87,9 +88,10 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
 
     }
 
+    /*
     public JsonSimpleRepresentation(CoupleList<String, Object> serialization) {
         this(new JSONObject(serialization.getHashMap()));
-    }
+    }*/
 
     @Override
     public JsonSimpleRepresentation getObject(String nodeName) {
@@ -180,9 +182,15 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     public List<String> getValues(String nodeName) throws RepresentationException {
 
         //the current object MUST be an array
+
+        this.fetch(nodeName);
+        JsonSimpleRepresentation arrayRep = this.fetch(nodeName);
+        return arrayRep.getValuesFromArray();
+        /*
         if (!(json instanceof JSONArray)) {
             throw new RepresentationException("The current object must be a JSONArray. The method will pick '" + nodeName + "' values on each object in the array");
         }
+
 
         List<String> objects = new ArrayList<String>();
 
@@ -197,12 +205,16 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             }
         }
 
-        return objects;
+        return objects;*/
     }
 
 
     @Override
     public List<Long> getNumbers(String nodeName) throws RepresentationException, NumberFormatException {
+        this.fetch(nodeName);
+        JsonSimpleRepresentation arrayRep = this.fetch(nodeName);
+        return arrayRep.getNumbersFromArray();
+        /*
         //the current object MUST be an array
         if (!(json instanceof JSONArray)) {
             throw new RepresentationException("The current object must be a JSONArray. The method will pick '" + nodeName + "' values on each object in the array");
@@ -219,21 +231,35 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
                 numbers.add((Long) obj.get(nodeName));
             }
         }
-        return numbers;
+        return numbers;*/
     }
 
     @Override
     public <T extends Number> List<T> getNumbers(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+
+        this.fetch(nodeName);
+        JsonSimpleRepresentation arrayRep = this.fetch(nodeName);
+        return arrayRep.getNumbersFromArray(exemple);
+
+        /*
+
         JSONArray array = toArray(nodeName);
         List<T> list = new ArrayList<T>(array.size());
         for (Object o : array) {
             list.add(MathUtils.convert(o.toString().trim(), exemple));
         }
-        return list;
+        return list;*/
     }
 
     @Override
     public JsonSimpleRepresentation add(String nodeName, String nodeValue) {
+        if (this.isPrimitive()){
+            throw new RepresentationException("Can't add a value to a primitive element");
+        }
+        if (this.isArray()){
+            throw new RepresentationException("Can't add a name/value pair to an array." +
+                    " Consider using add(Resource r, true) or ( (JsonArray)getDocument()).add(nodeValue)");
+        }
         toObject().put(nodeName, nodeValue);
         return this;
     }
@@ -243,14 +269,43 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         if (resource == null) {
             return this;
         }
-        Object value = eager ? resource.getRepresentation() : resource.getId();
-        toObject().put(resource.getPrefix(), value);
+        if (this.isPrimitive()){
+            throw new RepresentationException("Can't add value to a primitive element");
+        }
+
+        Object value;
+        if (eager){
+            Representation rep = resource.getRepresentation();
+            if (rep instanceof JsonSimpleRepresentation){
+                value = ((JsonSimpleRepresentation)rep).json;
+            }else{
+                throw new RepresentationException("Using eager parameter, you must add a Resource that have a JsonSimpleRepresentation");
+            }
+        }else{
+            value = resource.getId();
+        }
+
+        //There is two cases, depending on the current element is an Object or an Array
+        if (this.isObject()){
+            toObject().put(resource.getPrefix(), value);
+        }else{
+            assert this.isArray();
+            toArray().add(value);
+        }
+
         return this;
     }
 
 
     @Override
     public JsonSimpleRepresentation addAll(String listName, List values) {
+        if (this.isPrimitive()){
+            throw new RepresentationException("Can't add values to a primitive element");
+        }
+        if (this.isArray()){
+            throw new RepresentationException("Can't add a name/value pair to an array." +
+                    " Consider using add(Resource r, true) or ( (JsonArray)getDocument()).add(nodeValue)");
+        }
         JSONArray array = new JSONArray();
         array.addAll(values);
         toObject().put(listName, array);
@@ -322,6 +377,13 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
         JSONArray array = toArray();
         List<T> result = new ArrayList<T>();
+
+
+        /* TODO : two possibilities ; maybe one causes the bug in GsonSimpleRepresentationTest
+        for (Object o : array) {
+            result.add(MathUtils.convert(o.toString().trim(), exemple));
+        }*/
+
         for (Object o : array) {
             if (o == null || !(o instanceof Number)) {
                 throw new NumberFormatException(o + " is not a Number");
