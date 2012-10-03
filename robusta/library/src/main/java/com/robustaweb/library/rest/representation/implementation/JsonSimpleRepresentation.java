@@ -124,11 +124,17 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
         if (nodeName == null || nodeName.isEmpty()) {
             return false;
         }
-        try {
-            return toObject().containsKey(nodeName);
-        } catch (RepresentationException rex) {
-            return false;
+        if (this.isPrimitive()){
+            throw new RepresentationException("A primitive can't call has() method");
         }
+
+        if (this.isArray()){
+            return toArray().contains(nodeName);
+        }else{
+            assert this.isObject();
+            return toObject().containsKey(nodeName);
+        }
+
 
     }
 
@@ -468,7 +474,8 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             if (object.containsKey(key)) {
                 Object pluckItem = object.get(key);
                 if (pluckItem instanceof Number) { //TODO : when we will use the Class variable, this will be more precise
-                    result.add((T) pluckItem);
+                    Number n = MathUtils.convert(pluckItem.toString(), exemple);//TODO : it doesn't seem efficient : MathUtils should have a dedicated method
+                    result.add((T) n);
                 } else {
                     throw new RepresentationException("The current object " + object + " contains the '" + key + "' key, but result :'" + pluckItem + "' is not a Number (index " + i + ").");//TODO : when we will use the Class variable, Number will be more precise
                 }

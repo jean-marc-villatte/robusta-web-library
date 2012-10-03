@@ -184,7 +184,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public Representation fetch(String nodeName) {
+    public JsonRepresentation fetch(String nodeName) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

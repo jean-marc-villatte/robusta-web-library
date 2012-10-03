@@ -111,6 +111,7 @@ public interface JsonRepresentation<JsonObject> extends Representation {
     public JsonType getTypeof();
 
 
-
+    @Override
+    JsonRepresentation<JsonObject> fetch(String nodeName);
 }
 

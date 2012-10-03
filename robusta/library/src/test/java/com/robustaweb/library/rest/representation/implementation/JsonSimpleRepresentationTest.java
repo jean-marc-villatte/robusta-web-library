@@ -3,6 +3,7 @@ package com.robustaweb.library.rest.representation.implementation;
 import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.FileUtils;
+import com.robustaweb.library.rest.representation.JsonRepresentationTest;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.RepresentationTest;
 import com.robustaweb.library.rest.resource.Resource;
@@ -20,7 +21,7 @@ import static org.junit.Assert.*;
  * Date: 05/08/12
  * Time: 20:24
  */
-public class JsonSimpleRepresentationTest extends RepresentationTest {
+public class JsonSimpleRepresentationTest extends JsonRepresentationTest {
 
 
     @Before
