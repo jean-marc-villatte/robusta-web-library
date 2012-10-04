@@ -3,6 +3,11 @@
     <name>Boston school</name>
     <size>4</size>
     <price>12300.5</price>
+    <prices>
+        <price>12300.5</price>
+        <price>10300.52</price>
+        <price>18100.55236</price>
+    </prices>
     <students>
         <student>
             <id>1</id>

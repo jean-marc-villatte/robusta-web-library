@@ -2,6 +2,7 @@ package com.robustaweb.library.rest.representation;
 
 import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.rest.representation.implementation.JsonSimpleRepresentation;
+import org.json.simple.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,24 +40,49 @@ public class JsonRepresentationTest extends RepresentationTest{
     }
 
     @Test
-    public void testAddAllResources(){
+    public void testAddAllIfExists(){
+        /* Adding a list of objects should work */
+        List<SomeClass> list = SomeClass.createList();
+        int listSize = 5;
+        assertTrue(list.size() == listSize);
+
+        /* Adds if extists */
+        this.representation = this.getRepresentation().fetch("school");
+        assertTrue(this.representation.has("teachers"));
+
+        this.getRepresentation().addAll("teachers", list);
+
+        assertTrue(this.representation.has("teachers"));
+        this.representation = this.getRepresentation().fetch("teachers");
+        assertTrue(this.getRepresentation().isArray());
+
+        JSONArray array = (JSONArray) this.getRepresentation().getDocument();
+        assertTrue(array.size() == 3 + listSize);
+
+
+
+        /* Create if not exists*/
 
     }
 
     @Test
     public void testGetValuesFromArray(){
 
+        List<String> values = this.getRepresentation().fetch("school").fetch("teachers").getValuesFromArray();
+        assertTrue(values.contains("Brian"));
     }
 
     @Test
     public void testGetNumbersFromArray(){
-
+        List<Long> values = this.getRepresentation().fetch("school").fetch("years").getNumbersFromArray();
+        assertTrue(values.contains(1992L));
     }
 
 
     @Test
     public void testGetNumbersFromArrayWithClass(){
-
+        List<Float> values = this.getRepresentation().fetch("school").fetch("prices").getNumbersFromArray(1.23);
+        assertTrue(values.contains(18100.55236));
     }
 
 
@@ -94,3 +120,4 @@ public class JsonRepresentationTest extends RepresentationTest{
 
 
 }
+

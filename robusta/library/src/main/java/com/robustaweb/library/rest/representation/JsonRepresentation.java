@@ -35,8 +35,10 @@ public interface JsonRepresentation<JsonObject> extends Representation {
      */
     public JsonRepresentation<JsonObject> addAll(String listName, List values);
 
-
-    public JsonRepresentation<JsonObject> addAll(ResourceList resources, boolean eager);
+/**
+ * TODO : Deprecated because the list may be empty : so can't find prefix
+ */
+//    public JsonRepresentation<JsonObject> addAll(ResourceList resources, boolean eager);
 
 
     /**

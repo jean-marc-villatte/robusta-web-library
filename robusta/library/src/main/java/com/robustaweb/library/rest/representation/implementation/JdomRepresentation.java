@@ -583,27 +583,28 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 		return this;
 	}
 
-	//TODO : to be tested !
+	//See issue #19
+    /*
 	@Override
-	public JdomRepresentation addAll(ResourceList resources, boolean eager) {
+	public JdomRepresentation addAll(String listName, List list, boolean eager) {
 
-		if (resources == null || resources.isEmpty()){
+		if (list == null || list.isEmpty()){
 			return this;
 		}else{
-			Resource r0 = resources.get(0);
+			Resource r0 = list.get(0);
 			Element list = new Element(r0.getListPrefix());
-			for (int i = 0 ; i < resources.size() ; i++){
-				Resource r = resources.get(i);
+			for (int i = 0 ; i < list.size() ; i++){
+				Resource r = list.get(i);
 				Element e = new Element(r0.getPrefix());
                 String idText = r.getId() == null ? "" : r.getId().toString();
 				e.setText(idText);
 
 				list.addContent(e);
 			}
-			this.document.getRootElement().addContent(list);			
+			this.document.getRootElement().addContent(list);
 		}
 		return this;
-	}
+	}*/
 
 
 

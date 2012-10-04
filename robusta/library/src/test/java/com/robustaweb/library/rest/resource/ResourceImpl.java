@@ -5,6 +5,9 @@ import com.robustaweb.library.commons.MyRobusta;
 import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author robusta web
@@ -67,5 +70,14 @@ public class ResourceImpl implements Resource<Long> {
     @Override
     public CoupleList<String, Object> serialize() throws RepresentationException {
         return CoupleList.<String, Object>build("id", this.id);
+    }
+
+    public List<ResourceImpl> createList(){
+        int count = 0;
+        List<ResourceImpl> list = new ArrayList<ResourceImpl>(5);
+        for (long i = 0 ; i < 5 ; i++){
+            list.add(new ResourceImpl(i));
+        }
+        return list;
     }
 }

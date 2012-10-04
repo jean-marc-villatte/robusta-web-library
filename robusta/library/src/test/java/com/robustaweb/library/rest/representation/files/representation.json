@@ -3,6 +3,7 @@
         "name":"Boston school",
         "size":4,
         "price":12300.5,
+        "prices":[12300.5,10300.52,18100.55236],
         "students":[
             {
                 "id":1,

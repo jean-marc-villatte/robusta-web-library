@@ -198,11 +198,7 @@ public class GwtRepresentation implements
         return null;
     }
 
-    @Override
-    public Representation addAll(ResourceList resources, boolean eager) {
-        //TODO Defualt implementation
-        return null;
-    }
+
 
     /**
 	 * {@inheritDoc }

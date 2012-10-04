@@ -137,8 +137,10 @@ public interface Representation {
      * @param nodeName
      * @param nodeValue
      * @return the updated representation
-     */
+     * TODO : deprecated : the list may contain no object and ResourceLIst is definitively not stable
+     *
     public Representation addAll(ResourceList resources, boolean eager);
+    */
 
 
 

@@ -6,6 +6,7 @@ import com.robustaweb.library.commons.util.FileUtils;
 import com.robustaweb.library.rest.representation.implementation.JdomRepresentation;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;

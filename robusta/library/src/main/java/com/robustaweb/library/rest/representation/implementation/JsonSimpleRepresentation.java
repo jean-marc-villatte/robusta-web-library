@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -312,30 +313,27 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             throw new RepresentationException("Can't add a name/value pair to an array." +
                     " Consider using add(Resource r, true) or ( (JsonArray)getDocument()).add(nodeValue)");
         }
-        JSONArray array = new JSONArray();
-        array.addAll(values);
-        toObject().put(listName, array);
+
+        if (this.has(listName)){
+            JsonSimpleRepresentation representation = this.fetch(listName);
+            if (representation.isArray()){
+                JSONArray array = (JSONArray) representation.json;
+                Object mappedValues = new JsonSimpleRepresentation(values).json;
+                array.addAll((Collection)mappedValues); //TODO here we have a real problem because it's not mapped correctly
+
+            }
+        }else{
+            JSONArray array = new JSONArray();
+            array.addAll(values);
+            toObject().put(listName, array);
+
+        }
+
         return this;
+
     }
 
 
-    @Override
-    public JsonSimpleRepresentation addAll(ResourceList resources, boolean eager) {
-        if (resources == null || resources.isEmpty()) {
-            return this;
-        }
-
-        String listName = resources.get(0).getListPrefix();
-
-        JSONArray array = new JSONArray();
-        for (int i = 0; i < resources.size(); i++) {
-            Resource resource = resources.get(i);
-            Object value = eager ? resource.getRepresentation() : resource.getId();
-            array.add(value);
-        }
-        toObject().put(listName, array);
-        return this;
-    }
 
     @Override
     public Representation remove(String nodeName) throws RepresentationException {
@@ -345,6 +343,9 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
 
     @Override
     public JsonSimpleRepresentation fetch(String nodeName) {
+        if( !this.isObject()){
+            throw new RepresentationException("fetch must be called on a Json Object");
+        }
         Object newJson = toObject().get(nodeName);
         return new JsonSimpleRepresentation(newJson);
     }

@@ -48,8 +48,6 @@ public class JsonSimpleRepresentationTest extends JsonRepresentationTest {
         Resource nicolas = new UserImpl(24L, "a@a.com", "nicolas", "zozol");
         assertTrue(nicolas.getRepresentation() instanceof JdomRepresentation);
 
-
-
         boolean catched = false;
         try{
             jsonRepresentation.add(nicolas, true);

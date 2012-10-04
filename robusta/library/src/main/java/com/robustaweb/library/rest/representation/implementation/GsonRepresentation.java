@@ -171,11 +171,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
         return null;
     }
 
-    @Override
-    public JsonRepresentation<JsonElement> addAll(ResourceList resources, boolean eager) {
-        //TODO Defualt implementation
-        return null;
-    }
+
 
 
     @Override
