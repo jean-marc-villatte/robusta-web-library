@@ -395,7 +395,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             if (o == null || !(o instanceof Number)) {
                 throw new NumberFormatException(o + " is not a Number");
             }
-            result.add((T) o);
+            result.add(MathUtils.<T>convert(o.toString(), exemple));//TODO : use a better Math.convert method
         }
         return result;
     }

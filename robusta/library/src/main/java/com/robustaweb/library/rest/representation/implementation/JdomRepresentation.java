@@ -29,11 +29,7 @@ import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.MathUtils;
 import com.robustaweb.library.commons.util.SerializationUtils;
-import com.sun.xml.internal.bind.v2.runtime.output.XmlOutput;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom.*;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
@@ -44,8 +40,6 @@ import com.robustaweb.library.commons.exception.XmlException;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
-import com.robustaweb.library.rest.resource.ResourceList;
-import com.robustaweb.library.security.implementation.MD5;
 
 /**
  * JDOM based Representation implementation. It also contains a few methods to read/save xml
@@ -75,6 +69,16 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         this.document = createDocument(xml);
     }
 
+
+    public Element checkRootDocument(){
+        if (this.document == null){
+            throw new RepresentationException("The representation contains no Document");
+        }
+        if (this.getRootElement() == null){
+            throw new RepresentationException("The representation document has no <root> content");
+        }
+        return this.getRootElement();
+    }
     
     
     
@@ -149,6 +153,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     /**
      * {@inheritDoc }
+     * @deprecated use has() method to have real control
      */
     @Override
     public Element getOptionalElement(final String nodeName) {
@@ -180,7 +185,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     @Override
     public Element getElement(final String nodeName) throws XmlException {
 
-        Element elt = getOptionalElement(nodeName);
+
+        Element elt = this.checkRootDocument().getChild(nodeName);
         if (elt == null){
             throw new XmlException("Can't find element "+nodeName);
         }else{
@@ -247,8 +253,28 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         if (resource == null){
             return this;
         }
-        Object value = eager ? resource.getRepresentation() : resource.getId();
-        return this.add(resource.getPrefix(), value.toString());
+
+        Object id = resource.getId();
+        String idString = id == null ? getEmptyValue() : id.toString();
+
+        Content idAsString =  new Element(resource.getPrefix()).setText(idString);
+        Content content;
+
+        if (eager){
+            Representation representation = resource.getRepresentation();
+            if (representation instanceof JdomRepresentation){
+                content = ((JdomRepresentation)resource.getRepresentation()).checkRootDocument().detach();
+            }else{
+                content = idAsString;
+            }
+
+        }else{
+            content = idAsString;
+        }
+
+
+        this.checkRootDocument().addContent(content);
+        return this;
     }
 
     /**
@@ -266,7 +292,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     @Override
     public Representation fetch(String nodeName) {
         Element elt = this.getElement(nodeName);
-        elt = (Element)((Element)elt.clone()).detach();
+        elt = (Element)((Element)elt.clone());
+        // elt = (Element)elt.detach();
         Document doc = new Document();
         doc.setRootElement(elt);
         return  new JdomRepresentation(doc);
@@ -372,7 +399,9 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     @Override
     public boolean has(String nodeName) {
-        Element elt = getOptionalElement(nodeName);
+
+        Element elt = checkRootDocument().getChild(nodeName);
+
         return elt != null;
     }
 
@@ -452,7 +481,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         List<String> strings = getValues(nodeName);
         List<T> result = new ArrayList<T>();
         for (String s : strings) {
-            result.add(MathUtils.convert(s.trim(), exemple));
+            result.add(MathUtils.<T>convert(s.trim(), exemple));
         }
         return result;
     }

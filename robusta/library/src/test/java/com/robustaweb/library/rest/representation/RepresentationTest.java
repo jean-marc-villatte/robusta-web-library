@@ -60,6 +60,17 @@ public abstract class RepresentationTest {
     public void tearDown() {
     }
 
+    
+    protected Representation getSchoolRepresentation(){
+        if (this.isJson){
+            return this.getSchoolRepresentation();
+        }else{
+            return this.representation;
+        }
+    }
+    
+    
+    
     @Test
     public void testToString() {
 
@@ -76,7 +87,7 @@ public abstract class RepresentationTest {
     public void testGet() {
 
         //Fetching the school name
-        Representation rep = representation.fetch("school");
+        Representation rep = getSchoolRepresentation();
         assertTrue(rep.get("name").equals("Boston school"));
 
     }
@@ -85,15 +96,16 @@ public abstract class RepresentationTest {
     public void testHas() {
 
         //Fetching the school name
-        representation = representation.fetch("school");
+        representation = getSchoolRepresentation();
         assertTrue(representation.has("name"));
+        // has should work on direct child, not descendants
         assertFalse(representation.has("student"));
 
     }
 
     @Test
     public void testSet() {
-        Representation rep = representation.fetch("school");
+        Representation rep = getSchoolRepresentation();
         rep.set("name", "New York School");
         assertTrue(rep.get("name").equals("New York School"));
     }
@@ -106,7 +118,7 @@ public abstract class RepresentationTest {
     @Test
     public void testGetNumber() {
 
-            representation = representation.fetch("school");
+            representation = getSchoolRepresentation();
             Long size = representation.getNumber("size");
             assertTrue(size == 4);
 
@@ -115,7 +127,7 @@ public abstract class RepresentationTest {
     @Test
     public void testGetNumberWithClass() {
 
-        representation = representation.fetch("school");
+        representation = getSchoolRepresentation();
         Float price = representation.<Float>getNumber("price", 2.0f);
         assertTrue(price == 12300.5);
 
@@ -146,7 +158,7 @@ public abstract class RepresentationTest {
         List<String> teachers;
 
         if (isJson){
-            representation = representation.fetch("school");
+            representation = getSchoolRepresentation();
             teachers = representation.getValues("teachers");
         }else{
             representation = representation.fetch("teachers");
@@ -165,7 +177,7 @@ public abstract class RepresentationTest {
         List<Long> years;
 
         if (isJson){
-            representation = representation.fetch("school");
+            representation = getSchoolRepresentation();
             years = representation.getNumbers("years");
         }else{
             representation = representation.fetch("years");
@@ -180,25 +192,25 @@ public abstract class RepresentationTest {
 
     @Test
     public void testGetNumbersWithClass() {
-        List<Integer> years;
+        List<Float> prices;
 
         if (isJson){
-            representation = representation.fetch("school");
-            years = representation.<Integer>getNumbers("years", 1);
+            representation = getSchoolRepresentation();
+            prices = representation.<Float>getNumbers("prices", 2.1f);
         }else{
-            representation = representation.fetch("years");
-            years = representation.<Integer>getNumbers("year", 1);
+            representation = getSchoolRepresentation().fetch("prices");
+            prices = representation.<Float>getNumbers("price", 2.1f);
         }
 
-        assertTrue(years.size() == 8);
-        assertTrue(years.contains(1995L));
-        assertTrue(years.indexOf(1998L) == 6);
+        assertTrue(prices.size() == 3);
+        assertTrue(prices.contains(18100.55236f));
+        assertTrue(prices.indexOf(18100.55236f) == 2);
 
     }
 
     @Test
     public void testAdd(){
-        representation = representation.fetch("school");
+        representation = getSchoolRepresentation();
         representation.add("director", "Bobby Lapointe");
         assertTrue(representation.get("director").equals("Bobby Lapointe"));
     }
@@ -206,12 +218,13 @@ public abstract class RepresentationTest {
 
     @Test
     public void testAddResourceEager(){
-        representation = representation.fetch("school");
+        representation = getSchoolRepresentation();
         String email = "nz@gmail.com";
         Resource nicolas = new UserImpl(24L, email, "nicolas", "zozol");
 
         //this will add an object "user" with nicolas representation
         representation.add(nicolas, true);
+       // representation.add("just", "anortherValue");
         String prefix  = nicolas.getPrefix();
         assertEquals(prefix, "user");
 
@@ -227,7 +240,7 @@ public abstract class RepresentationTest {
 
     @Test
     public void testAddResourceNoEager(){
-        representation = representation.fetch("school").fetch("trustees");
+        representation = getSchoolRepresentation().fetch("trustees");
         String email = "nz@gmail.com";
         Resource nicolas = new UserImpl(24L, email, "nicolas", "zozol");
 
@@ -254,7 +267,7 @@ public abstract class RepresentationTest {
 
     @Test
     public void testRemove(){
-        this.representation = this.representation.fetch("school");
+        this.representation = this.getSchoolRepresentation();
         assertTrue(this.representation.has("price"));
         this.representation.remove("price");
         assertFalse(this.representation.has("price"));
@@ -264,7 +277,7 @@ public abstract class RepresentationTest {
     @Test
     public void testCopy(){
         this.representation = this.representation.copy();
-        assertTrue(this.representation.fetch("school").has("price"));
+        assertTrue(this.getSchoolRepresentation().has("price"));
     }
 
 
