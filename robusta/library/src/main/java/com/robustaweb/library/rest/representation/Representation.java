@@ -130,17 +130,13 @@ public interface Representation {
 
 
     /**
-     * Add elements to the representation. It pushes a Json array with the resource.getPrefix() name if the Representation is Json.However,
-     * it does nothing if the list is empty : you have to add yourself an empty array if needed.
-     * If eager is used, then resource.getRepresentation() must be 'compatible' with this Representation. The best compatibility is of course
-     * the same class, but this may depend on the implementation.
-     * @param nodeName
-     * @param nodeValue
+     * Add a list of objects to the Representation.
+     * If list is empty, an empty node <strong>is</strong> created.
+     * @param listName
+     * @param values
      * @return the updated representation
-     * TODO : deprecated : the list may contain no object and ResourceLIst is definitively not stable
-     *
-    public Representation addAll(ResourceList resources, boolean eager);
-    */
+     */
+    public Representation addAll(String listName, List values);
 
 
 

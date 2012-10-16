@@ -1,6 +1,7 @@
 package com.robustaweb.library.rest.representation;
 
 import com.robustaweb.library.commons.MyRobusta;
+import com.robustaweb.library.rest.representation.implementation.JdomRepresentation;
 import com.robustaweb.library.rest.representation.implementation.JsonSimpleRepresentation;
 import org.json.simple.JSONArray;
 import org.junit.Before;
@@ -20,6 +21,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class JsonRepresentationTest extends RepresentationTest{
 
+
+    @Before
+    public void setUp() {
+        this.isJson = true;
+        this.representation = new JsonSimpleRepresentation(this.jsonContent, true);
+        MyRobusta.setDefaultRepresentation(this.representation);
+    }
 
 
 

@@ -29,17 +29,24 @@ public interface XmlRepresentation extends Representation {
 
 
     public static final String headers = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    
+
+
+    String getAttribute(String attribute) throws XmlException;
+    XmlRepresentation setAttribute(String attribute, String value) throws XmlException;
+
+
     String getAttribute(String nodeName, String attribute) throws XmlException;
     XmlRepresentation setAttribute(String nodeName, String attribute, String value) throws XmlException;
 
 
     /**
+     * TODO: did not undesrtood
      * Grab all elements with leftNodeName, all elements with rightNodeName, and put them along to create
      * a CoupleList
      * Left and right nodeNames MUST be differents, and numbers of left nodes must equals numbers of right nodes
      * @param leftNodeName left Element
      * @param rightNodeName right Element
+     * @deprecated
      */
     public CoupleList<String, String> getCouples(String leftNodeName, String rightNodeName);
 
@@ -54,6 +61,7 @@ public interface XmlRepresentation extends Representation {
      * @param nodeName
      * @param values
      * @return the updated representation
+     *
      */
     public XmlRepresentation addAll(String nodeName, String listName, List<Object> values);
     

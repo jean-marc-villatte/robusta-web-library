@@ -286,7 +286,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             if (rep instanceof JsonSimpleRepresentation){
                 value = ((JsonSimpleRepresentation)rep).json;
             }else{
-                throw new RepresentationException("Using eager parameter, you must add a Resource that have a JsonSimpleRepresentation");
+                throw new RepresentationException("Using eager parameter, you must add a Resource that have a JsonSimpleRepresentation ; current is : "+rep.getClass().getSimpleName());
             }
         }else{
             value = resource.getId();

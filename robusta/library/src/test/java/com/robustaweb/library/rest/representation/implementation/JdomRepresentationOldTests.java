@@ -170,10 +170,10 @@ public class JdomRepresentationOldTests {
 
         
 
-        String v =new JdomRepresentation(xml).getOptionalValue("lastName");
+        String v =new JdomRepresentation(xml).get("lastName");
         assertTrue(v.equals("Doe") || v.equals("Dinar"));
 
-        v =new JdomRepresentation(xml).getOptionalValue( "NoPossibleSir");
+        v =new JdomRepresentation(xml).get( "NoPossibleSir");
         assertTrue(v == null);
 
     }
@@ -313,7 +313,7 @@ public class JdomRepresentationOldTests {
 
         //Removes the first, keeps the second
         representation.remove("bob");
-        assertTrue(representation.getOptionalValue("bob").equals("Spounge"));
+        assertTrue(representation.get("bob").equals("Spounge"));
     }
 
 

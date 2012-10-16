@@ -30,6 +30,7 @@ import com.robustaweb.library.commons.exception.XmlException;
 import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
+import com.robustaweb.library.rest.representation.XmlRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
 import com.robustaweb.library.rest.resource.ResourceList;
 
@@ -139,7 +140,7 @@ public class GwtRepresentation implements
 	/**
 	 * {@inheritDoc }
 	 */
-	@Override
+	//@Override
 	public Element getElement(String nodeName) throws XmlException {
 		Element elt = getOptionalElement(nodeName);
 		if (elt == null) {
@@ -198,6 +199,11 @@ public class GwtRepresentation implements
         return null;
     }
 
+    @Override
+    public Representation addAll(String listName, List values) {
+        //TODO : implement
+        return null;
+    }
 
 
     /**
@@ -214,6 +220,18 @@ public class GwtRepresentation implements
     @Override
     public Representation fetch(String nodeName) {
         //TODO Defualt implementation
+        return null;
+    }
+
+    @Override
+    public String getAttribute(String attribute) throws XmlException {
+        //TODO : implement
+        return null;
+    }
+
+    @Override
+    public XmlRepresentation setAttribute(String attribute, String value) throws XmlException {
+        //TODO : implement
         return null;
     }
 
@@ -420,7 +438,7 @@ public class GwtRepresentation implements
 	/**
 	 * {@inheritDoc }
 	 */
-	@Override
+	//@Override
 	public Element getOptionalElement(String nodeName) {
 		try {
 			Node n = this.document.getElementsByTagName(nodeName).item(0);

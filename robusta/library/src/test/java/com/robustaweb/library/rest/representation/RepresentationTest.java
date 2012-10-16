@@ -63,7 +63,7 @@ public abstract class RepresentationTest {
     
     protected Representation getSchoolRepresentation(){
         if (this.isJson){
-            return this.getSchoolRepresentation();
+            return this.representation.fetch("school");
         }else{
             return this.representation;
         }

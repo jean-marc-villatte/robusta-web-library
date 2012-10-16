@@ -24,15 +24,16 @@ import com.robustaweb.library.commons.exception.XmlException;
  * TODO : remove XmlException, so old school !
  * Add some capabilities
  * @author n.zozol
+ * @deprecated : use fetch or getValues()
  */
 public interface XmlDocumentRepresentation<D, E> extends XmlRepresentation{
 
     @Override
     public D getDocument() throws XmlException;
     public E getRootElement() throws XmlException;
-    public E getElement(String nodeName) throws XmlException;
+   // public E getElement(String nodeName) throws XmlException; replaced by fetch
     //TODO : probably to remove ; no need for that
-    public E getOptionalElement(String nodeName);
+
     public List<E> getElements(String nodeName) throws XmlException;
     public String getElementRepresentation(E element) throws XmlException;
    

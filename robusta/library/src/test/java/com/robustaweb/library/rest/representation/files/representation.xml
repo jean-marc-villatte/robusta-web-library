@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <school>
-    <name>Boston school</name>
+    <name id="boston">Boston school</name>
     <size>4</size>
-    <price>12300.5</price>
+    <price id="toomuch">12300.5</price>
     <prices>
         <price>12300.5</price>
         <price>10300.52</price>

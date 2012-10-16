@@ -143,6 +143,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     }
 
     /**
+     * TODO : compare with checkRootDocument : one must disapear
      * {@inheritDoc }
      */
     @Override
@@ -151,38 +152,12 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         return this.document.getRootElement();
     }
 
-    /**
-     * {@inheritDoc }
-     * @deprecated use has() method to have real control
-     */
-    @Override
-    public Element getOptionalElement(final String nodeName) {
-         Iterator it = this.document.getDescendants(new Filter() {
 
-            @Override
-            public boolean matches(Object o) {
-                if (o instanceof Element) {
-                    if (((Element) o).getName().equalsIgnoreCase(nodeName.toLowerCase())) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-        if (it.hasNext()) {
-            Object obj = it.next();
-            assert obj instanceof Element ;
-            return (Element) obj;
-        }else{
-            return null;
-        }
-    }
     
     /**
      * {@inheritDoc }
      */
-    @Override
+  //  @Override
     public Element getElement(final String nodeName) throws XmlException {
 
 
@@ -277,6 +252,12 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         return this;
     }
 
+    @Override
+    public Representation addAll(String listName, List values) {
+        //TODO : implement
+        return null;
+    }
+
     /**
      * {@inheritDoc }
      */
@@ -299,6 +280,16 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         return  new JdomRepresentation(doc);
 
     }
+
+
+   public  String getAttribute(String attribute) throws XmlException{
+       return this.getRootElement().getAttributeValue("attribute");
+   }
+    public JdomRepresentation setAttribute(String attribute, String value) throws XmlException{
+        this.getRootElement().setAttribute(attribute, value);
+        return this;
+    }
+
 
     /**
      * {@inheritDoc }
@@ -399,9 +390,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     @Override
     public boolean has(String nodeName) {
-
         Element elt = checkRootDocument().getChild(nodeName);
-
         return elt != null;
     }
 
@@ -434,14 +423,14 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 
     }
 
-    public String getOptionalValue(String nodeName) {
+    /*public String getOptionalValue(String nodeName) {
         Element elt = getOptionalElement(nodeName);
         if (elt == null) {
             return null;
         } else {
             return elt.getText();
         }
-    }
+    }*/
 
     /**
      * {@inheritDoc }
