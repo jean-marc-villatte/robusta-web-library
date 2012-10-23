@@ -55,14 +55,17 @@ public class JaxRsResourceController implements
 		ResourceController<HttpServletRequest> {
 
 	String authorizationValue;
+    @Context
 	private UriInfo context;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
+    //@Context
+	HttpServletRequest request;
+    //@Context
+	HttpServletResponse response;
 
     private final static Logger logger = Logger.getLogger(JaxRsResourceController.class
             .getName());
 
-	@Context
+	//@Context
 	public void setContext(UriInfo context) {
 
 		this.context = context;
@@ -88,10 +91,12 @@ public class JaxRsResourceController implements
 	public void init() {
 	}
 
-	/**
+
+
+    /**
 	 * Set the HttpServletRequest that has hitten the JAX Servlet and brings
 	 * informations.
-	 */
+	 *
 	@Context
 	public void setHttpServletRequest(HttpServletRequest request) {
 
@@ -100,12 +105,12 @@ public class JaxRsResourceController implements
 
 	/**
 	 * Set the HttpServletResponse that has hitten the JAX Servlet.
-	 */
+	 *
 	@Context
 	public void setHttpServletResponse(HttpServletResponse response) {
 		this.response = response;
 
-	}
+	}*/
 
 	public String getParam(String param) {
 		if (context == null) {
