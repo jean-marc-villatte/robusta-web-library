@@ -15,22 +15,13 @@
  */
 package com.robustaweb.library.commons.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import com.robustaweb.library.commons.exception.FileException;
 
+import java.io.*;
+
 /**
- * FileUtilities brings frequently used funcions, to be used in a standard Windows/linux or in the Clouds
- * 
- * <p>todo : an adaptation for Google AppEngine is on its way, so that it will be transparent for the programmer to use saveFile and readFile
+ * FileUtilities brings frequently used funcions, to be used in a standard Windows/unix/Android environements
+ * <p/>
  * in a Linux, Windows & AppEngine environment
  * </p>
  *
@@ -42,48 +33,40 @@ public class FileUtils {
 
     /**
      * Reads a file line after line.
+     *
      * @param path Full path of the file ('c:/webapp/data.xml' or '/var/webapp/data.xml')
      * @return The content of the file.
      * @throws java.io.FileNotFoundException
      */
-    public static String readFile(String path) throws FileNotFoundException {
+    public static String readFile(String path) throws IOException {
 
-        FileReader reader = new FileReader(path);
-        BufferedReader buffReader = new BufferedReader(reader);
+        FileReader reader = null;
+
+        BufferedReader buffReader = null;
 
         StringBuilder text = new StringBuilder();
 
-        if (buffReader != null) {
-            try {
-                String tempLine;
-                tempLine = buffReader.readLine();
-                while (tempLine != null) {
-                    text.append(tempLine).append("\n");
-                    // System.out.println("templine :"+tempLine);
-                    tempLine = buffReader.readLine();
-                }
-            } catch (IOException e) {
-                System.err.println("Error reading file: " + e.toString());
-            } finally {
-                try {
-                    buffReader.close();
-                } catch (IOException e) {
-                    System.err.println(
-                            "Erreur closing file: " + e.toString());
-                }
+        try {
+            reader = new FileReader(path);
+            buffReader = new BufferedReader(reader);
+
+            String tempLine;
+            while ( (tempLine = buffReader.readLine())!=null ) {
+                text.append(tempLine).append("\n");
             }
+        } finally {
+            reader.close();
+            buffReader.close();
         }
-
         return text.toString();
-
     }
 
     /**
-     * @todo2 : It seems to save in only one line ! need to be tested
-     * @param path Full path of the file ('c:/webapp/data.xml' or '/var/webapp/data.xml')
+     * @param path    Full path of the file ('c:/webapp/data.xml' or '/var/webapp/data.xml')
      * @param content Content to be saved in the file
      * @throws java.io.FileNotFoundException
      * @throws java.io.IOException
+     * @todo2 : It seems to save in only one line ! need to be tested
      */
     public static void saveFile(String path, String content) throws FileNotFoundException, IOException {
 
@@ -91,23 +74,26 @@ public class FileUtils {
         if (!f.exists()) {
             f.createNewFile();
         }
-        FileWriter fstream = new FileWriter(path);
-        BufferedWriter out = new BufferedWriter(fstream);
-        out.write(content);
-        //Close the output stream
-
-        fstream.flush();
-        out.close();
-        fstream.close();
-
-
+        FileWriter fstream = null;
+        BufferedWriter out = null;
+        try {
+            fstream = new FileWriter(path);
+            out = new BufferedWriter(fstream);
+            out.write(content);
+            fstream.flush();
+        } finally {
+            out.close();
+            fstream.close();
+        }
     }
 
     /**
      * Create a directory
-     * @param rootPath directory or mount point containing your future directory
+     *
+     * @param rootPath      directory or mount point containing your future directory
      * @param directoryName name of the future directory
      * @throws robusta.commons.exceptions.FileException
+     *
      */
     public static void createDirectory(String rootPath, String directoryName) throws FileException {
         File f = new File(rootPath + "/" + directoryName);
@@ -125,7 +111,8 @@ public class FileUtils {
     /**
      * <p>Delete a directory. It first delete recursively all subdirectories, then all files of this directory, then the directory.</p>
      * <p>The code was partially found in the net - it's very likely to be public domain.</p>
-     * @param path java.io.File representation of the directory 
+     *
+     * @param path java.io.File representation of the directory
      * @throws FileException if the path does not exist or if the directory can't be deleted for any unknown  reason.
      */
     static public void deleteDirectory(File path) throws FileException {
@@ -135,8 +122,6 @@ public class FileUtils {
                 if (files[i].isDirectory()) {
                     //recursive mode
                     deleteDirectory(files[i]);
-                } else {
-                    ///      System.out.println("FILE TO DELETE : " + files[i].getPath() + " - " + files[i].delete());
                 }
             }
         } else {
@@ -154,9 +139,11 @@ public class FileUtils {
 
     /**
      * Delete the file, that is NOT a directory
+     *
      * @param path
      * @return
      * @throws robusta.commons.exceptions.FileException
+     *
      */
     static public boolean deleteFile(String path) throws FileException {
 
@@ -171,10 +158,11 @@ public class FileUtils {
 
     /**
      * returns true if the Path or File exists
+     *
      * @param path
      * @return
      */
-    public static boolean pathExists(String path) {
+    public static boolean fileExists(String path) {
 
         File f = new File(path);
         return f.exists();
@@ -183,37 +171,42 @@ public class FileUtils {
 
     /**
      * Read an InputStream and returns a String. Notice that it will close the InputStream.
+     *
      * @param inputStream InputStrem
      * @return
-     * @throws java.io.IOException if it's impossible to read tje InputStram
+     * @throws java.io.IOException      if it's impossible to read tje InputStram
      * @throws IllegalArgumentException if is is null
      */
     public static String readInputStream(InputStream inputStream) throws IOException {
 
-        if (inputStream == null) {
-            throw new IllegalArgumentException("InputStream is null");
-        }
-
-        StringBuffer buffer = new StringBuffer();
-
-
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-        String str = "";
-        boolean firstLine = true;
+        StringBuilder builder = new StringBuilder();
 
-        while (str != null) {
-            if (!firstLine) {
-                buffer.append("\n");
+        try {
+
+            if (inputStream == null) {
+                throw new IllegalArgumentException("InputStream is null");
             }
-            str = in.readLine();
-            if (str != null) {
-                buffer.append(str);
+
+            String str = "";
+            boolean firstLine = true;
+
+            while (str != null) {
+                if (!firstLine) {
+                    builder.append("\n");
+                }
+                str = in.readLine();
+                if (str != null) {
+                    builder.append(str);
+                }
+                firstLine = false;
             }
-            firstLine = false;
+
+        } finally {
+            in.close();
+            inputStream.close();
         }
-        in.close();
-        inputStream.close();
-        return buffer.toString();
+        return builder.toString();
     }
 }
 

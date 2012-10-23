@@ -5,7 +5,6 @@
 
 package com.robustaweb.library.commons.util;
 
-import com.robustaweb.library.commons.util.FileUtils;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,11 +19,12 @@ import static org.junit.Assert.*;
  */
 public class FileUtilsTest {
 
-    public FileUtilsTest() {
-    }
+    String path = System.getProperty("user.dir");
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+
     }
 
     @AfterClass
@@ -39,10 +39,6 @@ public class FileUtilsTest {
     public void tearDown() {
     }
 
-    @Test 
-    public void testSetInTheClouds() {
-    }
-
     @Test
     public void testReadFile() throws Exception {
     }
@@ -50,25 +46,28 @@ public class FileUtilsTest {
     @Test
     public void testSaveFile() throws Exception {
 
-        String testLines="<a>\nUnit test for RWT FileUtilities\n</a>";
-        FileUtils.saveFile("c:/unit-test", testLines);
-        String content=FileUtils.readFile("c:/unit-test");
-        System.out.println("content :"+content);
-        
-        assertTrue( content.contains("RWT FileUtilities\n"));
-        FileUtils.deleteFile("c:/unit-test");
+        String filePath = path+"/unit-test";
+        String content = "RWL FileUtilities";
+        String testLines="<a>\nUnit test for "+content+"\n</a>";
+        FileUtils.saveFile(filePath, testLines);
+        String readContent=FileUtils.readFile(filePath);
+        assertTrue(readContent.contains(content));
+        FileUtils.deleteFile(filePath);
+        assertFalse(FileUtils.fileExists(filePath));
 
     }
 
     @Test
     public void testCreateDirectory() throws Exception {
+        String dirName = "unit-test";
+        String dirPath = path+"/"+dirName;
 
-        FileUtils.createDirectory("c:/", "unit-test");
-        File f = new File("c:/unit-test");
+        FileUtils.createDirectory(path, dirName);
+        File f = new File(dirPath);
         assertTrue(f.isDirectory());
-        assertTrue(FileUtils.pathExists("c:/unit-test") );
+        assertTrue(FileUtils.fileExists(dirPath) );
         FileUtils.deleteDirectory(f);
-        f = new File("c:/unit-test");
+        f = new File(dirPath);
         assertFalse(f.exists());
 
     }

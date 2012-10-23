@@ -35,7 +35,7 @@ public abstract class RepresentationTest {
 
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClassToto() throws Exception {
         String userDir = System.getProperty("user.dir");
         String mavenPath="/src/test/java";
         String packagePath = RepresentationTest.class.getPackage().getName().replaceAll("\\.", "/");
@@ -91,6 +91,7 @@ public abstract class RepresentationTest {
         assertTrue(rep.get("name").equals("Boston school"));
 
     }
+
 
     @Test
     public void testHas() {
