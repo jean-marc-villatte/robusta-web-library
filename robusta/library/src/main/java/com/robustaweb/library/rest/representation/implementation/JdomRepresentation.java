@@ -20,10 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.commons.util.CoupleList;
@@ -87,14 +84,15 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * @param rootName
      * @param serialization
      */
-    public JdomRepresentation(String rootName, CoupleList<String, Object> serialization) {
+    public JdomRepresentation(String rootName, HashMap<String, Object> serialization) {
         Element root = new Element(rootName);
-        for (Couple<String, Object> couple : serialization){
-            Element elt = new Element(couple.getLeft());
-            if (couple.getRight()==null){
+        for (Map.Entry<String, Object> entry : serialization.entrySet()){
+
+            Element elt = new Element(entry.getKey());
+            if (entry.getValue()==null){
                 elt.setText(this.getEmptyValue());
             }else{
-                elt.setText(couple.getRight().toString());
+                elt.setText(entry.getValue().toString());
             }
             root.addContent(elt);
         }
@@ -561,8 +559,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         }else{
             prefix = "root";
         }
-        CoupleList couples = new CoupleList(SerializationUtils.serialize(o));
-        JdomRepresentation representation = new JdomRepresentation(prefix, couples);
+        HashMap map = SerializationUtils.serialize(o);
+        JdomRepresentation representation = new JdomRepresentation(prefix, map);
         return representation;
     }
 
@@ -575,7 +573,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      */
 
     public static Representation construct(Resource resource) {
-        CoupleList<String, Object> serialization = resource.serialize();
+        HashMap<String, Object> serialization = resource.serialize();
         return JdomRepresentation.construct(resource.getPrefix(),  serialization);
     }
 
@@ -583,7 +581,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
 	 * {@inheritDoc }
 	 */
 
-	public static Representation construct(String prefix, CoupleList<String, Object> serialization) {
+	public static Representation construct(String prefix, HashMap<String, Object> serialization) {
 		return new JdomRepresentation(prefix, serialization);
 	}
 

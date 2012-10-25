@@ -6,6 +6,7 @@ import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -68,8 +69,8 @@ public class ResourceImpl implements Resource<Long> {
     }
 
     @Override
-    public CoupleList<String, Object> serialize() throws RepresentationException {
-        return CoupleList.<String, Object>build("id", this.id);
+    public HashMap<String, Object> serialize() throws RepresentationException {
+        return CoupleList.<String, Object>build("id", this.id).getHashMap();
     }
 
     public List<ResourceImpl> createList(){

@@ -11,6 +11,9 @@ import com.robustaweb.library.rest.resource.implementation.UserImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.HashMap;
+
 import static org.junit.Assert.*;
 
 /**
@@ -111,8 +114,8 @@ class House implements Resource<String>{
     }
 
     @Override
-    public CoupleList<String, Object> serialize() throws RepresentationException {
-        return CoupleList.<String, Object>build("id", id);
+    public HashMap<String, Object> serialize() throws RepresentationException {
+        return CoupleList.<String, Object>build("id", id).getHashMap();
     }
 
 

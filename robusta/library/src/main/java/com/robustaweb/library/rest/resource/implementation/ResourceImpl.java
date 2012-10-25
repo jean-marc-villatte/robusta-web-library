@@ -7,6 +7,8 @@ import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.representation.implementation.JdomRepresentation;
 import com.robustaweb.library.rest.resource.Resource;
 
+import java.util.HashMap;
+
 /**
  * User: Nicolas
  * Date: 15/07/12
@@ -37,8 +39,8 @@ public class ResourceImpl<IdType> implements Resource<IdType> {
     }
 
     @Override
-    public CoupleList<String, Object> serialize() throws RepresentationException {
-        return  new CoupleList(SerializationUtils.serialize(this));
+    public HashMap<String, Object> serialize() throws RepresentationException {
+        return SerializationUtils.serialize(this);
     }
 
     @Override

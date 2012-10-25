@@ -6,6 +6,8 @@ import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.representation.Representation;
 import com.robustaweb.library.rest.resource.Resource;
 
+import java.util.HashMap;
+
 /**
  * Simple exemple of a User implementation
  * @author n.zozol
@@ -29,8 +31,8 @@ public class UserImpl implements Resource<Long> {
 
 
     @Override
-    public CoupleList<String, Object> serialize() throws RepresentationException {
-        return (CoupleList<String, Object>) CoupleList.build("id", id, "email", email, "firstName", firstName, "lastName", lastName);
+    public HashMap<String, Object> serialize() throws RepresentationException {
+        return CoupleList.build("id", id, "email", email, "firstName", firstName, "lastName", lastName).getHashMap();
     }
     
     @Override

@@ -19,6 +19,8 @@ import com.robustaweb.library.commons.exception.RepresentationException;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.representation.Representation;
 
+import java.util.HashMap;
+
 /**
  * In Rest, everything is a Resource. In Robusta Web Library, a Resource will typically be Domain objects stored in database,
  * whom representation will be set in XML or JSON
@@ -78,7 +80,7 @@ public interface Resource<IdType> {
      * @return all name/values of this object.
      * @throws RepresentationException
      */
-    public CoupleList<String, Object> serialize() throws RepresentationException;
+    public HashMap<String, Object> serialize() throws RepresentationException;
 
     /**
      * Return default representation

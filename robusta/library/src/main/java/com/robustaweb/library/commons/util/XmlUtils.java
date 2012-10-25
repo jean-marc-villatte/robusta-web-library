@@ -69,7 +69,7 @@ public class XmlUtils {
      * @return an Xml String
      */
     public static String build(String headers, Resource resource){
-        return build(headers, resource.getPrefix(), resource.serialize());
+        return build(headers, resource.getPrefix(), new CoupleList<String, Object>(resource.serialize()));
     }
 
 }
