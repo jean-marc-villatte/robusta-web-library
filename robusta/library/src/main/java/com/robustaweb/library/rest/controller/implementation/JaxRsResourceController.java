@@ -57,9 +57,9 @@ public class JaxRsResourceController implements
 	String authorizationValue;
     @Context
 	private UriInfo context;
-    //@Context
+    @Context
 	HttpServletRequest request;
-    //@Context
+    @Context
 	HttpServletResponse response;
 
     private final static Logger logger = Logger.getLogger(JaxRsResourceController.class
@@ -93,24 +93,7 @@ public class JaxRsResourceController implements
 
 
 
-    /**
-	 * Set the HttpServletRequest that has hitten the JAX Servlet and brings
-	 * informations.
-	 *
-	@Context
-	public void setHttpServletRequest(HttpServletRequest request) {
 
-		this.request = request;
-	}
-
-	/**
-	 * Set the HttpServletResponse that has hitten the JAX Servlet.
-	 *
-	@Context
-	public void setHttpServletResponse(HttpServletResponse response) {
-		this.response = response;
-
-	}*/
 
 	public String getParam(String param) {
 		if (context == null) {

@@ -114,6 +114,7 @@ public interface Representation {
      * @param nodeName
      * @param nodeValue
      * @return the updated representation
+     * TODO : this should be only enabled in Xml because Json would rather use set()
      */
     public Representation add(String nodeName, String nodeValue);
 

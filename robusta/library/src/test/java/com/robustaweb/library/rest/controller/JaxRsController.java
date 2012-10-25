@@ -2,6 +2,7 @@ package com.robustaweb.library.rest.controller;
 
 import com.robustaweb.library.rest.controller.implementation.JaxRsResourceController;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +14,13 @@ import java.util.List;
 @Path("root")
 public class JaxRsController extends JaxRsResourceController{
 
-
-
-    public void before(){
-        System.out.println("");
-        peoples.add("Nicolas Zozol");
-    }
-
     List<String> peoples = new ArrayList<String>();
 
+    @PostConstruct
+    public void fillList(){
+        peoples.add("Nicolas");
+        peoples.add("jack");
+    }
 
     @GET
     public String hello(){
@@ -45,12 +44,8 @@ public class JaxRsController extends JaxRsResourceController{
     @DELETE
     @Path("{name}")
     public String deletePeople(@PathParam("name") String name){
-
         System.out.println("deleting "+name);
         this.peoples.remove(name);
         return String.valueOf(peoples.size());
-
     }
-
-
 }
