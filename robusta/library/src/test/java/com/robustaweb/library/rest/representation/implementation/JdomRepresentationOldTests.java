@@ -110,7 +110,7 @@ public class JdomRepresentationOldTests {
         Long idClasse = new JdomRepresentation(xml).getNumber("idClasse");
         assertTrue(idClasse == 13);
 
-        int year = new JdomRepresentation(xml).getNumber("year", 1);
+        int year = new JdomRepresentation(xml).getNumber("year", Integer.class);
         assertTrue(year == 2009);
 
 
@@ -127,7 +127,7 @@ public class JdomRepresentationOldTests {
 
         
 
-        String v = new JdomRepresentation(xml).get("lastName");
+        String v = new JdomRepresentation(xml).fetch("student").get("lastName");
         assertTrue(v.equals("Doe") || v.equals("Dinar"));
 
         boolean foundError = false;
@@ -158,25 +158,7 @@ public class JdomRepresentationOldTests {
 
     }
 
-   
-    @Test
-    public void testGetPossibleValue() throws Exception {
-        String xml = "<studentList>" +
-                " <idSchool>3</idSchool><idClasse>13</idClasse><year> " +
-                "\n2009     </year>" +
-                "<student><lastName>Doe</lastName><firstName>John</firstName><middleName>Reuter</middleName></student>" +
-                "<student><lastName>Dinar</lastName><firstName>Jim</firstName><middleName>Reuter</middleName></student>" +
-                "</studentList>";
 
-        
-
-        String v =new JdomRepresentation(xml).get("lastName");
-        assertTrue(v.equals("Doe") || v.equals("Dinar"));
-
-        v =new JdomRepresentation(xml).get( "NoPossibleSir");
-        assertTrue(v == null);
-
-    }
 
     @Test
     public void testGetStringValues() throws Exception {
@@ -301,11 +283,9 @@ public class JdomRepresentationOldTests {
         String xml = " <root>" +
                 "<object><data>Jambalaya</data><beans>75</beans></object>" +
                 "<object><data>Cassoulet</data><beans>150</beans></object>" +
-                "<object>" +
                 "<data>Garbure</data><beans>15</beans>" +
                 "<bob>Eponge</bob>" +
                 "<bob>Spounge</bob>" +
-                "</object>" +
                 "</root>";
 
         JdomRepresentation representation  = new JdomRepresentation(xml);

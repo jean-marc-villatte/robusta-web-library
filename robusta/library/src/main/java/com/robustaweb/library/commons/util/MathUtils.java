@@ -179,28 +179,43 @@ public class MathUtils {
      * @throws IllegalArgumentException if the T type is not Double, Float, Integer, Long, Short or Byte
      * @throws NumberFormatException if the conversion fails
      */
-    public static <T extends Number> T convert(String str, T exemple) throws NumberFormatException, IllegalArgumentException{
+    public static <T extends Number> T convert(String str, Class<T> c) throws NumberFormatException, IllegalArgumentException{
 
         str = str.trim();
         T result = null;
-        if (exemple instanceof Double) {
+        if (c.getCanonicalName().equals(Double.class.getCanonicalName())) {
             result = (T) new Double(str);
-        } else if (exemple instanceof Float) {
+        } else if (c.getCanonicalName().equals(Float.class.getCanonicalName())) {
             result = (T) new Float(str);
-        } else if (exemple instanceof Integer) {
+        } else if (c.getCanonicalName().equals(Integer.class.getCanonicalName())) {
             result = (T) new Integer(str);
-        } else if (exemple instanceof Long) {
+        } else if (c.getCanonicalName().equals(Long.class.getCanonicalName())) {
             result = (T) new Long(str);
-        } else if (exemple instanceof Short) {
+        } else if (c.getCanonicalName().equals(Short.class.getCanonicalName())) {
             result = (T) new Short(str);
-        } else if (exemple instanceof Byte) {
+        } else if (c.getCanonicalName().equals(Byte.class.getCanonicalName())) {
             result = (T) new Byte(str);
         }else{
-            throw new IllegalArgumentException("Conversion is not possible with class "+exemple.getClass()
+            throw new IllegalArgumentException("Conversion is not possible with class "+c
                     +"; only allowing Double, Float, integer, Long, Short & Byte");
         }
 
         return result;
+
+    }
+
+
+    static <T> T convert (Number n, Class<T> clazz){
+        return null;
+    }
+
+
+
+
+    public static void main(String[] args) {
+        Double s = new MathUtils().convert("12.36", Double.class);
+        System.out.println(s);
+
 
     }
   

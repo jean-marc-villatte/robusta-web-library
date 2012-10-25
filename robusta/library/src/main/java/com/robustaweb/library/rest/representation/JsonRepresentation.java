@@ -56,7 +56,7 @@ public interface JsonRepresentation<JsonObject> extends Representation {
      * @throws NumberFormatException
      * @throws RepresentationException if the current Representation is not a JsonArray
      */
-    public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException;
+    public <T extends Number> List<T> getNumbersFromArray(Class<T> clazz) throws RepresentationException, NumberFormatException;
 
 
     /**
@@ -89,7 +89,7 @@ public interface JsonRepresentation<JsonObject> extends Representation {
      * @throws NumberFormatException
      * @throws RepresentationException if the current Representation is not a JsonArray
      */
-    public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException;
+    public <T extends Number> List<T> pluckNumbers(String key, Class<T> clazz) throws RepresentationException, NumberFormatException;
 
 
 

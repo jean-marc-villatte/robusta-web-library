@@ -133,7 +133,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> T getNumber(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -149,7 +149,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public <T extends Number> List<T> getNumbers(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -202,7 +202,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> getNumbersFromArray(Class<T> clazz) throws RepresentationException, NumberFormatException {
         //TODO Defualt implementation
         return null;
     }
@@ -220,7 +220,7 @@ public class GsonRepresentation extends AbstractJsonRepresentation<JsonElement> 
     }
 
     @Override
-    public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> pluckNumbers(String key, Class<T> clazz) throws RepresentationException, NumberFormatException {
         //TODO Defualt implementation
         return null;
     }

@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
  * Created by Nicolas Zozol
  * Date: 16/10/12
  */
-public class XmlRepresentationTest extends RepresentationTest {
+public abstract class XmlRepresentationTest extends RepresentationTest {
 
     protected XmlRepresentation getSchoolRepresentation() {
         return (XmlRepresentation) this.representation;

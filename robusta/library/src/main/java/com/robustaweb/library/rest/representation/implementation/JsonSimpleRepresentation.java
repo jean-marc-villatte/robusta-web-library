@@ -147,17 +147,17 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     @Override
     public Long getNumber(String nodeName) throws RepresentationException, NumberFormatException {
         String value = get(nodeName);
-        return MathUtils.convert(value, 1L);
+        return MathUtils.convert(value, Long.class);
     }
 
     @Override
-    public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> T getNumber(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
         String s = get(nodeName);
         if (s == null) {
             throw new RepresentationException("No value for node " + nodeName + " ; it's imposible to make it a Long");
         }
         s = s.trim();
-        T result = MathUtils.convert(s, exemple);
+        T result = MathUtils.convert(s, clazz);
         return result;
     }
 
@@ -242,11 +242,11 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
-    public <T extends Number> List<T> getNumbers(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
 
         this.fetch(nodeName);
         JsonSimpleRepresentation arrayRep = this.fetch(nodeName);
-        return arrayRep.getNumbersFromArray(exemple);
+        return arrayRep.getNumbersFromArray(clazz);
 
         /*
 
@@ -381,7 +381,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
-    public <T extends Number> List<T> getNumbersFromArray(T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> getNumbersFromArray(Class<T> clazz) throws RepresentationException, NumberFormatException {
         JSONArray array = toArray();
         List<T> result = new ArrayList<T>();
 
@@ -391,11 +391,18 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
             result.add(MathUtils.convert(o.toString().trim(), exemple));
         }*/
 
+        int i=0;
         for (Object o : array) {
             if (o == null || !(o instanceof Number)) {
                 throw new NumberFormatException(o + " is not a Number");
             }
-            result.add(MathUtils.<T>convert(o.toString(), exemple));//TODO : use a better Math.convert method
+            if (clazz.isInstance(o)){
+                result.add((T) o);
+            }else {
+                throw new RepresentationException("The current object '" + o + "' is a "+o.getClass().getSimpleName()+", " +
+                        "not a "+clazz.getSimpleName()+" Number (index " + i + ").");
+            }
+            i++;
         }
         return result;
     }
@@ -459,7 +466,7 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
     }
 
     @Override
-    public <T extends Number> List<T> pluckNumbers(String key, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> List<T> pluckNumbers(String key, Class<T> clazz) throws RepresentationException, NumberFormatException {
         JSONArray array = this.toArray();
         List<T> result = new ArrayList<T>();
 
@@ -474,11 +481,11 @@ public class JsonSimpleRepresentation implements JsonRepresentation<Object> {
 
             if (object.containsKey(key)) {
                 Object pluckItem = object.get(key);
-                if (pluckItem instanceof Number) { //TODO : when we will use the Class variable, this will be more precise
-                    Number n = MathUtils.convert(pluckItem.toString(), exemple);//TODO : it doesn't seem efficient : MathUtils should have a dedicated method
-                    result.add((T) n);
+                if (clazz.isInstance(pluckItem)) {
+                    result.add((T) pluckItem);
                 } else {
-                    throw new RepresentationException("The current object " + object + " contains the '" + key + "' key, but result :'" + pluckItem + "' is not a Number (index " + i + ").");//TODO : when we will use the Class variable, Number will be more precise
+                    throw new RepresentationException("The current object " + object + " contains the '" + key + "' key," +
+                            " but result :'" + pluckItem + "' is a "+pluckItem.getClass().getSimpleName()+", not a "+clazz.getSimpleName()+" Number (index " + i + ").");
                 }
             } else {
                 throw new RepresentationException("The current object " + object + " does not contains the '" + key + "' key needed for pluck() method (index " + i + ").");

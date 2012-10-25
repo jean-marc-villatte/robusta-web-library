@@ -74,7 +74,7 @@ public abstract class RepresentationTest {
     @Test
     public void testToString() {
 
-        String res = representation.toString();
+        String res = getSchoolRepresentation().toString();
         String errorMessage = "toString () is not working";
 
         // Rep shows a tag
@@ -113,7 +113,7 @@ public abstract class RepresentationTest {
 
     @Test
     public void testGetDocument() {
-        assertTrue(representation.getDocument() != null);
+        assertTrue(getSchoolRepresentation().getDocument() != null);
     }
 
     @Test
@@ -129,7 +129,7 @@ public abstract class RepresentationTest {
     public void testGetNumberWithClass() {
 
         representation = getSchoolRepresentation();
-        Float price = representation.<Float>getNumber("price", 2.0f);
+        Float price = representation.<Float>getNumber("price", Float.class);
         assertTrue(price == 12300.5);
 
     }
@@ -193,19 +193,19 @@ public abstract class RepresentationTest {
 
     @Test
     public void testGetNumbersWithClass() {
-        List<Float> prices;
+        List<Double> prices;
 
         if (isJson){
             representation = getSchoolRepresentation();
-            prices = representation.<Float>getNumbers("prices", 2.1f);
+            prices = representation.getNumbers("prices", Double.class);
         }else{
             representation = getSchoolRepresentation().fetch("prices");
-            prices = representation.<Float>getNumbers("price", 2.1f);
+            prices = representation.getNumbers("price", Double.class);
         }
 
         assertTrue(prices.size() == 3);
-        assertTrue(prices.contains(18100.55236f));
-        assertTrue(prices.indexOf(18100.55236f) == 2);
+        assertTrue(prices.contains(18100.55236));
+        assertTrue(prices.indexOf(18100.55236) == 2);
 
     }
 

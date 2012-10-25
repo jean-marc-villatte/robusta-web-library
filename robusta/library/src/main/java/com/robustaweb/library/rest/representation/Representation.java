@@ -91,7 +91,7 @@ public interface Representation {
      * @throws RepresentationException
      * @throws NumberFormatException
      */
-    public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException;
+    public <T extends Number> T getNumber(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException;
 
 
     /**
@@ -107,7 +107,7 @@ public interface Representation {
     public List<Long> getNumbers(String nodeName) throws RepresentationException, NumberFormatException;
 
     
-    public <T extends Number> List<T> getNumbers(String nodeName, T exemple) throws RepresentationException, NumberFormatException;
+    public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException;
 
     /**
      * Add a new element, even if one of the same nodeName exists or a value to a Json array.

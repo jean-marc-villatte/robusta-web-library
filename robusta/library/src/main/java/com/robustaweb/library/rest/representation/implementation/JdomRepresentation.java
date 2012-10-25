@@ -406,17 +406,17 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     @Override
     public Long getNumber(String nodeName) {
         String val = get(nodeName);
-        return new Long(val.trim());
+        return Long.valueOf(val.trim());
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> T getNumber(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
         String s = get(nodeName);
         s = s.trim();
-        T result = MathUtils.convert(s, exemple);
+        T result = MathUtils.convert(s, clazz);
         return result;
 
     }
@@ -463,12 +463,12 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * {@inheritDoc }
      */
     @Override
-    public <T extends Number> List<T> getNumbers(String nodeName, T exemple) {
+    public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz) {
 
         List<String> strings = getValues(nodeName);
         List<T> result = new ArrayList<T>();
         for (String s : strings) {
-            result.add(MathUtils.<T>convert(s.trim(), exemple));
+            result.add(MathUtils.convert(s.trim(), clazz));
         }
         return result;
     }

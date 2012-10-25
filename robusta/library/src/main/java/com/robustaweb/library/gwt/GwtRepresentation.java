@@ -336,11 +336,11 @@ public class GwtRepresentation implements
 	 * {@inheritDoc }
 	 */
 	@Override
-	public <T extends Number> T getNumber(String nodeName, T exemple)
+	public <T extends Number> T getNumber(String nodeName, Class<T> clazz)
 			throws RepresentationException, NumberFormatException {
 		String s = get(nodeName);
 		s = s.trim();
-		T result = MathUtils.convert(s, exemple);
+		T result = MathUtils.convert(s, clazz);
 		return result;
 
 	}
@@ -401,12 +401,12 @@ public class GwtRepresentation implements
 	 * {@inheritDoc }
 	 */
 	@Override
-	public <T extends Number> List<T> getNumbers(String nodeName, T exemple)
+	public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz)
 			throws RepresentationException, NumberFormatException {
 		List<String> strValues = getValues(nodeName);
 		ArrayList<T> numbers = new ArrayList<T>();
 		for (String s : strValues) {
-			numbers.add(MathUtils.convert(s, exemple));
+			numbers.add(MathUtils.convert(s, clazz));
 		}
 		return numbers;
 	}

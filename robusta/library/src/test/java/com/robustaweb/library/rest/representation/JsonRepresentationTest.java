@@ -89,7 +89,8 @@ public class JsonRepresentationTest extends RepresentationTest{
 
     @Test
     public void testGetNumbersFromArrayWithClass(){
-        List<Float> values = this.getRepresentation().fetch("school").fetch("prices").getNumbersFromArray(1.23);
+        JsonRepresentation rep = this.getRepresentation().fetch("school").fetch("prices");
+        List<Double> values = rep.getNumbersFromArray(Double.class);
         assertTrue(values.contains(18100.55236));
     }
 
@@ -117,9 +118,9 @@ public class JsonRepresentationTest extends RepresentationTest{
     public void testPluckNumbersWithClass(){
 
         this.representation = this.getRepresentation().fetch("school").fetch("students");
-        List<Integer> ids =this.getRepresentation().pluckNumbers("id", (Integer)1);
+        List<Long> ids =this.getRepresentation().pluckNumbers("id", Long.class);
         assertTrue(ids.size() == 4);
-        assertTrue(ids.get(3) instanceof Integer);
+        assertTrue(ids.get(3) instanceof Long);
         assertTrue(ids.get(3) == 4);
 
 

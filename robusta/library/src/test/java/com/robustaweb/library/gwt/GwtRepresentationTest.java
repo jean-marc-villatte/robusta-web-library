@@ -125,7 +125,7 @@ public class GwtRepresentationTest extends GWTTestCase {
 				Representation clone = rp.copy();
 				clone.set("float", "12.2");
 				float expected = 12.2f;
-				float result = clone.getNumber("float", asFloat);
+				float result = clone.getNumber("float", Float.class);
 				errorMessage = "getting " + result + " for representation "
 						+ clone.getClass().getName() + " instead of "
 						+ expected;
@@ -165,8 +165,8 @@ public class GwtRepresentationTest extends GWTTestCase {
 			for (Representation rp : representations) {
 
 				List<Long> resAsLong = rp.getNumbers("numbers");
-				List<Integer> resAsInts = rp.getNumbers("numbers", asInt);
-				List<Float> resAsFloats = rp.getNumbers("numbers", asFloat);
+				List<Integer> resAsInts = rp.getNumbers("numbers", Integer.class);
+				List<Float> resAsFloats = rp.getNumbers("numbers", Float.class);
 				List<Integer> expectedAsInts = Arrays.asList(new Integer[] { 1,
 						2, 3, 4 });
 				List<Long> expectedAsLong = Arrays.asList(new Long[] { 1L, 2L,
