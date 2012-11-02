@@ -108,7 +108,7 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client>{
     /**
      *
      */
-    protected String contentType = SynchronousRestClient.xmlContentType;
+    protected String contentType = RestClient.formContentType;
     /**
      *
      */
@@ -232,7 +232,7 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client>{
             if (firstLine) {
                 firstLine = false;
             } else {
-                result.append("\n");
+                result.append("&");
             }
             Couple<String, Object> c = parameters.get(i);
             String paramName = encodeParameter(c.getLeft());
@@ -242,6 +242,7 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client>{
             result.append("=");
             result.append(paramValue);
         }
+        System.out.println(result);
         return result.toString();
     }
     

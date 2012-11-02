@@ -16,12 +16,16 @@
 package com.robustaweb.library.rest.controller.implementation;
 
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
@@ -61,11 +65,13 @@ public class JaxRsResourceController implements
 	HttpServletRequest request;
     @Context
 	HttpServletResponse response;
+    @Context
+    protected HttpHeaders headers;
 
     private final static Logger logger = Logger.getLogger(JaxRsResourceController.class
             .getName());
 
-	//@Context
+	@Context
 	public void setContext(UriInfo context) {
 
 		this.context = context;
@@ -73,6 +79,25 @@ public class JaxRsResourceController implements
 		//TODO : if headers contains : If-None-Match, If-Unmodified-Since, or If-modified-Since
 		init();
 	}
+
+    /**
+     * Set the HttpServletRequest that has hitten the JAX Servlet and brings
+     * informations.
+     */
+    @Context
+    public void setHttpServletRequest(HttpServletRequest request) {
+
+        this.request = request;
+    }
+
+    /**
+     * Set the HttpServletResponse that has hitten the JAX Servlet.
+     */
+    @Context
+    public void setHttpServletResponse(HttpServletResponse response) {
+        this.response = response;
+
+    }
 
 	public UriInfo getContext() {
 		return context;
@@ -82,6 +107,8 @@ public class JaxRsResourceController implements
 	public String getUri() {
 		return this.context.getBaseUri().toString();
 	}
+
+
 
 	/**
 	 * Does nothing, and is called at the end of the setContext() function
@@ -203,11 +230,17 @@ public class JaxRsResourceController implements
 	public CoupleList<String, String> getHeaders() {
 		CoupleList<String, String> result = new CoupleList<String, String>();
 
-		Enumeration en = getHttpRequest().getParameterNames();
-		while (en.hasMoreElements()) {
-			String name = en.nextElement().toString();
-			result.addCouple(name, getHttpRequest().getParameter(name));
-		}
+        Set<Map.Entry<String, List<String>>> set = headers.getRequestHeaders().entrySet();
+        for (Map.Entry<String, List<String>> en : set){
+            List<String> value = en.getValue();
+            String firstValue;
+            if (value != null && value.size()>0){
+                firstValue = value.get(0);
+            }else{
+                firstValue="";
+            }
+            result.addCouple(en.getKey(), firstValue);
+        }
 		return result;
 	}
 

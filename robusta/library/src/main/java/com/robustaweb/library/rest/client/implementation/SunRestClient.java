@@ -91,6 +91,7 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
                     http.setDoOutput(true);
                     /* if there is something to put in the requestBody*/
                     if (this.requestBody != null && this.requestBody.length() >= 0) {
+
                         DataOutputStream wr = new DataOutputStream(http.getOutputStream());
                         wr.writeBytes(requestBody);
                         wr.flush();

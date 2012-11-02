@@ -1,8 +1,7 @@
-package com.robustaweb.library.rest.controller;
+package com.robustaweb.controller;
 
 import com.robustaweb.library.commons.util.FileUtils;
 import com.robustaweb.library.commons.util.StringUtils;
-import com.robustaweb.library.rest.client.RestClient;
 import com.robustaweb.library.rest.controller.implementation.JaxRsResourceController;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +12,6 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -61,14 +59,7 @@ public class JaxRsController extends JaxRsResourceController{
     @POST
     @Path("multi-http-params")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String getParams(@FormParam("multi")List<String> multiParams) throws IOException {
-        return StringUtils.join(multiParams, " ; ");
-    }
-
-    @GET
-    @Path("multi-http-params")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String getParamsGet(@QueryParam("multi")List<String> multiParams) throws IOException {
+    public String getParams(@DefaultValue("All") @QueryParam("multi")List<String> multiParams) throws IOException {
         UriInfo context = this.getContext();
         MultivaluedMap map = context.getQueryParameters();
         System.out.println("===>"+this.getAuthorizationValue());
@@ -78,14 +69,6 @@ public class JaxRsController extends JaxRsResourceController{
             System.out.println(o);
         }
 
-        return set.toString();//StringUtils.join(multiParams, " ; ");
-    }
-
-
-    @GET
-    @Path("various")
-    public String variousOnTheFlyTests(){
-        System.out.println("auth=>"+getAuthorizationValue());
-        return this.headers.getRequestHeaders().toString();
+        return StringUtils.join(multiParams, " ; ");
     }
 }

@@ -15,9 +15,7 @@
  */
 package com.robustaweb.library.commons.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.robustaweb.library.commons.exception.ValidationException;
 
@@ -564,6 +562,25 @@ public class StringUtils {
         return (String[]) resultList.toArray(new String[resultList.size()]);       
     }
 
+    public static String join (Iterable strings, String glue){
+        if (strings == null){
+            throw new IllegalArgumentException("strings array is null");
+        }
+        if (glue == null){
+            throw new IllegalArgumentException("No glue ; use empty String instead of null");
+        }
+        StringBuilder sb = new StringBuilder();
+        Iterator it = strings.iterator();
+        while (it.hasNext()){
+            sb.append(it.next().toString());
+            if (it.hasNext()){
+                sb.append(glue);
+            }
+        }
+
+        return sb.toString();
+    }
+
     /**
      * @todo3 : to be tested
      * Join elements
@@ -572,22 +589,7 @@ public class StringUtils {
      * @return
      */
     public static String join (Object [] strings, String glue){
-
-        if (strings == null){
-            throw new IllegalArgumentException("strings array is null");
-        }
-        if (glue == null){
-            throw new IllegalArgumentException("No glue ; use empty String instead of null");
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0 ; i < strings.length ; i++){
-            sb.append(strings[i].toString());
-            //if not last
-            if (i < strings.length - 1 && glue.length()>0){
-                sb.append(glue);
-            }
-        }
-        return sb.toString();
+        return join(Arrays.asList(strings), glue);
     }
 
     public static String defaultJoints = " _-";
