@@ -34,7 +34,7 @@ public interface Callback{
      * @param client
      * @param response
      */
-    public void onSuccess(String response);
+    public void onSuccess(String response, int code);
 
 
     /**
@@ -45,10 +45,10 @@ public interface Callback{
      */
     public void onFailure(RestException failure);
 
-    //TODO : httpException not compatible with Gwt ?
     public  void onException(Exception exception);
 
     public void onComplete();
+
 
  
 }

@@ -16,8 +16,8 @@
 package com.robustaweb.library.rest.client.implementation;
 
 import com.robustaweb.library.commons.exception.HttpException;
-import com.robustaweb.library.commons.exception.RestException;
 import com.robustaweb.library.commons.util.CoupleList;
+import com.robustaweb.library.commons.util.StringUtils;
 import com.robustaweb.library.rest.HttpMethod;
 import com.robustaweb.library.rest.client.SynchronousRestClient;
 
@@ -25,68 +25,70 @@ import com.robustaweb.library.rest.client.SynchronousRestClient;
  *
  * @author n.zozol
  */
-public abstract class AbstractSynchronousRestClient<Client> extends AbstractRestClient<Client> implements SynchronousRestClient<Client> {
+public abstract class AbstractSynchronousRestClient<Client, Response> extends AbstractRestClient<Client> implements SynchronousRestClient<Client, Response> {
 
-    /**
-     * {@inheritDoc }
-     */
+
+
+
     @Override
-    public String POST(String relativeFileWithNoParam, CoupleList<String, Object> parameters) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.POST, relativeFileWithNoParam, parameters);
-        assert obj.length == 2;
-        return executeMethod(HttpMethod.POST, obj[0], obj[1]);
+    public Response GET(String path, CoupleList<String, Object> parameters) throws HttpException {
+        prepareMethod();
+        String url = encodeUrl(applicationUri, path, parameters);
+        return executeMethod(HttpMethod.GET, url);
     }
 
-    /**
-     * {@inheritDoc }
-     */
+
     @Override
-    public String GET(String relativeFileWithNoParam, CoupleList<String, Object> parameters) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.GET, relativeFileWithNoParam, parameters);
-        assert obj.length == 2;
-        return executeMethod(HttpMethod.GET, obj[0], obj[1]);
+    public Response POST(String path, CoupleList<String, Object> parameters) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        String body = encodeParameters(parameters);
+        return executeMethod(HttpMethod.POST, url, body);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public String PUT(String relativeFileWithNoParam, CoupleList<String, Object> parameters) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.PUT, relativeFileWithNoParam, parameters);
-        assert obj.length == 2;
-        return executeMethod(HttpMethod.PUT, obj[0], obj[1]);
+    public Response POST(String path, String body) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        return executeMethod(HttpMethod.POST, url, body);
     }
 
-    /**
-     * {@inheritDoc }
-     */
+
     @Override
-    public String DELETE(String relativeFileWithNoParam, CoupleList<String, Object> parameters) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.DELETE, relativeFileWithNoParam, parameters);
-        assert obj.length == 2;
-        return executeMethod(HttpMethod.DELETE, obj[0], obj[1]);
+    public Response PUT(String path, CoupleList<String, Object> parameters) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        String body = encodeParameters(parameters);
+        return executeMethod(HttpMethod.PUT, url, body);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public String OTHER(String method, String relativeFileWithNoParam, CoupleList<String, Object> parameters) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.OTHER.setMethod(method), relativeFileWithNoParam, parameters);
-        assert obj.length == 2;
-        return executeMethod(HttpMethod.OTHER.setMethod(method), obj[0], obj[1]);
+    public Response PUT(String path, String body) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        return executeMethod(HttpMethod.PUT, url, body);
     }
 
+
+
+    @Override
+    public Response DELETE(String path, CoupleList<String, Object> parameters) throws HttpException {
+        prepareMethod();
+        String url = encodeUrl(applicationUri, path, parameters);
+        return executeMethod(HttpMethod.DELETE, url);
+    }
+
+
     /**
-     * This method has the responsability do make the correct call with a specific implementation
-     * @param method
-     * @param relativePathAndParams
-     * @param requestBody
-     * @return
-     * @throws HttpException
-     * @throws RestException
+     * Execute the request with a Body, without url params
      */
-    protected abstract String executeMethod(final HttpMethod method, final String url, final String requestBody) throws HttpException;
+    protected abstract Response executeMethod(final HttpMethod method, final String url, final String requestBody) throws HttpException;
+
+    /**
+     * Executes the request with url params, without a body
+     */
+    protected abstract Response executeMethod(final HttpMethod method, final String url) throws HttpException;
+
 }
 
 

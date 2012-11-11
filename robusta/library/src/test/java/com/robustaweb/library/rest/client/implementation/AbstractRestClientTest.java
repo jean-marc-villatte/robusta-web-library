@@ -64,7 +64,6 @@ public class AbstractRestClientTest {
         assertEquals(expected, actual);
         actual = URLDecoder.decode("A%20B%20C%20$%25", "UTF-8");
         assertEquals(expected, actual);
-        System.out.println("FF UTF8 ok");
     }
 
     @Test
@@ -80,11 +79,9 @@ public class AbstractRestClientTest {
             assertTrue(Arrays.asList(actual).toString(), Arrays.equals(actual, expected));
 
             client.setContentType("form");
-            expected = new String[]{"http://localhost:8080/robusta/rest/user", "id=12\nusername=john+doe"};
+            expected = new String[]{"http://localhost:8080/robusta/rest/user", "id=12&username=john+doe"};
             actual = client.prepareMethod(HttpMethod.POST, relativePath, cl);
             assertEquals(expected[0], actual[0]);
-            System.out.println("excepted :"+expected[1]);
-            System.out.println("actual :"+actual[1]);
             assertEquals(expected[1], actual[1]);
             assertTrue(Arrays.asList(actual).toString(), Arrays.equals(actual, expected));
 

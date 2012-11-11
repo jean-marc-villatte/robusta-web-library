@@ -82,17 +82,17 @@ public class AsynchronousRestClientSun extends AbstractAsynchronousRestClient<Ht
                 }
 
                 try {
-                    if (AsynchronousRestClientSun.proxy != null) {
-                        http = (HttpURLConnection) u.openConnection(AsynchronousRestClientSun.proxy);
-                    } else {
-                        http = (HttpURLConnection) u.openConnection();
-                    }
+
+                    http = (HttpURLConnection) u.openConnection();
+
                     http.addRequestProperty("Content-type", contentType);
                     if (authorizationValue != null) {
-                        http.addRequestProperty("Authorization", AsynchronousRestClientSun.authorizationValue);
+                        http.addRequestProperty("Authorization", authorizationValue);
                     }
                     http.setRequestMethod(method.toString());
                     http.setDoInput(true);
+                    //TODO : all
+
                     switch (method) {
                         case PUT:
                         case POST:

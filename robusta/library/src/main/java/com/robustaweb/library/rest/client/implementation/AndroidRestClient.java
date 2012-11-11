@@ -18,6 +18,7 @@ package com.robustaweb.library.rest.client.implementation;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
 import org.apache.http.HttpResponse;
@@ -42,11 +43,12 @@ import com.robustaweb.library.rest.client.Callback;
  * 
  * @author n.zozol
  */
-public class AndroidRestClient extends
-		AbstractAsynchronousRestClient<DefaultHttpClient> {
+public class AndroidRestClient extends AbstractAsynchronousRestClient<DefaultHttpClient> {
 
 	DefaultHttpClient client;
 	Thread requestThread;
+
+
 
 	public AndroidRestClient() {
 		AbstractRestClient.applicationUri = "";

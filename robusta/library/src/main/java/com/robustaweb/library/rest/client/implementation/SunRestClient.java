@@ -15,28 +15,23 @@
  */
 package com.robustaweb.library.rest.client.implementation;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.commons.util.FileUtils;
 import com.robustaweb.library.commons.util.ListUtils;
 import com.robustaweb.library.rest.HttpMethod;
 
-/** 
+import java.io.*;
+import java.net.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
  * Simple REST Http client wrapping the Sun Client. Compare to Apache, many JVM have this client.
+ *
  * @author Nicolas Zozol - Edupassion.com - Robusta Web nzozol@edupassion.com
  */
-public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnection> {
+public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnection, String> {
 
 
     static Proxy proxy;
@@ -48,10 +43,88 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
      */
     public SunRestClient(String applicationPath) {
         if (!applicationPath.startsWith("http")) {
-            throw new IllegalArgumentException("Application URI should start with http !");
+            throw new IllegalArgumentException("Application URI should start with http or https");
         }
         SunRestClient.applicationUri = applicationPath;
     }
+
+
+    /**
+     * Configure the connection with url and optional proxy. Content-type and UAtorization headers will be added later.
+     * Override this method if you want to add custom headers or configuration
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public HttpURLConnection getConnection(final String url) throws IOException {
+        if (url == null || !url.startsWith("http")) {
+            throw new HttpException("Url should start with http or https");
+        }
+
+        URL u;
+        try {
+            u = new URL(url);
+        } catch (MalformedURLException ex) {
+            throw new HttpException("malformed URI with : "+url, ex);
+        }
+
+
+        if (proxy != null) {
+            http = (HttpURLConnection) u.openConnection(proxy);
+        } else {
+            http = (HttpURLConnection) u.openConnection();
+        }
+
+        return http;
+
+    }
+
+
+    @Override
+    public void setHeader(String name, String value) {
+        http.setRequestProperty(name, value);
+
+    }
+
+    @Override
+    protected String executeMethod(HttpMethod method, String url) throws HttpException {
+        HttpURLConnection http;
+        InputStream httpInputStream = null;
+
+        String response = "";
+
+        try {
+
+            http = getConnection(url);
+            addRequestHeaders();
+            http.setRequestMethod(method.toString());
+            http.setDoInput(true);
+
+            httpInputStream = http.getInputStream();
+            response = FileUtils.readInputStream(httpInputStream);
+            this.responseHeaders = readHeaders(http);
+
+            checkUuids();
+
+            return response;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new HttpException(ex.getMessage(), ex);
+        } finally {
+            //cleaning for next request
+            clean();
+            //closing streams
+            try {
+                if (httpInputStream != null) {
+                    httpInputStream.close();
+                }
+            } catch (IOException e) {
+                throw new HttpException("Can't close the stream", e);
+            }
+        }
+    }
+
 
     /**
      * {@inheritDoc }
@@ -59,67 +132,70 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
     @Override
     protected String executeMethod(final HttpMethod method, final String url, final String requestBody) throws HttpException {
 
-        assert url.startsWith("http");
-
-        URL u;
-        try {
-            u = new URL(url);
-        } catch (MalformedURLException ex) {
-            throw new HttpException("malformedURI", ex);
+        switch (method) {
+            case GET:
+            case DELETE:
+                throw new IllegalArgumentException("Can't send a body on GET or DELETE method. Use directly getUnderlyingClient() if you really want to do this.");
         }
 
+        HttpURLConnection http;
+        InputStream httpInputStream = null;
+        OutputStream httpOutputStream = null;
+        DataOutputStream wr = null;
+        String response = "";
+
         try {
 
-            
-            if (SunRestClient.proxy != null){
-                http = (HttpURLConnection) u.openConnection(SunRestClient.proxy);
-            }else{
-                http = (HttpURLConnection) u.openConnection();
-            }
-             
-
-            http.addRequestProperty("Content-type", this.contentType);
-            if (authorizationValue != null) {
-                http.addRequestProperty("Authorization", SunRestClient.authorizationValue);
-            }
-
+            http = getConnection(url);
+            addRequestHeaders();
             http.setRequestMethod(method.toString());
             http.setDoInput(true);
-            switch (method) {
-                case PUT:
-                case POST:
-                    http.setDoOutput(true);
-                    /* if there is something to put in the requestBody*/
-                    if (this.requestBody != null && this.requestBody.length() >= 0) {
 
-                        DataOutputStream wr = new DataOutputStream(http.getOutputStream());
-                        wr.writeBytes(requestBody);
-                        wr.flush();
-                        wr.close();
-                    }
-                    break;
+            /* if there is something to put in the requestBody*/
+            if (requestBody != null && requestBody.length() >= 0) {
+                httpOutputStream = http.getOutputStream();
+                wr = new DataOutputStream(httpOutputStream);
+                wr.writeBytes(requestBody);
+                wr.flush();
             }
-            this.response = FileUtils.readInputStream(http.getInputStream());
+
+            httpInputStream = http.getInputStream();
+            response = FileUtils.readInputStream(httpInputStream);
             this.responseHeaders = readHeaders(http);
-            
-            
-           
-            return this.response;
+
+            checkUuids();
+
+            return response;
         } catch (IOException ex) {
             ex.printStackTrace();
             throw new HttpException(ex.getMessage(), ex);
         } finally {
+            //cleaning for next request
             clean();
-        }        
+            //closing streams
+            try {
+                if (wr != null) {
+                    wr.close();
+                }
+                if (httpOutputStream != null){
+                    httpOutputStream.close();
+                }
+                if (httpInputStream != null) {
+                    httpInputStream.close();
+                }
+            } catch (IOException e) {
+                throw new HttpException("Can't close the stream", e);
+            }
+        }
     }
-    
-    private Map<String, String> readHeaders(HttpURLConnection http){
-    	Map<String, List<String>> maps = http.getHeaderFields();
-    	Map<String, String> map = new HashMap<String, String>();
-    	for(String key : maps.keySet()){
-    		map.put(key, ListUtils.join(";",maps.get(key)));
-    	}
-    	return map;
+
+    private Map<String, String> readHeaders(HttpURLConnection http) {
+        Map<String, List<String>> maps = http.getHeaderFields();
+        Map<String, String> map = new HashMap<String, String>();
+        for (String key : maps.keySet()) {
+            map.put(key, ListUtils.join(";", maps.get(key)));
+        }
+        return map;
     }
 
     /**
@@ -136,6 +212,7 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
 
     /**
      * Set a proxy for the class
+     *
      * @param proxy
      */
     public static void setProxy(Proxy proxy) {
@@ -150,6 +227,5 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
         return http;
     }
 
-    
 
 }

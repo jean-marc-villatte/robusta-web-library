@@ -5,35 +5,37 @@
 
 package com.robustaweb.library.commons.util;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  *
  * @author Moi
  */
-public class CoupleListTest extends TestCase {
+public class CoupleListTest {
     
     CoupleList<Integer, String> myList;
        Couple c1,c2,c3,c4,c5;
     Couple c6,c7,c8;
-    String mySuperString,myOtherSuperString;
+    String twoString, threeString;
     
-    
-    public CoupleListTest(String testName) {
-        super(testName);
-    }            
 
-    @Override
+
+
+    @Before
     protected void setUp() throws Exception {
-        super.setUp();
+
         myList=new CoupleList<Integer, String>();
         
-         mySuperString="2";
-        myOtherSuperString="3";
+         twoString ="2";
+        threeString ="3";
         
         c1=new Couple<Integer, String>(1, "1");
-        c2=new Couple <Integer, String> (2, mySuperString);
-        c3=new Couple<Integer, String>(3, myOtherSuperString);
+        c2=new Couple <Integer, String> (2, twoString);
+        c3=new Couple<Integer, String>(3, threeString);
         c4=new Couple<Integer, String>(4, "4");
         c5=new Couple<Integer, String>(5, "5");
         c6=new Couple("six", new Float(6.0));
@@ -44,53 +46,38 @@ public class CoupleListTest extends TestCase {
       
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
 
-    /**
-     * Test of addCouple method, of class CoupleList.
-     */
+    @Test
     public void testAddCouple() {
         assertTrue(myList.contains(c1));
     }
 
-    /**
-     * Test of getLeftElement method, of class CoupleList.
-     */
+    @Test
     public void testGetLeftElement() {
         assertTrue(myList.getLeftElement(0)==1);
     }
 
-    /**
-     * Test of getRightElement method, of class CoupleList.
-     */
+    @Test
     public void testGetRightElement() {
         
         assertTrue(myList.getRightElement(0).equals("1"));
     }
 
-    /**
-     * Test of getAllLeftElements method, of class CoupleList.
-     */
+    @Test
     public void testGetAllLeftElements() {
         assertTrue(myList.getAllLeftElements().size()==5);
         assertTrue(myList.getAllLeftElements().get(1)==2);
     }
 
-    /**
-     * Test of getAllRightElements method, of class CoupleList.
-     */
+    @Test
     public void testGetAllRightElements() {
+        assertTrue(myList.getAllRightElements().size()==5);
+        assertTrue(myList.getAllRightElements().get(1).equals(threeString));
     }
 
-    
 
-    /**
-     * Test of findMyLovers method, of class CoupleList.
-     */
-    public void testFindMyLovers() {
+    @Test
+    public void testMatchers() {
         String six="6";
         Integer seven=7;
         myList.addCouple(6, six);
@@ -98,13 +85,11 @@ public class CoupleListTest extends TestCase {
         myList.addCouple(seven, "666");
         
         assertTrue(myList.size()==8);
-        assertTrue(myList.findMyLovers(six).size()==2);
+        assertTrue(myList.matchers(six).size()==2);
     }
 
-    /**
-     * Test of findMyFirstLoveInLeft method, of class CoupleList.
-     */
-    public void testFindMyFirstLoveInLeft() {
+    @Test
+    public void testLeftMatcher() {
         String six="6";
         Integer seven=7;
         myList.addCouple(6, six);
@@ -112,14 +97,12 @@ public class CoupleListTest extends TestCase {
         myList.addCouple(seven, "666");
         
         assertTrue(myList.size()==8);
-        assertTrue(myList.findMyFirstLoveInLeft(six)==6);
+        assertTrue(myList.leftMatcher(six)==6);
         System.out.println(myList);
     }
 
-    /**
-     * Test of findMyFirstLoveInRight method, of class CoupleList.
-     */
-    public void testFindMyFirstLoveInRight() {
+    @Test
+    public void testRightMatcher() {
               String six="6";
         Integer seven=7;
         myList.addCouple(6, six);
@@ -127,13 +110,11 @@ public class CoupleListTest extends TestCase {
         myList.addCouple(seven, "666");
         
         assertTrue(myList.size()==8);
-        assertTrue(myList.findMyFirstLoveInRight(seven).equals(six));
+        assertTrue(myList.rightMatcher(seven).equals(six));
     }
 
-    /**
-     * Test of findMyFirstLove method, of class CoupleList.
-     */
-    public void testFindMyFirstLove() {
+    @Test
+    public void testFirstMatcher() {
               String six="6";
         Integer seven=7;
         myList.addCouple(6, six);
@@ -141,18 +122,14 @@ public class CoupleListTest extends TestCase {
         myList.addCouple(seven, "666");
         
         assertTrue(myList.size()==8);
-        assertTrue(myList.findMyFirstLove(six).equals(6));
+        assertTrue(myList.firstMatcher(six).equals(6));
     }
 
-    /**
-     * Test of getHashMap method, of class CoupleList.
-     */
+    @Test
     public void testGetHashMap() {
     }
 
-    /**
-     * Test of getInvertedCouple method, of class CoupleList.
-     */
+    @Test
     public void testGetInvertedCouple() {
         CoupleList<String, Integer> cp=CoupleList.<String, Integer>build("cream",3,"coffee",5,"size",7,"cream",9);
         CoupleList<Integer, String> inverse=CoupleList.<String, Integer>build(3,"cream",5, "coffee",7,"size",9,"cream");
@@ -162,9 +139,7 @@ public class CoupleListTest extends TestCase {
 
     }
 
-    /**
-     * Test of findWhere method, of class CoupleList.
-     */
+    @Test
     public void testFindWhere() {
               String six="6";
         Integer seven=7;
@@ -176,9 +151,7 @@ public class CoupleListTest extends TestCase {
         assertTrue(myList.findWhere(six).get(0).getLeft()==6);
     }
 
-    /**
-     * Test of removeWhere method, of class CoupleList.
-     */
+    @Test
     public void testRemoveWhere() {
               String six="6";
         Integer seven=7;
@@ -195,13 +168,18 @@ public class CoupleListTest extends TestCase {
         
     }
 
-    
+    @Test
     public void testBuilder(){
 
         CoupleList<String, String> cp=CoupleList.<String, String>build("cream","lavande","coffee","java","size","big","cream","none");
         assertTrue(cp.size()==4 );
-        assertTrue(cp.findMyLovers("cream").size()==2 );
-        //System.out.println(cp);
+        assertTrue(cp.matchers("cream").size()==2 );
+    }
+
+    @Test
+    public void testJoin(){
+        String result = CoupleList.build("jo", "two", 2, 4, 5, "two").join("=", "&&&");
+        assertEquals("jo=two&&&2=4&&&5=two", result);
     }
 
 }

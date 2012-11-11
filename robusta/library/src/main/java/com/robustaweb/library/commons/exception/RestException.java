@@ -31,6 +31,7 @@ public class RestException extends Exception {
      * @param httpCode Http Code sent by the server
      * @param message an explanation
      * @param rawResponse the response sent by the server
+     * TODO : switch code with response
      */
     public RestException(int httpCode, String rawResponse) {
         

@@ -22,22 +22,15 @@ public class JerseyServerTest extends JerseyTest {
     protected String baseUri = "http://localhost:" + TestConstants.JERSEY_HTTP_PORT + "/";
 
     public JerseyServerTest() throws Exception {
-        String resourcePackageName="com.robustaweb.library.rest.controller";
         //super("com.robustaweb.library.rest.controller");
-
-
-        //It's possible to NOT call the super() and the :
-        ///1)
+        String resourcePackageName="com.robustaweb.library.rest.controller";
         System.setProperty("container.type", TestConstants.EMBEDDED_GF_V3);
         ApplicationDescriptor appDescriptor = new ApplicationDescriptor()
                 .setRootResourcePackageName(resourcePackageName) // resource packages
                 .setContextPath(contextPath) //context of app
                 .setServletPath(servletPath); // context of spi servlet
 
-
-        //2)
         setupTestEnvironment(appDescriptor);
-        // */
     }
 
     @Test

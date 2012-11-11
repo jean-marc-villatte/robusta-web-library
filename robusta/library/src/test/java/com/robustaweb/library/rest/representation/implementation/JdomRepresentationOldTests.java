@@ -254,7 +254,7 @@ public class JdomRepresentationOldTests {
 
         CoupleList<String, String> couples = new JdomRepresentation(xml).getCouples( "data", "beans");
         assertTrue(couples.size() == 3);
-        assertTrue(couples.findMyFirstLove("75").equals("Jambalaya"));
+        assertTrue(couples.firstMatcher("75").equals("Jambalaya"));
         /*
          * will return [{"Jambalaya", "75"}, {"Cassoulet", "150"}, {"Garbure", "15"}]
          *

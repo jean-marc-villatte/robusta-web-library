@@ -116,12 +116,12 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
      * <p>Returns all RIGHT elements equals to Object o when o is a LEFT element, and viceversa
      * o can be sometimes on the left, sometime on the right.
      * </p>
-     * <p>For exemple <code>findMyLovers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
+     * <p>For exemple <code>matchers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
      * will return ["Three", "Not Three"]</p>
      * @param o The object to test
      * @return a list of matching objects
      */
-    public ArrayList findMyLovers(Object o) {
+    public ArrayList matchers(Object o) {
 
         ArrayList result = new ArrayList();
 
@@ -143,12 +143,12 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
     /**
      *
      * <p>Returns the first LEFT object matching the RIGHT object o</p>
-     * <p>For exemple <code>findMyLovers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
+     * <p>For exemple <code>matchers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
      * will return <strong>"Not Three"</strong></p>
      * @return first love of o
      */
     
-    public LEFT findMyFirstLoveInLeft(RIGHT o) {
+    public LEFT leftMatcher(RIGHT o) {
 
         for (int i = 0; i < this.size(); i++) {
 
@@ -162,11 +162,11 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
 
     /**
      * <p>Returns the first RIGHT object matching the LEFT object o</p>
-     * <p>For exemple <code>findMyLovers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
+     * <p>For exemple <code>matchers(3)</code> in [(3,"Three"),("Not Three", 3),(4,5),(9,10)]
      * will return <strong>"Three"</strong></p>
      * @return first love of o
      */
-    public RIGHT findMyFirstLoveInRight(LEFT o) {
+    public RIGHT rightMatcher(LEFT o) {
 
         for (int i = 0; i < this.size(); i++) {
 
@@ -182,7 +182,7 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
      *<p>Returns the first object matching the  object o, whatever if it's on the Right or the Left</p>
      * @return first love of o
      */
-    public Object findMyFirstLove(Object o) {
+    public Object firstMatcher(Object o) {
 
         for (int i = 0; i < this.size(); i++) {
             if (getLeftElement(i).equals(o)) {
@@ -321,6 +321,14 @@ public class CoupleList<LEFT, RIGHT> extends ArrayList<Couple<LEFT, RIGHT>> {
     }
 
 
+    public String join(String innerJoin, String outerJoin){
+        StringBuilder builder = new StringBuilder();
+        for (Couple<LEFT, RIGHT> couple : this){
+            builder.append(couple.getLeft()).append(innerJoin).append(couple.getRight()).append(outerJoin);
+        }
+        builder.setLength(builder.length() - outerJoin.length());
+        return builder.toString();
+    }
 
 
     /**
