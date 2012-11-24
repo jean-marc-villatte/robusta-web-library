@@ -123,7 +123,7 @@ public class AndroidRestClient extends AbstractAsynchronousRestClient<DefaultHtt
 
 					HttpContext localContext = new BasicHttpContext();
 					HttpResponse response = client.execute(meth, localContext);
-					callback.onSuccess(response.toString());
+					callback.onSuccess(response.toString(), response.getStatusLine().getStatusCode());//TODO : to be tested
 
 					// headers response
 					HeaderIterator it = response.headerIterator();
@@ -154,7 +154,13 @@ public class AndroidRestClient extends AbstractAsynchronousRestClient<DefaultHtt
 		}
 	}
 
-	/**
+    @Override
+    public void setHeader(String name, String value) {
+        //TODO Defualt implementation
+
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override

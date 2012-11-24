@@ -39,14 +39,15 @@ import com.robustaweb.library.rest.client.SynchronousRestClient;
  * Simple REST Http client wrapping the very popular Apache Client. Check the Apache Client librairies are in the ClassPath.
  * @author Nicolas Zozol - Edupassion.com - Robusta Web nzozol@edupassion.com
  */
-public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpClient> {
+public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpClient, String> {
 
     DefaultHttpClient client ;
    
 
     public ApacheRestClient(String applicationUri) {
-        checkConstructorUri(applicationUri);
         setApplicationUri(applicationUri);
+        checkConstructorUri();
+
     }
 
 
@@ -87,11 +88,11 @@ public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpC
 
                 case POST:
                     httpMethod = new HttpPost(url);
-                    ((HttpPost) httpMethod).setEntity(new StringEntity(this.requestBody));
+                    ((HttpPost) httpMethod).setEntity(new StringEntity(requestBody));
                     break;
                 case PUT:
                     httpMethod = new HttpPut(url);
-                    ((HttpPut) httpMethod).setEntity(new StringEntity(this.requestBody));
+                    ((HttpPut) httpMethod).setEntity(new StringEntity(requestBody));
                     break;
                 default:
                     throw new IllegalStateException("Can't execute this method : " + method);
@@ -118,10 +119,10 @@ public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpC
             }
             
             //Parsing response
-            this.response = FileUtils.readInputStream(httpResponse.getEntity().getContent());
+           return  FileUtils.readInputStream(httpResponse.getEntity().getContent());
             
             
-            return this.response;
+
 
         } catch (IOException ex) {
             throw new HttpException("IO Exception : "+ex.getMessage(), ex);
@@ -130,8 +131,20 @@ public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpC
         }
     }
 
+    @Override
+    protected String executeMethod(HttpMethod method, String url) throws HttpException {
+        //TODO Defualt implementation
+        return null;
+    }
+
     private void clear() {
-        this.setNextRequestBody("");
+        //TODO should not be private, but reuse exixting one
+    }
+
+    @Override
+    public void setHeader(String name, String value) {
+        //TODO Defualt implementation
+
     }
 
     /**

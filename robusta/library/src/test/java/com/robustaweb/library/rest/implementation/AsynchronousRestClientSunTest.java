@@ -52,7 +52,7 @@ public class AsynchronousRestClientSunTest {
 
     @Test
     public void testSetAuthorizationValue() throws Exception{
-        client.setAuthorizationValue("James Bond");
+        client.setAuthorizationValue("James Bond", false);
 
         AsyncCallback<String> cb1 = new AsyncCallback<String>(){
 
@@ -70,7 +70,7 @@ public class AsynchronousRestClientSunTest {
         Callback cb = new SimpleCallback(client) {
 
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(String response, int code) {
                 System.out.println("success");
             }
 

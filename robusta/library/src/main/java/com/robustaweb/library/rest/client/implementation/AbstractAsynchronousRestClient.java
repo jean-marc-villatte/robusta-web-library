@@ -30,9 +30,9 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
 
     @Override
     public void GET(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.GET, relativePath, parameters);
-        assert obj.length == 2;
-        String url = obj[0], body = obj[1];
+        prepareMethod();
+
+        String url = ;
 
 
         executeMethod(HttpMethod.GET, url, body, callback);
@@ -44,7 +44,7 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
         assert obj.length == 2;
         String url = obj[0], body = obj[1];
 
-        setNextRequestBody(body);
+
         executeMethod(HttpMethod.POST, url, body, callback);
     }
 
@@ -54,7 +54,7 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
         assert obj.length == 2;
         String url = obj[0], body = obj[1];
 
-        setNextRequestBody(body);
+
         executeMethod(HttpMethod.PUT, url, body, callback);
     }
 
@@ -64,7 +64,6 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
         assert obj.length == 2;
         String url = obj[0], body = obj[1];
 
-        setNextRequestBody(body);
         executeMethod(HttpMethod.DELETE, url, body, callback);
     }
     
@@ -76,7 +75,6 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
         assert obj.length == 2;
         String url = obj[0], body = obj[1];
 
-        setNextRequestBody(body);
         executeMethod(HttpMethod.OTHER.setMethod(method), url, body, callback);
     	
     }
@@ -85,6 +83,7 @@ public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRes
 
     //TODO : add the method getResponse
     @Override
+    @Deprecated
     public abstract void join();
 
     protected abstract void executeMethod(final HttpMethod method, final String url, final String requestBody, final Callback callback) throws HttpException;

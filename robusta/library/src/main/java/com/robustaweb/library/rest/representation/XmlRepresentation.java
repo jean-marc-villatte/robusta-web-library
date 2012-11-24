@@ -33,10 +33,12 @@ public interface XmlRepresentation extends Representation {
 
     String getAttribute(String attribute) throws XmlException;
     XmlRepresentation setAttribute(String attribute, String value) throws XmlException;
+    boolean hasAttribute(String attribute);
 
 
     String getAttribute(String nodeName, String attribute) throws XmlException;
     XmlRepresentation setAttribute(String nodeName, String attribute, String value) throws XmlException;
+    boolean hasAttribute(String nodeName, String attribute);
 
 
     /**

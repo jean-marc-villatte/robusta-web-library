@@ -15,6 +15,7 @@
  */
 package com.robustaweb.library.rest.client.implementation;
 
+import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.commons.exception.HttpUuidException;
 import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
@@ -162,8 +163,10 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client> {
      * @param applicationUri
      */
     @Override
-    public void setApplicationUri(String applicationUri) {
+    public void setApplicationUri(String applicationUri) throws HttpException {
+
         AbstractRestClient.applicationUri = applicationUri;
+        checkConstructorUri();//TODO not logic : should be checked before setting invalid value
     }
 
 

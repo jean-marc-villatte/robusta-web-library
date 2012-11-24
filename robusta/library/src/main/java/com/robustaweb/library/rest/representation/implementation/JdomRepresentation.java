@@ -20,20 +20,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.robustaweb.library.commons.util.*;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.MathUtils;
 import com.robustaweb.library.commons.util.SerializationUtils;
+import com.robustaweb.library.rest.representation.XmlRepresentation;
 import com.sun.xml.internal.bind.v2.runtime.output.XmlOutput;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom.*;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
@@ -83,14 +78,14 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * @param rootName
      * @param serialization
      */
-    public JdomRepresentation(String rootName, CoupleList<String, Object> serialization) {
+    public JdomRepresentation(String rootName, HashMap<String, Object> serialization) {
         Element root = new Element(rootName);
-        for (Couple<String, Object> couple : serialization){
-            Element elt = new Element(couple.getLeft());
-            if (couple.getRight()==null){
+        for (Map.Entry<String, Object> entry : serialization.entrySet()){
+            Element elt = new Element(entry.getKey());
+            if (entry.getValue()==null){
                 elt.setText(this.getEmptyValue());
             }else{
-                elt.setText(couple.getRight().toString());
+                elt.setText(entry.getValue().toString());
             }
             root.addContent(elt);
         }
@@ -150,14 +145,14 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     /**
      * {@inheritDoc }
      */
-    @Override
     public Element getOptionalElement(final String nodeName) {
-         Iterator it = this.document.getDescendants(new Filter() {
+
+         List list = this.document.getContent(new Filter() {
 
             @Override
             public boolean matches(Object o) {
                 if (o instanceof Element) {
-                    if (((Element) o).getName().equalsIgnoreCase(nodeName.toLowerCase())) {
+                    if (((Element) o).getName().equalsIgnoreCase(nodeName)) {
                         return true;
                     }
                 }
@@ -165,10 +160,8 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
             }
         });
 
-        if (it.hasNext()) {
-            Object obj = it.next();
-            assert obj instanceof Element ;
-            return (Element) obj;
+        if (list.size()>0) {
+            return (Element)list.get(0);
         }else{
             return null;
         }
@@ -177,7 +170,6 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
     /**
      * {@inheritDoc }
      */
-    @Override
     public Element getElement(final String nodeName) throws XmlException {
 
         Element elt = getOptionalElement(nodeName);
@@ -236,7 +228,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      */
     @Override
     public JdomRepresentation add(String nodeName, String nodeValue) throws XmlException {
-        Element element = new Element(nodeName, this.document.getRootElement().getNamespace());
+        Element element = new Element(nodeName);
         element.setText(nodeValue);
         this.document.getRootElement().addContent(element);
         return this;
@@ -249,6 +241,16 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         }
         Object value = eager ? resource.getRepresentation() : resource.getId();
         return this.add(resource.getPrefix(), value.toString());
+    }
+
+    @Override
+    public Representation addAll(String listName, List values) {
+
+        for (Object o : values){
+            this.add(listName, values.toString());
+        }
+
+        return this;
     }
 
     /**
@@ -271,6 +273,33 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         doc.setRootElement(elt);
         return  new JdomRepresentation(doc);
 
+    }
+
+    @Override
+    public String getAttribute(String attribute) throws XmlException {
+
+        Attribute attr =getRootElement().getAttribute(attribute);
+        if (attr == null){
+            throw new XmlException("Attribute "+attribute+" not found");
+        }
+        return  attr.getValue();
+    }
+
+    @Override
+    public XmlRepresentation setAttribute(String attribute, String value) throws XmlException {
+        getRootElement().setAttribute(attribute, value);
+        return this;
+    }
+
+    @Override
+    public boolean hasAttribute(String attribute) {
+        return getRootElement().getAttribute(attribute) != null;
+    }
+
+    @Override
+    public boolean hasAttribute(String nodeName, String attribute) {
+        Element element = getElement(nodeName);
+        return element.getAttribute(attribute) != null;
     }
 
     /**
@@ -397,10 +426,10 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * {@inheritDoc }
      */
     @Override
-    public <T extends Number> T getNumber(String nodeName, T exemple) throws RepresentationException, NumberFormatException {
+    public <T extends Number> T getNumber(String nodeName, Class<T> clazz) throws RepresentationException, NumberFormatException {
         String s = get(nodeName);
         s = s.trim();
-        T result = MathUtils.convert(s, exemple);
+        T result = MathUtils.convert(s, clazz);
         return result;
 
     }
@@ -447,12 +476,12 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      * {@inheritDoc }
      */
     @Override
-    public <T extends Number> List<T> getNumbers(String nodeName, T exemple) {
+    public <T extends Number> List<T> getNumbers(String nodeName, Class<T> clazz) {
 
         List<String> strings = getValues(nodeName);
         List<T> result = new ArrayList<T>();
         for (String s : strings) {
-            result.add(MathUtils.convert(s.trim(), exemple));
+            result.add(MathUtils.convert(s.trim(), clazz));
         }
         return result;
     }
@@ -543,8 +572,7 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
         }else{
             prefix = "root";
         }
-        CoupleList couples = new CoupleList(SerializationUtils.serialize(o));
-        JdomRepresentation representation = new JdomRepresentation(prefix, couples);
+        JdomRepresentation representation = new JdomRepresentation(prefix, SerializationUtils.serialize(o));
         return representation;
     }
 
@@ -557,15 +585,14 @@ public class JdomRepresentation implements XmlDocumentRepresentation<Document, E
      */
 
     public static Representation construct(Resource resource) {
-        CoupleList<String, Object> serialization = resource.serialize();
-        return JdomRepresentation.construct(resource.getPrefix(),  serialization);
+        return JdomRepresentation.construct(resource.getPrefix(),  resource.serialize());
     }
 
     /**
 	 * {@inheritDoc }
 	 */
 
-	public static Representation construct(String prefix, CoupleList<String, Object> serialization) {
+	public static Representation construct(String prefix, HashMap<String, Object> serialization) {
 		return new JdomRepresentation(prefix, serialization);
 	}
 
