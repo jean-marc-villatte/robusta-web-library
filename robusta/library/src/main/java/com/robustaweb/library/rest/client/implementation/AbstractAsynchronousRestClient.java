@@ -25,9 +25,10 @@ import com.robustaweb.library.rest.client.AsynchronousRestClient;
  *
  * @author n.zozol
  */
-public abstract class AbstractAsynchronousRestClient<Client, TResponse, TCallback> extends AbstractRestClient<Client, TResponse> implements AsynchronousRestClient<Client, TCallback>{
+public abstract class AbstractAsynchronousRestClient<Client, TResponse, TCallback> extends AbstractRestClient<Client> implements AsynchronousRestClient<TCallback>{
 
     String response;
+
 
     protected AbstractAsynchronousRestClient(String applicationUri) {
         super(applicationUri);

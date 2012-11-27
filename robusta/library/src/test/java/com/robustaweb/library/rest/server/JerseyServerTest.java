@@ -52,7 +52,7 @@ public class JerseyServerTest extends JerseyTest {
 
         JdkRestClient client = new JdkRestClient(baseUri + "root");
         CoupleList<String, Object> params = CoupleList.<String, Object>build("multi","multi1", "multi", "multi2", "multi", "multi3");
-        client.setAuthorizationValue("Johnnu");
+        client.setAuthorizationValue("Johnnu", false);
         String result = client.POST("multi-http-params", params);
         System.out.println(result);
 
@@ -65,7 +65,7 @@ public class JerseyServerTest extends JerseyTest {
     @Test
     public void testVarious() throws InterruptedException {
         JdkRestClient client = new JdkRestClient(baseUri + "root");
-        client.setAuthorizationValue("Jimob");
+        client.setAuthorizationValue("Jimob", false);
 
         String result = client.GET("various", null);
         System.out.println(result);

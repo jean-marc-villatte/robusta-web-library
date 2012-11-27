@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author n.zozol
  */
-public abstract class AbstractRestClient<Client, ResponseAbstraction> implements RestClient<Client, ResponseAbstraction> {
+public abstract class AbstractRestClient<Client> implements RestClient<Client> {
 
 
     /* -- BEFORE Requests--*/

@@ -45,9 +45,7 @@ public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpC
    
 
     public ApacheRestClient(String applicationUri) {
-        setApplicationUri(applicationUri);
-        checkConstructorUri();
-
+       super(applicationUri);
     }
 
 
@@ -100,7 +98,7 @@ public class ApacheRestClient extends AbstractSynchronousRestClient<DefaultHttpC
 
             //Adding headers
             if (this.contentType == null){
-                this.contentType = SynchronousRestClient.xmlContentType;
+                this.contentType = xmlContentType;
             }
             httpMethod.addHeader("Content-type", this.contentType);
             if (authorizationValue != null) {

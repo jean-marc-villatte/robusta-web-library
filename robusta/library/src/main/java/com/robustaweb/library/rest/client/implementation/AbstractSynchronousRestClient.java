@@ -25,10 +25,12 @@ import com.robustaweb.library.rest.client.SynchronousRestClient;
  *
  * @author n.zozol
  */
-public abstract class AbstractSynchronousRestClient<Client, Response> extends AbstractRestClient<Client> implements SynchronousRestClient<Client, Response> {
+public abstract class AbstractSynchronousRestClient<Client, Response> extends AbstractRestClient<Client> implements SynchronousRestClient<Response> {
 
 
-
+    protected AbstractSynchronousRestClient(String applicationUri) {
+        super(applicationUri);
+    }
 
     @Override
     public Response GET(String path, CoupleList<String, Object> parameters) throws HttpException {

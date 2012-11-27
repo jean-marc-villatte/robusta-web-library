@@ -90,7 +90,7 @@ public class AsynchronousRestClientSunTest {
         client.join();
         assertTrue(client.getHttpCode()<300);
         System.out.println("finished");
-        System.out.println("result :\n"+client.getResponse());
+
 
 
     }

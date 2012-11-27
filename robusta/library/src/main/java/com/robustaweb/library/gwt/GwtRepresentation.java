@@ -235,6 +235,12 @@ public class GwtRepresentation implements
         return null;
     }
 
+    @Override
+    public boolean hasAttribute(String attribute) {
+        //TODO Defualt implementation
+        return false;
+    }
+
     /**
 	 * {@inheritDoc }
 	 */
@@ -256,7 +262,13 @@ public class GwtRepresentation implements
 		return this;
 	}
 
-	/**
+    @Override
+    public boolean hasAttribute(String nodeName, String attribute) {
+        //TODO Defualt implementation
+        return false;
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
 	@Override

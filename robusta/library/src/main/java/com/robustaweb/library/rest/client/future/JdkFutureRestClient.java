@@ -24,10 +24,7 @@ public class JdkFutureRestClient extends AbstractFutureRestClient<HttpURLConnect
      * @param applicationPath default path of the request
      */
     public JdkFutureRestClient(String applicationPath) {
-        if (!applicationPath.startsWith("http")) {
-            throw new IllegalArgumentException("Application URI should start with http !");
-        }
-        applicationUri = applicationPath;
+        super(applicationPath);
     }
 
     @Override
@@ -58,6 +55,12 @@ public class JdkFutureRestClient extends AbstractFutureRestClient<HttpURLConnect
     public Future<String> OTHER(String method, String relativePath, CoupleList<String, Object> parameters) throws HttpException {
         //TODO Defualt implementation
         return null;
+    }
+
+    @Override
+    public void setHeader(String name, String value) {
+        //TODO Defualt implementation
+
     }
 
     @Override

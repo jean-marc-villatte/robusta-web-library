@@ -41,10 +41,7 @@ public class JdkRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
      * @param applicationPath default path of the request
      */
     public JdkRestClient(String applicationPath) {
-        if (!applicationPath.startsWith("http")) {
-            throw new IllegalArgumentException("Application URI should start with http or https");
-        }
-        JdkRestClient.applicationUri = applicationPath;
+       super(applicationPath);
     }
 
 

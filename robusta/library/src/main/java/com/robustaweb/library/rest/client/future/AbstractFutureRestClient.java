@@ -27,7 +27,9 @@ public abstract class AbstractFutureRestClient<Client> extends AbstractRestClien
     private static final int NTHREDS = 10;
     ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
 
-
+    protected AbstractFutureRestClient(String applicationUri) {
+        super(applicationUri);
+    }
 
 
     @Override

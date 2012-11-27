@@ -30,7 +30,7 @@ import com.robustaweb.library.rest.client.implementation.AbstractAsynchronousRes
  *
  * @author Nicolas Zozol for Robusta Web ToolKit & <a href="http://www.edupassion.com">Edupassion.com</a> - nzozol@robustaweb.com
  */
-public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder> {
+public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder,String,  Callback> {
 
     RequestBuilder builder;
 
@@ -45,10 +45,32 @@ public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder
      * If no applicationUri is set, the client will use "/" as base URI
      */
     public GwtRestClient(String applicationUri) {
+        super(applicationUri);
         if (applicationUri == null) {
             applicationUri = "/";
         }
         GwtRestClient.applicationUri = applicationUri;
+    }
+
+    @Override
+    protected void executeMethod(HttpMethod method, String url, Callback callback) throws HttpException {
+        //TODO Defualt implementation
+
+    }
+
+
+    /**
+     * @param applicationUri
+     * @throws IllegalArgumentException if uri does not start with http:// or https://
+     */
+    protected boolean checkConstructorUri(String applicationUri){
+        return true;
+    }
+
+    @Override
+    public void setHeader(String name, String value) {
+        //TODO Defualt implementation
+
     }
 
     /**
@@ -93,7 +115,7 @@ public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder
             }
 
             RestRequestCallback cb = new RestRequestCallback(callback);
-            this.builder.sendRequest(this.requestBody, cb);
+            this.builder.sendRequest(requestBody, cb);
             
         } catch (Exception ex) {
             callback.onException(ex);
@@ -104,10 +126,6 @@ public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder
 
     }
 
-    @Override
-    public void join() {
-        throw new UnsupportedOperationException("Not supported yet for GWT. Javascript doesn't use Threads.");
-    }
 
     /**
      * Encoding is done automatically with the client. The method will so return the exactly same value
@@ -145,7 +163,7 @@ public class GwtRestClient extends AbstractAsynchronousRestClient<RequestBuilder
             	GwtRestClient.this.responseHeaders.put(header.getName(), header.getValue());
             }
             try{
-            callCallback(callback, httpCode, this.response);
+            //callCallback(callback, httpCode, this.response);
             }catch (RuntimeException ex ){
                 ex.printStackTrace();
                 throw ex;

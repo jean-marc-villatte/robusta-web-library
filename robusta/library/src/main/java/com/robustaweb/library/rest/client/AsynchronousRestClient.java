@@ -25,7 +25,7 @@ import com.robustaweb.library.commons.util.CoupleList;
  * @author robusta web
  * @see TCallback
  */
-public interface AsynchronousRestClient<Client, TCallback>{
+public interface AsynchronousRestClient<TCallback>{
 
   
     /**

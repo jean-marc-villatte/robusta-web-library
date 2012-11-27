@@ -51,7 +51,7 @@ public class AsynchronousRestClientSun<TResponse> extends AbstractAsynchronousRe
     Representation responseRepresentation = null;
     InputStream inputStream;
 
-    public <T extends TResponse>AsynchronousRestClientSun(String applicationUri, Class<T> responseClazz){
+    public <T extends TResponse>AsynchronousRestClientSun(String applicationUri){
         super(applicationUri);
         /*if (responseClazz.equals(String.class)){
             acceptedResponse = AcceptedResponse.STRING;

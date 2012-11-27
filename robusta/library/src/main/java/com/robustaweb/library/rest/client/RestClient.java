@@ -8,7 +8,7 @@ import java.util.Map;
  * The general idea is : you can make simple and useful stuff ; if you want complicated things, use the original client grabbing #getUnderlyingClient method
  * @param <Client>
  */
-public interface RestClient<Client, TResponse> {
+public interface RestClient<Client> {
 
 	  /**
      * if not modified, value is "application/xml;charset=utf-8"
