@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.robustaweb.library.rest.client;
+package com.robustaweb.library.rest.client.implementation;
 
 import com.robustaweb.library.commons.exception.RestException;
+import com.robustaweb.library.rest.client.AsynchronousRestClient;
 
 /**
  * Callback called after a request is done.

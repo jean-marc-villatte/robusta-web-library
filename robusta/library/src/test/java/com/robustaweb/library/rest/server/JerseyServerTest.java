@@ -1,14 +1,11 @@
 package com.robustaweb.library.rest.server;
 
 import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.rest.client.implementation.SunRestClient;
+import com.robustaweb.library.rest.client.implementation.JdkRestClient;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.TestConstants;
 import com.sun.jersey.test.framework.util.ApplicationDescriptor;
 import org.junit.Test;
-
-import javax.ws.rs.core.UriInfo;
-import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,14 +32,14 @@ public class JerseyServerTest extends JerseyTest {
 
     @Test
     public void testHelloWorldRequest() {
-        SunRestClient client = new SunRestClient(baseUri + "root");
+        JdkRestClient client = new JdkRestClient(baseUri + "root");
         String result = client.GET("", null);
         System.out.println(result);
     }
 
     @Test
     public void testDeleteRequest() {
-        SunRestClient client = new SunRestClient(baseUri + "root");
+        JdkRestClient client = new JdkRestClient(baseUri + "root");
         String result = client.DELETE("jack", null);
         assertTrue(result, result.startsWith("1"));
     }
@@ -53,7 +50,7 @@ public class JerseyServerTest extends JerseyTest {
     @Test
     public void testMultiParams() throws InterruptedException {
 
-        SunRestClient client = new SunRestClient(baseUri + "root");
+        JdkRestClient client = new JdkRestClient(baseUri + "root");
         CoupleList<String, Object> params = CoupleList.<String, Object>build("multi","multi1", "multi", "multi2", "multi", "multi3");
         client.setAuthorizationValue("Johnnu");
         String result = client.POST("multi-http-params", params);
@@ -67,7 +64,7 @@ public class JerseyServerTest extends JerseyTest {
 
     @Test
     public void testVarious() throws InterruptedException {
-        SunRestClient client = new SunRestClient(baseUri + "root");
+        JdkRestClient client = new JdkRestClient(baseUri + "root");
         client.setAuthorizationValue("Jimob");
 
         String result = client.GET("various", null);

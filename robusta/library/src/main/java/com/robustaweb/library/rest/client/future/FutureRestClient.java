@@ -17,14 +17,13 @@ package com.robustaweb.library.rest.client.future;
 
 import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.commons.util.CoupleList;
-import com.robustaweb.library.rest.client.Callback;
 import com.robustaweb.library.rest.client.RestClient;
 
 /**
  * Interface describing a Http Client making Asynchronous requests
  * It uses a Callback more close of Prototype/Jquery
  * @author robusta web
- * @see com.robustaweb.library.rest.client.Callback
+ * @see com.robustaweb.library.rest.client.implementation.Callback
  */
 public interface FutureRestClient<Client, Response> extends RestClient<Client> {
 

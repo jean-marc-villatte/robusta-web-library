@@ -26,7 +26,7 @@ import com.robustaweb.library.commons.util.CoupleList;
  * </p>
  * @author robusta web
  */
-public interface SynchronousRestClient<Client, Response> extends RestClient<Client>{
+public interface SynchronousRestClient<Client, Response> /*extends RestClient<Client>*/{
 
 
 

@@ -21,15 +21,15 @@ import com.robustaweb.library.commons.util.CoupleList;
 
 /**
  * Interface describing a Http Client making Asynchronous requests
- * It uses a Callback more close of Prototype/Jquery
+ * It uses a TCallback more close of Prototype/Jquery
  * @author robusta web
- * @see Callback
+ * @see TCallback
  */
-public interface AsynchronousRestClient<Client> extends RestClient<Client> {
+public interface AsynchronousRestClient<Client, TCallback>{
 
   
     /**
-     * <p>Execute a GET Http request. The relative apth compares to the AbsolutePath</p>
+     * <p>Execute a GET Http request. The relative path compares to the AbsolutePath</p>
      * <p>For exemple, if ApplicationUri has been set to http://exemple.com/mycontext/, a relative url of students/johndoe will set
      * a GET request to the http://exemple.com/mycontext/johndoe resource.</p>
      * <p>The request handles parameters that will be added to the url request. You might use CoupleList.build(param1, value1, param2, value2) to set these
@@ -41,28 +41,15 @@ public interface AsynchronousRestClient<Client> extends RestClient<Client> {
      * @throws HttpException
      * @throws RestException
      */
-    public void GET(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException;
+    public void GET(String relativePath, CoupleList<String, Object> parameters, TCallback callback) throws HttpException;
 
-    public void POST(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException;
+    public void POST(String relativePath, CoupleList<String, Object> parameters, TCallback callback) throws HttpException;
+    public void POST(String relativePath, String body, TCallback callback) throws HttpException;
 
-    public void PUT(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException;
+    public void PUT(String relativePath, CoupleList<String, Object> parameters, TCallback callback) throws HttpException;
+    public void PUT(String relativePath, String body, TCallback callback) throws HttpException;
 
-    public void DELETE(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException;
-    
-    /**
-     * Execute any othe method, including WEBDAV methods, or the PATCH method
-     * @param method
-     * @param relativePath
-     * @param parameters
-     * @param callback
-     * @throws HttpException
-     */
-    public void OTHER(String method, String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException;
-    
-   
-    
-
-    public void join();
+    public void DELETE(String relativePath, CoupleList<String, Object> parameters, TCallback callback) throws HttpException;
 
         
 }

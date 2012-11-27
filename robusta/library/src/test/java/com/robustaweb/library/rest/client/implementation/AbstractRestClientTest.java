@@ -10,7 +10,6 @@ import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.rest.HttpMethod;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -26,7 +25,7 @@ public class AbstractRestClientTest {
     String applicationUri = "http://localhost:8080/robusta/rest/";
 
     AbstractRestClient[] clients = new AbstractRestClient[]{
-        new SunRestClient(applicationUri),
+        new JdkRestClient(applicationUri),
     new ApacheRestClient(applicationUri)};
 
     

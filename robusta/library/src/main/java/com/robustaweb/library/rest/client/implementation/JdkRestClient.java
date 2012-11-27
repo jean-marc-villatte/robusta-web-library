@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Simple REST Http client wrapping the Sun Client. Compare to Apache, many JVM have this client.
- *
+ * Simple REST Http client wrapping the Jdk HttpURLConnection Client. Compare to Apache, many JVM have this client, and is now recommended by Android
  * @author Nicolas Zozol - Edupassion.com - Robusta Web nzozol@edupassion.com
  */
-public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnection, String> {
+public class JdkRestClient extends AbstractSynchronousRestClient<HttpURLConnection, String> {
 
 
     static Proxy proxy;
@@ -41,16 +40,16 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
      * Constructor
      * @param applicationPath default path of the request
      */
-    public SunRestClient(String applicationPath) {
+    public JdkRestClient(String applicationPath) {
         if (!applicationPath.startsWith("http")) {
             throw new IllegalArgumentException("Application URI should start with http or https");
         }
-        SunRestClient.applicationUri = applicationPath;
+        JdkRestClient.applicationUri = applicationPath;
     }
 
 
     /**
-     * Configure the connection with url and optional proxy. Content-type and UAtorization headers will be added later.
+     * Configure the connection with url and optional proxy. Content-type and Autorization headers will be added later.
      * Override this method if you want to add custom headers or configuration
      *
      * @param url
@@ -99,8 +98,10 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
             http = getConnection(url);
             addRequestHeaders();
             http.setRequestMethod(method.toString());
-            http.setDoInput(true);
+            http.setDoInput(false);
 
+
+            this.httpCode = http.getResponseCode();
             httpInputStream = http.getInputStream();
             response = FileUtils.readInputStream(httpInputStream);
             this.responseHeaders = readHeaders(http);
@@ -126,6 +127,7 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
     }
 
 
+
     /**
      * {@inheritDoc }
      */
@@ -138,12 +140,10 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
                 throw new IllegalArgumentException("Can't send a body on GET or DELETE method. Use directly getUnderlyingClient() if you really want to do this.");
         }
 
-        HttpURLConnection http;
         InputStream httpInputStream = null;
         OutputStream httpOutputStream = null;
         DataOutputStream wr = null;
         String response = "";
-
         try {
 
             http = getConnection(url);
@@ -159,6 +159,7 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
                 wr.flush();
             }
 
+            this.httpCode = http.getResponseCode();
             httpInputStream = http.getInputStream();
             response = FileUtils.readInputStream(httpInputStream);
             this.responseHeaders = readHeaders(http);
@@ -216,7 +217,7 @@ public class SunRestClient extends AbstractSynchronousRestClient<HttpURLConnecti
      * @param proxy
      */
     public static void setProxy(Proxy proxy) {
-        SunRestClient.proxy = proxy;
+        JdkRestClient.proxy = proxy;
     }
 
     /**

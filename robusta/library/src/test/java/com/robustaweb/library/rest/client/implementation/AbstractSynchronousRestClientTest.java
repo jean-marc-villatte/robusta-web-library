@@ -14,7 +14,7 @@ public class AbstractSynchronousRestClientTest {
 
     String applicationUri = "http://localhost:8084/robusta/rest/";
     AbstractSynchronousRestClient[] clients = new AbstractSynchronousRestClient[]{
-        new SunRestClient(applicationUri),
+        new JdkRestClient(applicationUri),
         new ApacheRestClient(applicationUri)};
     String expected, actual;
 

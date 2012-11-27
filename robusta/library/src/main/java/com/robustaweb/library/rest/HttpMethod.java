@@ -21,7 +21,7 @@ package com.robustaweb.library.rest;
  */
 public enum HttpMethod {
 
-    GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE"), OTHER(null);
+    GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
     
     String method;
 

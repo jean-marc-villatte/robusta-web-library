@@ -7,15 +7,14 @@ package com.robustaweb.library.rest.implementation;
 import com.robustaweb.library.rest.client.implementation.AsynchronousRestClientSun;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.robustaweb.library.commons.exception.RestException;
-import com.robustaweb.library.rest.client.AsynchronousRestClient;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.robustaweb.library.rest.client.SimpleCallback;
-import com.robustaweb.library.rest.client.Callback;
+import com.robustaweb.library.rest.client.implementation.SimpleCallback;
+import com.robustaweb.library.rest.client.implementation.Callback;
 import static org.junit.Assert.*;
 
 /**

@@ -16,93 +16,77 @@
 package com.robustaweb.library.rest.client.implementation;
 
 import com.robustaweb.library.commons.exception.HttpException;
-import com.robustaweb.library.commons.exception.RestException;
 import com.robustaweb.library.commons.util.CoupleList;
+import com.robustaweb.library.commons.util.StringUtils;
 import com.robustaweb.library.rest.HttpMethod;
 import com.robustaweb.library.rest.client.AsynchronousRestClient;
-import com.robustaweb.library.rest.client.Callback;
 
 /**
  *
  * @author n.zozol
  */
-public abstract class AbstractAsynchronousRestClient<Client> extends AbstractRestClient<Client> implements AsynchronousRestClient<Client> {
+public abstract class AbstractAsynchronousRestClient<Client, TResponse, TCallback> extends AbstractRestClient<Client, TResponse> implements AsynchronousRestClient<Client, TCallback>{
 
-    @Override
-    public void GET(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException {
-        prepareMethod();
+    String response;
 
-        String url = ;
-
-
-        executeMethod(HttpMethod.GET, url, body, callback);
+    protected AbstractAsynchronousRestClient(String applicationUri) {
+        super(applicationUri);
     }
 
     @Override
-    public void POST(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.GET, relativePath, parameters);
-        assert obj.length == 2;
-        String url = obj[0], body = obj[1];
+    public void GET(String path, CoupleList<String, Object> parameters, TCallback callback) throws HttpException {
+        prepareMethod();
+        String url = encodeUrl(applicationUri, path, parameters);
+        executeMethod(HttpMethod.GET, url, callback);
+    }
 
+    @Override
+    public void POST(String path, CoupleList<String, Object> parameters, TCallback callback) throws HttpException {
+        prepareMethod();
 
+        String url = StringUtils.addPath(applicationUri, path);
+        String body = encodeParameters(parameters);
         executeMethod(HttpMethod.POST, url, body, callback);
     }
 
     @Override
-    public void PUT(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.GET, relativePath, parameters);
-        assert obj.length == 2;
-        String url = obj[0], body = obj[1];
+    public void POST(String path, String body, TCallback callback) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        executeMethod(HttpMethod.POST, url, body, callback);
+    }
 
+    @Override
+    public void PUT(String path, CoupleList<String, Object> parameters, TCallback callback) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
+        executeMethod(HttpMethod.PUT, url, callback);
+    }
 
+    @Override
+    public void PUT(String path, String body, TCallback callback) throws HttpException {
+        prepareMethod();
+        String url = StringUtils.addPath(applicationUri, path);
         executeMethod(HttpMethod.PUT, url, body, callback);
     }
 
     @Override
-    public void DELETE(String relativePath, CoupleList<String, Object> parameters, Callback callback) throws HttpException {
-        String[] obj = prepareMethod(HttpMethod.GET, relativePath, parameters);
-        assert obj.length == 2;
-        String url = obj[0], body = obj[1];
-
-        executeMethod(HttpMethod.DELETE, url, body, callback);
+    public void DELETE(String path, CoupleList<String, Object> parameters, TCallback callback) throws HttpException {
+        prepareMethod();
+        String url = encodeUrl(applicationUri, path, parameters);
+        executeMethod(HttpMethod.DELETE, url, callback);
     }
     
-    @Override
-    public void OTHER(String method, String relativePath,
-    		CoupleList<String, Object> parameters, Callback callback)
-    		throws HttpException {
-    	String[] obj = prepareMethod(HttpMethod.OTHER.setMethod(method), relativePath, parameters);
-        assert obj.length == 2;
-        String url = obj[0], body = obj[1];
 
-        executeMethod(HttpMethod.OTHER.setMethod(method), url, body, callback);
-    	
-    }
 
    
 
-    //TODO : add the method getResponse
-    @Override
-    @Deprecated
-    public abstract void join();
 
-    protected abstract void executeMethod(final HttpMethod method, final String url, final String requestBody, final Callback callback) throws HttpException;
 
-    /**
-     * calls the callback succes or failure, using the httpcode
-     * @param httpCode
-     * @param response
-     * @param callback
-     */
-    protected void callCallback(Callback callback, int httpCode, String response) {
+    protected abstract void executeMethod(final HttpMethod method, final String url,  final TCallback callback) throws HttpException;
 
-        if (httpCode >= 200 && httpCode < 300) {
-            callback.onSuccess(response);
-        } else if (httpCode >= 300 && httpCode < 400) {
-            //no success
-        } else if (httpCode >= 400 && httpCode < 600) {
-        } else if (httpCode < 600) {
-            callback.onFailure(new RestException(httpCode, response));
-        }
-    }
+
+    protected abstract void executeMethod(final HttpMethod method, final String url, final String requestBody, final TCallback callback) throws HttpException;
+
+
 }

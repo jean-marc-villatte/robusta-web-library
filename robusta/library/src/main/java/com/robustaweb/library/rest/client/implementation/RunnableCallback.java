@@ -1,4 +1,4 @@
-package com.robustaweb.library.rest.client;
+package com.robustaweb.library.rest.client.implementation;
 
 /**
  * Robusta Code Library

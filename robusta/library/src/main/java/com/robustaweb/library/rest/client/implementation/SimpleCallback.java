@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.robustaweb.library.rest.client;
+package com.robustaweb.library.rest.client.implementation;
 
 import com.robustaweb.library.commons.exception.RestException;
+import com.robustaweb.library.rest.client.AsynchronousRestClient;
 
 /**
  * @TODO notice
@@ -42,7 +43,7 @@ public class SimpleCallback implements Callback{
      * @param response
      */
     @Override
-    public void onSuccess( String response) {
+    public void onSuccess( String response, int code) {
         if (debug) {
             System.out.println("Debug SimpleCallback : Successful request");
         }

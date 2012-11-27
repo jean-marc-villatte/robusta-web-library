@@ -1,5 +1,6 @@
 package com.robustaweb.library.rest.client;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Map;
  * The general idea is : you can make simple and useful stuff ; if you want complicated things, use the original client grabbing #getUnderlyingClient method
  * @param <Client>
  */
-public interface RestClient<Client> {
+public interface RestClient<Client, TResponse> {
 
 	  /**
      * if not modified, value is "application/xml;charset=utf-8"
@@ -27,6 +28,12 @@ public interface RestClient<Client> {
     public static  String formContentType = "application/x-www-form-urlencoded; charset=utf-8";
 
     public static String jsonContentType = "application/json; charset=utf-8";
+
+    public static final String ACCEPTING_STRING = "STRING";
+    public static final String ACCEPTING_REPRESENTATION = "REPRESENTATION";
+    public static final String ACCEPTING_RESOURCE = "RESOURCE";
+    public static final String ACCEPTING_INPUT_STREAM = "INPUT STREAM";
+
 
     public void setApplicationUri(String uri);
 
@@ -71,6 +78,7 @@ public interface RestClient<Client> {
     public void validateRequestAndResponseUuids(boolean validate);
 
 
+
     
     /**
      * Returns last request's Http Status Code. If no request have been made -  or if last request has failed before even beeing launched -
@@ -89,5 +97,7 @@ public interface RestClient<Client> {
      * @return the wrapped client
      */
     public Client getUnderlyingClient();
+
+
 
 }

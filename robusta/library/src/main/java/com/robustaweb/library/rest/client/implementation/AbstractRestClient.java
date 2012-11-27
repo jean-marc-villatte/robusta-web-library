@@ -21,6 +21,7 @@ import com.robustaweb.library.commons.util.Couple;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.StringUtils;
 import com.robustaweb.library.rest.client.RestClient;
+import com.robustaweb.library.rest.representation.Representation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.Map;
  *
  * @author n.zozol
  */
-public abstract class AbstractRestClient<Client> implements RestClient<Client> {
+public abstract class AbstractRestClient<Client, ResponseAbstraction> implements RestClient<Client, ResponseAbstraction> {
 
 
     /* -- BEFORE Requests--*/
@@ -64,16 +65,21 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client> {
     String requestUuid = null;
     public boolean authorizationOnlyOnce = false;
 
+
+    protected AbstractRestClient(String applicationUri){
+        if (!checkConstructorUri(applicationUri)){
+            throw new IllegalArgumentException("applicationUri must start with http:// or https:// ;  currently there is : " + applicationUri);
+        }
+        this.setApplicationUri(applicationUri);
+    }
+
+
     /**
-     * For non-gwt application, it will check that uri starts with http or https
-     *
      * @param applicationUri
      * @throws IllegalArgumentException if uri does not start with http:// or https://
      */
-    protected void checkConstructorUri() throws IllegalArgumentException {
-        if (!applicationUri.startsWith("http://") && !applicationUri.startsWith("https://")) {
-            throw new IllegalArgumentException("applicationUri must start with http:// or https:// ;  currently there is : " + applicationUri);
-        }
+    protected boolean checkConstructorUri(String applicationUri){
+        return applicationUri.startsWith("http://") || applicationUri.startsWith("https://");
     }
 
 
@@ -81,7 +87,6 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client> {
      * @param method
      */
     protected void prepareMethod() {
-        checkConstructorUri();
         requestUuid = null;
         httpCode = INVALID_HTTP_CODE;
         if (this.contentType == null) {
@@ -164,9 +169,7 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client> {
      */
     @Override
     public void setApplicationUri(String applicationUri) throws HttpException {
-
         AbstractRestClient.applicationUri = applicationUri;
-        checkConstructorUri();//TODO not logic : should be checked before setting invalid value
     }
 
 
@@ -223,7 +226,7 @@ public abstract class AbstractRestClient<Client> implements RestClient<Client> {
     protected void addRequestHeaders() {
         setHeader("Content-type", this.contentType);
         if (authorizationValue != null) {
-            setHeader("Authorization", SunRestClient.authorizationValue);
+            setHeader("Authorization", JdkRestClient.authorizationValue);
         }
         setHeader("request-uuid", java.util.UUID.randomUUID().toString());
     }

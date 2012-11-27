@@ -4,8 +4,7 @@ import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.FileUtils;
 import com.robustaweb.library.rest.HttpMethod;
-import com.robustaweb.library.rest.client.Callback;
-import com.robustaweb.library.rest.client.RunnableCallback;
+import com.robustaweb.library.rest.client.implementation.Callback;
 import com.robustaweb.library.rest.client.implementation.AbstractRestClient;
 
 import java.io.DataOutputStream;

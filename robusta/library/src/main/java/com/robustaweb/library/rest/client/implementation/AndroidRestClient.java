@@ -34,7 +34,6 @@ import org.apache.http.protocol.HttpContext;
 
 import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.rest.HttpMethod;
-import com.robustaweb.library.rest.client.Callback;
 
 /**
  * Rest Http Client for Android. It uses Apache Http Client 4 in asynchronous
@@ -43,25 +42,94 @@ import com.robustaweb.library.rest.client.Callback;
  * 
  * @author n.zozol
  */
-public class AndroidRestClient extends AbstractAsynchronousRestClient<DefaultHttpClient> {
+public class AndroidRestClient<TResponse> extends AbstractAsynchronousRestClient<DefaultHttpClient, TResponse, Callback> {
 
 	DefaultHttpClient client;
 	Thread requestThread;
 
 
 
-	public AndroidRestClient() {
-		AbstractRestClient.applicationUri = "";
-	}
 
 	public AndroidRestClient(String applicationUri) {
+        super(applicationUri);
 		AbstractRestClient.applicationUri = applicationUri;
 	}
 
-	/**
+    @Override
+    protected void executeMethod(HttpMethod method, String url, Callback callback) throws HttpException {
+        //TODO Defualt implementation
+
+    }
+
+    @Override
+    protected void executeMethod(final HttpMethod method, final String url, String requestBody, final Callback callback) throws HttpException {
+        requestThread = new Thread() {
+
+            @Override
+            public void run() {
+
+                HttpRequestBase meth = null;
+                try {
+                    switch (method) {
+                        case GET:
+                            meth = new HttpGet(url);
+
+                            break;
+                        case POST:
+                            meth = new HttpPost(url);
+                            break;
+                        case DELETE:
+                            meth = new HttpDelete(url);
+                            break;
+                        case PUT:
+                            meth = new HttpPut(url);
+                            break;
+                        default:
+                            meth = new HttpEntityEnclosingRequestBase() {
+                                @Override
+                                public String getMethod() {
+                                    return method.getMethod();
+                                }
+                            };
+                            break;
+                    }
+                    // this.builder = new RequestBuilder(meth, url);
+
+                    if (contentType != null && !contentType.isEmpty()) {
+
+                        meth.addHeader("Content-Type", contentType);
+                    }
+                    if (AndroidRestClient.authorizationValue != null
+                            && AndroidRestClient.authorizationValue.length() > 0) {
+                        meth.addHeader("Authorization",
+                                AndroidRestClient.authorizationValue);
+                    }
+
+                    HttpContext localContext = new BasicHttpContext();
+                    HttpResponse response = client.execute(meth, localContext);
+                    callback.onSuccess(response.toString(), response.getStatusLine().getStatusCode());//TODO : to be tested
+
+                    // headers response
+                    HeaderIterator it = response.headerIterator();
+                    while (it.hasNext()) {
+                        Header header = it.nextHeader();
+                        responseHeaders
+                                .put(header.getName(), header.getValue());
+                    }
+
+                } catch (Exception ex) {
+                    callback.onException(ex);
+                } finally {
+                    clean();
+                }
+            }
+        };
+
+    }
+
+    /**
 	 * {@inheritDoc }
 	 */
-	@Override
 	public void join() {
 		try {
 			requestThread.join();
@@ -71,76 +139,6 @@ public class AndroidRestClient extends AbstractAsynchronousRestClient<DefaultHtt
 		}
 	}
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	protected void executeMethod(final HttpMethod method, final String url,
-			final String requestBody, final Callback callback)
-			throws HttpException {
-
-		requestThread = new Thread() {
-
-			@Override
-			public void run() {
-
-				HttpRequestBase meth = null;
-				try {
-					switch (method) {
-					case GET:
-						meth = new HttpGet(url);
-
-						break;
-					case POST:
-						meth = new HttpPost(url);
-						break;
-					case DELETE:
-						meth = new HttpDelete(url);
-						break;
-					case PUT:
-						meth = new HttpPut(url);
-						break;
-					default:
-						meth = new HttpEntityEnclosingRequestBase() {
-							@Override
-							public String getMethod() {
-								return method.getMethod();
-							}
-						};
-						break;
-					}
-					// this.builder = new RequestBuilder(meth, url);
-
-					if (contentType != null && !contentType.isEmpty()) {
-
-						meth.addHeader("Content-Type", contentType);
-					}
-					if (AndroidRestClient.authorizationValue != null
-							&& AndroidRestClient.authorizationValue.length() > 0) {
-						meth.addHeader("Authorization",
-								AndroidRestClient.authorizationValue);
-					}
-
-					HttpContext localContext = new BasicHttpContext();
-					HttpResponse response = client.execute(meth, localContext);
-					callback.onSuccess(response.toString(), response.getStatusLine().getStatusCode());//TODO : to be tested
-
-					// headers response
-					HeaderIterator it = response.headerIterator();
-					while (it.hasNext()) {
-						Header header = it.nextHeader();
-						responseHeaders
-								.put(header.getName(), header.getValue());
-					}
-
-				} catch (Exception ex) {
-					callback.onException(ex);
-				} finally {
-					clean();
-				}
-			}
-		};
-	}
 
 	/**
 	 * {@inheritDoc }

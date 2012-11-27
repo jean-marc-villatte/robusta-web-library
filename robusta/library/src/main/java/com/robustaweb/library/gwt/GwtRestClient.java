@@ -23,7 +23,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.robustaweb.library.commons.exception.HttpException;
 import com.robustaweb.library.rest.HttpMethod;
-import com.robustaweb.library.rest.client.Callback;
+import com.robustaweb.library.rest.client.implementation.Callback;
 import com.robustaweb.library.rest.client.implementation.AbstractAsynchronousRestClient;
 
 /**
