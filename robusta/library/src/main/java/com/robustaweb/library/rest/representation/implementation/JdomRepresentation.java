@@ -15,32 +15,23 @@
  */
 package com.robustaweb.library.rest.representation.implementation;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.*;
-
-import com.robustaweb.library.commons.util.*;
+import com.robustaweb.library.commons.exception.RepresentationException;
+import com.robustaweb.library.commons.exception.XmlException;
 import com.robustaweb.library.commons.util.CoupleList;
 import com.robustaweb.library.commons.util.MathUtils;
 import com.robustaweb.library.commons.util.SerializationUtils;
+import com.robustaweb.library.rest.representation.Representation;
+import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
 import com.robustaweb.library.rest.representation.XmlRepresentation;
-import com.sun.xml.internal.bind.v2.runtime.output.XmlOutput;
+import com.robustaweb.library.rest.resource.Resource;
 import org.jdom.*;
 import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.robustaweb.library.commons.exception.RepresentationException;
-import com.robustaweb.library.commons.exception.XmlException;
-import com.robustaweb.library.rest.representation.Representation;
-import com.robustaweb.library.rest.representation.XmlDocumentRepresentation;
-import com.robustaweb.library.rest.resource.Resource;
-import com.robustaweb.library.rest.resource.ResourceList;
-import com.robustaweb.library.security.implementation.MD5;
+import java.io.*;
+import java.util.*;
 
 /**
  * JDOM based Representation implementation. It also contains a few methods to read/save xml

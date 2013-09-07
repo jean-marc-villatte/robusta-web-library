@@ -376,6 +376,51 @@ public class StringUtilsTest {
     }
 
     @Test
+    public void testExtract(){
+        String classic = "I want to ##remove some stuff - there";
+        String expected = "remove some stuff";
+        String actual = StringUtils.extractBetweenSeparators(classic, "##", " -");
+        assertEquals(expected, actual);
+        actual = StringUtils.extractBetweenSeparators(classic, "#", " -");
+        assertNotSame(expected, actual);
+
+        String noLeft = "remove some stuff-> on the right";
+        actual = StringUtils.extractBetweenSeparators(noLeft, null, "->");
+        assertEquals(expected, actual);
+        actual = StringUtils.extractBetweenSeparators(noLeft, "", "->");
+        assertEquals(expected, actual);
+
+        String noRight = "On the left<=remove some stuff";
+        actual = StringUtils.extractBetweenSeparators(noRight, "<=", null);
+        assertEquals(expected, actual);
+        actual = StringUtils.extractBetweenSeparators(noRight, "<=", "");
+        assertEquals(expected, actual);
+
+        String same = "left#remove some stuff#right";
+        actual = StringUtils.extractBetweenSeparators(same, "#", "#");
+        assertEquals(expected, actual);
+
+        String before = "left[#remove some stuff[right";
+        actual = StringUtils.extractBetweenSeparators(before, "#", "[");
+        assertEquals(expected, actual);
+
+        String empty = "left[#[right";
+        expected="";
+        actual = StringUtils.extractBetweenSeparators(empty, "#", "[");
+        assertEquals(expected, actual);
+
+        String notFound ="On the left<=remove some stuff";
+        boolean foundError = false;
+        try{
+            StringUtils.extractBetweenSeparators(notFound, "#", "[");
+        }catch (IllegalArgumentException ex){
+            foundError = true;
+        }
+        assertTrue(foundError);
+
+    }
+
+    @Test
     public void testStrictCapitalize() {
         String expected = "Johndoe";
         String actual = StringUtils.strictCapitalize("johnDoe");

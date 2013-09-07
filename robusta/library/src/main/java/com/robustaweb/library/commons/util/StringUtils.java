@@ -27,9 +27,10 @@ import com.robustaweb.library.commons.exception.ValidationException;
  * <li> {@link StringUtils#removeCharacters(String, String) removeCharacters()}
  * </ul>
  * </p>
+ *
  * @author Nicolas Zozol for Robusta Web ToolKit & http://www.edupassion.com - nzozol@robustaweb.com
- * TODO : verify this class is GWT compatible
- * TODO : check if any is NOT used inside the library 
+ *         TODO : verify this class is GWT compatible
+ *         TODO : check if any is NOT used inside the library
  */
 public class StringUtils {
 
@@ -39,16 +40,13 @@ public class StringUtils {
      * <p> This function is based on the Javascript pattern /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/
      * </p>
      * <p>Check <a href="http://www.ietf.org/rfc/rfc2822.txt">IETF</a> for more informations.</p>
+     *
      * @param email email to be tested
-     * @return true if email is an email pattern, false if not
-     * @throws  IllegalArgumentException if the email is null
+     * @return true if email is an email pattern, false if not or null
      */
     public static boolean validateEmail(String email) {
 
-        if (email == null) {
-            throw new IllegalArgumentException("The email is null");
-        }
-        if (email.equals("")) {
+        if (email == null || email.equals("")) {
             return false;
         }
         String worker = new String(email);
@@ -67,6 +65,7 @@ public class StringUtils {
 
     /**
      * Returns true if the String could be a md5
+     *
      * @param md5String String to test : could it be a MD5, or there is no way ?
      * @return true if the String could be a md5
      * @throws IllegalArgumentException if the md5String is null
@@ -83,14 +82,15 @@ public class StringUtils {
 
     /**
      * Returns what is before the '@' character. For <strong>nicolas.zozol@robustaweb.com</strong> email, we'll get here <strong>nicolas.zozol</strong>
+     *
      * @param email
      * @return The email prefix
      * @throws IllegalArgumentException if the email is null
-     * @throws ValidationException if email is not a valid email
+     * @throws ValidationException      if email is not a valid email
      */
     public static String getEmailPrefix(String email) throws ValidationException {
 
-        if (email == null){
+        if (email == null) {
             throw new IllegalArgumentException("email is null");
         }
 
@@ -104,9 +104,9 @@ public class StringUtils {
     }
 
     /**
-     * 
      * Return true if the email is in two parts, like nicolas.zozol@gmail.com
      * Note that Bart.@simpsons.com will return true.
+     *
      * @param email
      * @return true if the email is in two parts, like nicolas.zozol@gmail.com
      * @throws ValidationException if the email is not valid
@@ -124,15 +124,16 @@ public class StringUtils {
 
     }
 
- 
+
     /**
      * <p>removes a character in the String </p>
-     *
+     * <p/>
      * <p>
      * String boss="Bruce Springsteen";<br/>
      * String result = StringUtils.removeCharacter(boss, 'e') returns "Bruc Springstn".<br/>
      * But the original String boss is not modified.
      * </p>
+     *
      * @param string
      * @param c
      * @return
@@ -151,8 +152,8 @@ public class StringUtils {
      * For exemple removeCharacters("Napoleon","nou") returns Naple because it will remove one 'n', two 'o' and zero 'u' <br/>
      * Like for removeCharacter(String string, char c), the original String is not modified.</p>
      * <p>It's a recursive function, not the fastest you may have.</p>
-     * 
-     * @param original Original string
+     *
+     * @param original           Original string
      * @param charactersToRemove characters that will be removed form the Original String
      * @return a new string without the specified characters
      * @throws IllegalArgumentException if original or charactersToRemove is null
@@ -184,10 +185,11 @@ public class StringUtils {
      * </p>
      * If the string is empty, it returns also an empty string.
      * If the string is null, it will throw a IllegalArgumentException
+     *
      * @param originalString Original parameter
      * @param character
-     * @throws IllegalArgumentException : if the string is null
      * @return Removes all the specified character found at the beginning of the string
+     * @throws IllegalArgumentException : if the string is null
      */
     public static String removeStartingCharacters(String originalString, char character) {
 
@@ -219,10 +221,11 @@ public class StringUtils {
      * </p>
      * If the string is empty, it returns also an empty string.
      * If the string is null, it will throw a IllegalArgumentException
+     *
      * @param originalString Original parameter
      * @param character
-     * @throws IllegalArgumentException : if the string is null
      * @return Removes all the specified character found at the end of the string
+     * @throws IllegalArgumentException : if the string is null
      */
     public static String removeTrailingCharacters(String originalString, char character) {
 
@@ -250,6 +253,7 @@ public class StringUtils {
 
     /**
      * <p>Simply removes the last character</p>
+     *
      * @param originalString
      * @return a new String without the
      * @throws IllegalArgumentException if the string is null
@@ -270,6 +274,7 @@ public class StringUtils {
 
     /**
      * <p>Simply removes the last character</p>
+     *
      * @param originalString
      * @return a new String without the
      * @throws IllegalArgumentException if the string is null
@@ -291,17 +296,18 @@ public class StringUtils {
     /**
      * <p>This is a simpler alternative to original String.replaceAll function that uses complex Regexp.
      * Here, you modify a String by changing the <strong>characters sequence</strong> sequenceToReplace by the replacement string.</p>
-     *
+     * <p/>
      * <p>
      * Exemple :<br/>
-     *  &nbsp;<code>String original = "//cooluri//living.js///";</code><br/>
+     * &nbsp;<code>String original = "//cooluri//living.js///";</code><br/>
      * Then <br/>
-     *  &nbsp;<code>StringUtils.replaceAll(original,"//", "-");</code><br/>
+     * &nbsp;<code>StringUtils.replaceAll(original,"//", "-");</code><br/>
      * will return :<br/>
      * -cooluri-living.js-/
      * </p>
-     * <p>Note that the '///' is always seen as ('//'+'/') and <strong>never</strong> as ('/'+'//'). This function is <strong>sequential</strong>, and will not always work like regular expressions.</p>     
-     * @param originalString The original string
+     * <p>Note that the '///' is always seen as ('//'+'/') and <strong>never</strong> as ('/'+'//'). This function is <strong>sequential</strong>, and will not always work like regular expressions.</p>
+     *
+     * @param originalString    The original string
      * @param sequenceToReplace The characters sequence to replace
      * @param replacement
      * @return
@@ -319,10 +325,10 @@ public class StringUtils {
         if (replacement == null) {
             throw new IllegalArgumentException("replacement is null");
         }
-        if (sequenceToReplace.equals(replacement)){
+        if (sequenceToReplace.equals(replacement)) {
             return originalString;
         }
-        
+
         String newString = new String(originalString);
         if (originalString == null || originalString.length() == 0) {
             return originalString;
@@ -346,16 +352,17 @@ public class StringUtils {
      * <pre>
      * replaceAny("john jack jim", "ji", "t") => "tohn tack ttm"
      * </pre>
+     *
      * @param originalString
      * @param anyCharacter
      * @param replacement
      * @return
      */
-    public static String replaceAny(String originalString, String anyCharacter, String replacement){
+    public static String replaceAny(String originalString, String anyCharacter, String replacement) {
 
         String worker = originalString;
-        for (Character c : anyCharacter.toCharArray()){
-            String pattern = ""+c;
+        for (Character c : anyCharacter.toCharArray()) {
+            String pattern = "" + c;
             worker = worker.replaceAll(pattern, replacement);
         }
         return worker;
@@ -365,13 +372,14 @@ public class StringUtils {
      * <p>Keeps the 'number' first characters, and might be useful to keep your user's privacy :<br/>
      * &nbsp;<code>truncate("Hernandez", 3)</code><br/>
      * will produce: "Her"
-     *</p>
+     * </p>
      * <p>
      * If number is bigger than the size of the String, the whole string is kept : <br/>
      * &nbsp;<code>truncate("Hernandez", 24)</code><br/>
      * will produce: "Hernandez"
-     *</p>
+     * </p>
      * <p>If number==0, the function returns an empty string.</p>
+     *
      * @param original
      * @param number
      * @return a new smaller String.
@@ -391,6 +399,7 @@ public class StringUtils {
 
     /**
      * If stringToTes contains any character in 'characatersToTest', the function returns true, false if not
+     *
      * @param stringToTest
      * @param charatersToTest
      * @return true if stringToTes contains any character in 'characatersToTest'
@@ -417,34 +426,35 @@ public class StringUtils {
 
     }
 
-  
-
 
     /**
      * Returns the concatenation of the absolute and relative paths, adding a "/" character between them if needed
      * Calling addPath(uri, "/") ensures that the path will finish with only one "/" (as long as uri doesn't finishes with more than one "/")
+     *
      * @param absolute
      * @param relative
      * @return
      */
-    public static String addPath(String absolute, String relative){
-        return removeTrailingCharacters(absolute, '/')+"/"+removeStartingCharacters(relative, '/');
+    public static String addPath(String absolute, String relative) {
+        return removeTrailingCharacters(absolute, '/') + "/" + removeStartingCharacters(relative, '/');
     }
 
     /**
      * Add the protocol to the String
+     *
      * @param protocol
      * @param uri
      * @return a new Stirng with the protocol
      */
-    public static String addProtocol(String protocol, String uri){
-        String worker=removeTrailingCharacters(protocol, '/');
-        worker=removeTrailingCharacters(worker, ':');
-        return worker+"://"+removeStartingCharacters(uri, '/');
+    public static String addProtocol(String protocol, String uri) {
+        String worker = removeTrailingCharacters(protocol, '/');
+        worker = removeTrailingCharacters(worker, ':');
+        return worker + "://" + removeStartingCharacters(uri, '/');
     }
 
     /**
      * Needed for Gwt Compatibility : GWT does not yet provide a getSimpleClassName
+     *
      * @param o
      * @return
      */
@@ -455,6 +465,49 @@ public class StringUtils {
 
     }
 
+
+    /**
+     * Extract a string in a larger one
+     * <p>
+     * Exemple : "I want to ##remove some stuff-there
+     * StringUtils.extractBetweenSeparators(classic, "##", "-");
+     * returns <strong>remove some stuff</strong>
+     * </p>
+     *
+     * @param str
+     * @param left   : if null or empty, no left extraction
+     * @param right: if null or empty, no right extraction
+     * @return the extracted string
+     */
+    public static String extractBetweenSeparators(String str, String left, String right) throws IllegalArgumentException {
+        if (str == null) {
+            throw new IllegalArgumentException("String is null");
+        }
+        String result;
+
+        int leftStart;
+
+        if (left == null || left.isEmpty()) {
+            leftStart = 0;
+        } else {
+            int indexLeft = str.indexOf(left);
+            if (indexLeft < 0) throw new IllegalArgumentException("'" + left + "' is not found in " + str);
+            leftStart = indexLeft + left.length();
+        }
+
+        int rightEnd;
+        if (right == null || right.isEmpty()) {
+            result = str.substring(leftStart);
+        } else {
+            rightEnd = str.indexOf(right, leftStart);
+            if (rightEnd < 0)
+                throw new IllegalArgumentException("'" + right + "' is not found in " + str.substring(leftStart));
+            result = str.substring(leftStart, rightEnd);
+        }
+        return result;
+
+    }
+
     /**
      * Transform an Obejct array into a String array, by calling toString() on each element.
      *
@@ -462,32 +515,33 @@ public class StringUtils {
      * @param transformNullIntoBlank if true, a null is changed to blank. If false, we keep null
      * @return a String array
      */
-    public String[] stringify (Object [] array, boolean transformNullIntoBlank){
+    public String[] stringify(Object[] array, boolean transformNullIntoBlank) {
 
         ArrayList<String> result = new ArrayList<String>();
-      for (Object o : array){
-        if (o!= null){
-            result.add(o.toString());
-        }else{
-            if (transformNullIntoBlank){
-                result.add("");
-            }else{
-                result.add(null);
+        for (Object o : array) {
+            if (o != null) {
+                result.add(o.toString());
+            } else {
+                if (transformNullIntoBlank) {
+                    result.add("");
+                } else {
+                    result.add(null);
+                }
             }
         }
-      }
-        return (String []) result.toArray();
+        return (String[]) result.toArray();
     }
 
     /**
      * Return a String that starts with an Uppercase character, and ends with LowerCase characters
      * strictCapitalize("johnDoe") returns Johndoe
+     *
      * @param str string to capitalize
      * @return a String that starts with an Uppercase character, and ends with LowerCase characters
-     * @see #simpleCapitalize(java.lang.String) 
+     * @see #simpleCapitalize(java.lang.String)
      */
     public static String strictCapitalize(String str) {
-        if (str == null){
+        if (str == null) {
             throw new IllegalArgumentException("String is null");
         }
         if (str.length() == 0) {
@@ -500,12 +554,13 @@ public class StringUtils {
     /**
      * Capitalize the first letter, and doesn't touch any other
      * simpleCapitalize("johnDoe") returns JohnDoe
+     *
      * @param str string to capitalize
      * @return the same string with capitalized first letter
-     * @see #strictCapitalize(java.lang.String) 
+     * @see #strictCapitalize(java.lang.String)
      */
-    public static String simpleCapitalize(String str){
-        if (str == null){
+    public static String simpleCapitalize(String str) {
+        if (str == null) {
             throw new IllegalArgumentException("String is null");
         }
         if (str.length() == 0) {
@@ -518,62 +573,62 @@ public class StringUtils {
     /**
      * TODO 1 : work on this ; Use StringTokenizer
      * <p>Splits the provided text into an array ,* separators specified.</p>
-     *
+     * <p/>
      * <p>The separator is not included in the returned String array.
      * Adjacent separators are treated as one separator.</p>
-     *
-     * <pre>     
+     * <p/>
+     * <pre>
      * StringUtils.split("ab de fg", " ")   = ["ab", "de", "fg"]
      * StringUtils.split("ab   de fg", " ") = ["ab", "cd", "ef"]
      * StringUtils.split("ab:cd:ef", ":")    = ["ab", "cd", "ef"]
      * </pre>
      *
-     * @param string  the String to parse, may be null
-     * @param separatorChars  the characters used as the delimiters
+     * @param string         the String to parse, may be null
+     * @param separatorChars the characters used as the delimiters
      * @return an array of parsed Strings
      * @throws IllegalArgumentException if string or separatorChars is null, or if separatorChars is empty
      */
-    public static String[] split(String string, String separatorChars){
-        if (string == null){
+    public static String[] split(String string, String separatorChars) {
+        if (string == null) {
             throw new IllegalArgumentException("string argument is null");
         }
-        if (separatorChars == null || separatorChars.length() == 0){
+        if (separatorChars == null || separatorChars.length() == 0) {
             throw new IllegalArgumentException("separators is null or empty");
         }
 
         List<String> resultList = new ArrayList<String>();
-        String worker =new String(string);
+        String worker = new String(string);
         String firstSeparator = separatorChars.substring(0, 1);
         assert firstSeparator.length() == 1;
 
         char[] charArray = separatorChars.toCharArray();
         //We replace multiple instance of other separator by only one firstSeparator
-        for (int i = 1 ; i < charArray.length ; i++){
-            String pattern = "("+charArray[i]+")+";
+        for (int i = 1; i < charArray.length; i++) {
+            String pattern = "(" + charArray[i] + ")+";
             worker = worker.replaceAll(pattern, firstSeparator);
         }
-        
+
         //One more pass for the first separator
-        String pattern = "("+firstSeparator+")+";
+        String pattern = "(" + firstSeparator + ")+";
         worker = worker.replaceAll(pattern, firstSeparator);
 
-        System.out.println("separator : "+firstSeparator+" ; worker : "+worker);
-        Collections.addAll(resultList, worker.split(firstSeparator) );
-        return (String[]) resultList.toArray(new String[resultList.size()]);       
+        System.out.println("separator : " + firstSeparator + " ; worker : " + worker);
+        Collections.addAll(resultList, worker.split(firstSeparator));
+        return (String[]) resultList.toArray(new String[resultList.size()]);
     }
 
-    public static String join (Iterable strings, String glue){
-        if (strings == null){
+    public static String join(Iterable strings, String glue) {
+        if (strings == null) {
             throw new IllegalArgumentException("strings array is null");
         }
-        if (glue == null){
+        if (glue == null) {
             throw new IllegalArgumentException("No glue ; use empty String instead of null");
         }
         StringBuilder sb = new StringBuilder();
         Iterator it = strings.iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             sb.append(it.next().toString());
-            if (it.hasNext()){
+            if (it.hasNext()) {
                 sb.append(glue);
             }
         }
@@ -582,50 +637,48 @@ public class StringUtils {
     }
 
     /**
-     * @todo3 : to be tested
-     * Join elements
      * @param strings
      * @param glue
      * @return
+     * @todo3 : to be tested
+     * Join elements
      */
-    public static String join (Object [] strings, String glue){
+    public static String join(Object[] strings, String glue) {
         return join(Arrays.asList(strings), glue);
     }
 
     public static String defaultJoints = " _-";
-    
+
     /**
      * Transfom joints in capital characters
      * Chateau De Versailles => ChateauDeVersaille
      * white_house => whiteHouse  (House is now capitalized)
      * groovyStyle_grails => groovyStyleGrails (inside capitals are untouched)
      * One difference with Java style is that the first letter might stay a capital
-     *
+     * <p/>
      * If specifiedJoints == null, the method uses default ones : " _-", thought this
      * can be changed with the {@link StringUtils#defaultJoints}
      *
      * @param string
      * @return
      */
-    public static String normalize(String string, String specifiedJoints){
-        if (specifiedJoints == null){
+    public static String normalize(String string, String specifiedJoints) {
+        if (specifiedJoints == null) {
             specifiedJoints = defaultJoints;
         }
 
         String worker = replaceAny(string, specifiedJoints, " ");
-        String [] array = split(worker, " ");
-        for (int i = 0 ; i < array.length ; i++){
+        String[] array = split(worker, " ");
+        for (int i = 0; i < array.length; i++) {
             String s = array[i];
-            if (i>0){
+            if (i > 0) {
                 array[i] = simpleCapitalize(s);
             }
-            
+
         }
 
         return join(array, "");
     }
-
-
 
 
 }
